@@ -1,9 +1,13 @@
+import { BrowserRouter } from "react-router";
+import RouterDecider from "./routes/RouterDecider";
 
-function App() {
+ export default function App() {
+  // Esse é o componente de entrada
+  // Ele leva a aplicação para o RouterDecider
 
   return (
-    <p>Hello World</p>
+    <BrowserRouter>
+      <RouterDecider />
+    </BrowserRouter>
   )
 }
-
-export default App
