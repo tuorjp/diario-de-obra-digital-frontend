@@ -1,0 +1,77 @@
+<div class="login-page">
+  <!-- LOGO ESQUERDA -->
+  <div class="image-section">
+    <img src="assets/logo.png" alt="Logo Hefesto - Ícone Principal" class="main-logo" />
+  </div>
+
+  <!-- FORMULÁRIO DIREITA -->
+  <div class="form-section">
+    <div class="login-form-container">
+      <div class="login-header">
+        <p class="welcome-text">Bem vindo ao</p>
+        <img
+          src="assets/logo-hefesto-nome.png"
+          alt="Hefesto - Diário de Obra Digital"
+          class="hefesto-nome-logo"
+        />
+      </div>
+
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <mat-icon matPrefix>email</mat-icon>
+          <input
+            matInput
+            formControlName="login"
+            type="email"
+            placeholder="exemplo@gmail.com"
+          />
+          <mat-error *ngIf="loginForm.get('login')?.hasError('required')">
+            Email é obrigatório.
+          </mat-error>
+          <mat-error *ngIf="loginForm.get('login')?.hasError('email')">
+            Formato de email inválido.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Senha</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hidePassword ? 'password' : 'text'"
+            placeholder="***********"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="hidePassword = !hidePassword"
+            type="button"
+          >
+            <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+            Senha é obrigatória.
+          </mat-error>
+        </mat-form-field>
+
+        <div class="login-actions">
+          <button
+            mat-flat-button
+            class="hefesto-button"
+            type="submit"
+            [disabled]="isLoading"
+          >
+            <span *ngIf="!isLoading">Login</span>
+            <mat-spinner *ngIf="isLoading" diameter="24"></mat-spinner>
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

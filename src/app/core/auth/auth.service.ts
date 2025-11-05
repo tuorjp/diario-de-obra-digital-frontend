@@ -1,29 +1,33 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, tap } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root', // Singleton: uma única instância para toda a aplicação.
+  providedIn: 'root',
 })
 export class AuthService {
-  // Para este exemplo, usaremos o localStorage para simular a presença do token.
-  // Em uma aplicação real, você provavelmente usaria cookies seguros (HttpOnly).
-  
-  // Simula o login salvando um token falso.
-  login() {
-    localStorage.setItem('TK', 'meu-token-super-secreto');
+  private apiUrl = 'http://localhost:8080/auth/login';
+
+  constructor(private http: HttpClient) {}
+
+  login(credentials: { login: string; password: string }): Observable<any> {
+    return this.http.post(this.apiUrl, credentials).pipe(
+      tap((response: any) => {
+        if (response && response.token) {
+          localStorage.setItem('TK', response.token);
+        }
+      })
+    );
   }
 
-  // Simula o logout.
-  logout() {
+  logout(): void {
     localStorage.removeItem('TK');
   }
 
-  // Verifica se o usuário está logado.
   isLoggedIn(): boolean {
-    // O '!!' converte o resultado (string ou null) para um booleano (true ou false).
     return !!this.getToken();
   }
 
-  // Pega o token para ser usado pelo interceptor.
   getToken(): string | null {
     return localStorage.getItem('TK');
   }

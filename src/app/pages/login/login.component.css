@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+/* ===== RESET ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  background: #F4F4F4;
+  overflow-x: auto;
+}
+
+:host {
+  display: block;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+
+  --color-dark-blue: #283040;
+  --color-light-blue: #9CB0D9;
+  --color-light-grey: #BFBFBF;
+  --color-input-bg: #EFEFEF;
+  --color-bg: #F4F4F4;
+}
+
+/* ===== LAYOUT BASE ===== */
+.login-page {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--color-bg);
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+.image-section,
+.form-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ===== LOGO ===== */
+.main-logo {
+  width: min(38vw, 72dvh);
+  max-width: 580px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ===== CARD ===== */
+.login-form-container {
+  width: clamp(280px, 46vw, 600px);
+  background: #fff;
+  border-radius: 16px;
+  padding: clamp(20px, 3vw, 48px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* ===== CABEÇALHO ===== */
+.login-header {
+  text-align: left;
+  margin-bottom: clamp(16px, 2vw, 32px);
+}
+
+.welcome-text {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: clamp(32px, 3.5vw, 64px);
+  line-height: 134%;
+  color: var(--color-light-blue);
+  margin: 0 0 clamp(8px, 1.2vw, 16px) 0;
+  text-align: left;
+}
+
+.hefesto-nome-logo {
+  width: clamp(220px, 22vw, 388px);
+  height: auto;
+  display: block;
+}
+
+/* ===== FORM ===== */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(12px, 1.6vw, 24px);
+}
+
+/* Angular Material inputs */
+:host ::ng-deep .mat-mdc-form-field {
+  width: 100%;
+}
+
+:host ::ng-deep .mat-mdc-text-field-wrapper {
+  background: var(--color-input-bg) !important;
+  border-radius: 10px !important;
+  min-height: clamp(48px, 6vh, 64px);
+}
+
+:host ::ng-deep .mat-icon[matPrefix],
+:host ::ng-deep .mat-icon[matSuffix] {
+  color: var(--color-light-grey) !important;
+}
+
+/* ===== BOTÃO ===== */
+.hefesto-button {
+  width: 100%;
+  height: clamp(46px, 6vh, 64px);
+  font-size: clamp(14px, 1.1vw, 20px);
+  font-weight: 700;
+  border-radius: 10px;
+  background-color: var(--color-dark-blue) !important;
+  color: white !important;
+  transition: 0.2s ease;
+}
+
+.hefesto-button:hover {
+  background-color: #1E263A !important;
+}
+
+/* ===== ERROS ===== */
+.error-message {
+  color: #f44336;
+  text-align: center;
+  font-size: 0.95rem;
+  margin-top: 12px;
+}
+
+/* =====================================================
+   💻 LANDSCAPE (largura >= altura)
+   ===================================================== */
+@media (min-aspect-ratio: 1/1) {
+  .login-page {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-inline: 6vw;
+  }
+
+  .image-section {
+    flex: 1 1 50%;
+    justify-content: flex-end;
+    padding-right: 3vw;
+  }
+
+  .form-section {
+    flex: 1 1 50%;
+    justify-content: flex-start;
+    padding-left: 3vw;
+  }
+
+  .login-form-container {
+    width: clamp(360px, 40vw, 560px);
+  }
+}
+
+/* =====================================================
+   📱 PORTRAIT (largura < altura)
+   ===================================================== */
+@media (max-aspect-ratio: 1/1) {
+  .login-page {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-inline: clamp(16px, 5vw, 32px);
+  }
+
+  /* ===== Logo ===== */
+  .image-section {
+    width: 100%;
+    justify-content: center;
+    align-items: flex-end;
+    padding: 0;
+    margin-top: clamp(48px, 10vh, 96px);
+    margin-bottom: clamp(32px, 6vh, 64px);
+  }
+
+  .main-logo {
+    width: min(55vw, 30dvh);
+    max-width: 240px;
+  }
+
+  /* ===== Card ===== */
+  .form-section {
+    width: 100%;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: clamp(16px, 4vh, 40px);
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 540px;
+    border-radius: 12px;
+    padding: clamp(24px, 5vw, 40px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  /* ===== Cabeçalho ===== */
+  .login-header {
+    text-align: left;
+    margin-bottom: clamp(20px, 4vw, 32px);
+  }
+
+  .welcome-text {
+    text-align: left;
+  }
+
+  .hefesto-nome-logo {
+    margin: 0;
+  }
+}
+
+/* Segurança para telas muito estreitas */
+@media (max-width: 340px) {
+  .login-form-container {
+    padding: 16px;
+    border-radius: 12px;
+  }
+
+  .welcome-text {
+    font-size: 26px;
+  }
+
+  .hefesto-nome-logo {
+    width: 220px;
+  }
+}
