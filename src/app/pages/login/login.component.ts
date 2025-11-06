@@ -64,7 +64,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/home']); // redireciona após login
         },
         error: (err: any) => {
-          console.error('Falha no login', err);
+          console.error('ERRO', err);
           this.errorMessage = 'Usuário ou senha inválidos. Tente novamente.';
         }
       });
