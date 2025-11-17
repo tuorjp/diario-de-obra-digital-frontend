@@ -1,0 +1,58 @@
+.layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ==== DESKTOP / PAISAGEM ==== */
+.sidebar-desktop {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  border-right: 1px solid #ddd;
+}
+
+/* esconder a sidebar desktop apenas no mobile retrato */
+@media (max-width: 900px) and (orientation: portrait) {
+  .sidebar-desktop {
+    display: none;
+  }
+}
+
+/* ==== SIDEBAR MOBILE ==== */
+.sidebar-mobile {
+  position: fixed;
+  top: 0;
+  left: -260px;
+  width: 260px;
+  height: 100vh;
+  background: #fff;
+  border-right: 1px solid #ddd;
+  z-index: 999;
+  transition: left 0.3s ease-out;
+}
+
+.sidebar-mobile.open {
+  left: 0;
+}
+
+/* overlay */
+.sidebar-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 998;
+}
+
+/* ==== CONTENT ==== */
+.content-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  padding: 2rem 2.5rem;
+  overflow-y: auto;
+}

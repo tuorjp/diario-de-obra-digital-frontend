@@ -1,0 +1,19 @@
+<header class="header">
+
+  <!-- Botão hambúrguer -->
+  <button class="hamburger-btn" (click)="menuToggle.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <!-- Breadcrumb multi-nível -->
+  <nav class="breadcrumbs">
+    <ng-container *ngFor="let crumb of breadcrumbs; let i = index">
+
+      <a [routerLink]="crumb.url">{{ crumb.label }}</a>
+
+      <span class="separator" *ngIf="i < breadcrumbs.length - 1">›</span>
+
+    </ng-container>
+  </nav>
+
+</header>

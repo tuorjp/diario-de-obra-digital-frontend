@@ -1,0 +1,25 @@
+<div class="layout">
+
+  <!-- DESKTOP / PAISAGEM -->
+  <aside class="sidebar-desktop">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <!-- OVERLAY PARA MOBILE -->
+  <div class="sidebar-overlay" *ngIf="sidebarOpen" (click)="closeSidebar()"></div>
+
+  <!-- SIDEBAR MOBILE (DRAWER) -->
+  <aside class="sidebar-mobile" [class.open]="sidebarOpen">
+    <app-sidebar></app-sidebar>
+  </aside>
+
+  <!-- CONTEÚDO -->
+  <div class="content-area">
+    <app-header (menuToggle)="toggleSidebar()"></app-header>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+</div>

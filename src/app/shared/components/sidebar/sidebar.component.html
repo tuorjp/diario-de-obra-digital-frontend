@@ -1,0 +1,58 @@
+<aside class="sidebar-container">
+
+  <!-- LOGO -->
+  <div class="logo-area">
+    <img class="logo-icon" src="assets/logo.png" />
+    <img class="logo-name" src="assets/logo-hefesto-nome.png" />
+  </div>
+
+  <div class="separator"></div>
+
+  <!-- MENU SUPERIOR -->
+  <nav class="menu">
+
+    <div class="menu-item">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        <mat-icon>dashboard</mat-icon> Dashboard
+      </a>
+    </div>
+    <div class="separator"></div>
+
+    <div class="menu-item">
+      <a routerLink="/obras" routerLinkActive="active">
+        <mat-icon>construction</mat-icon> Obras
+      </a>
+    </div>
+    <div class="separator"></div>
+
+    <div class="menu-item">
+      <a routerLink="/diarios" routerLinkActive="active">
+        <mat-icon>menu_book</mat-icon> Diários de Obra
+      </a>
+    </div>
+    <div class="separator"></div>
+
+    <div class="menu-item">
+      <a routerLink="/user" routerLinkActive="active">
+        <mat-icon>person</mat-icon> Usuário
+      </a>
+    </div>
+
+    <div class="separator"></div>
+
+  </nav>
+
+  <!-- espaço flexível que empurra o rodapé -->
+  <div class="grow-space"></div>
+
+  <!-- linha acima do Sair -->
+  <div class="separator"></div>
+
+  <!-- SAIR NO RODAPÉ -->
+  <div class="logout">
+    <a routerLink="/logout">
+      <mat-icon>logout</mat-icon> Sair
+    </a>
+  </div>
+
+</aside>

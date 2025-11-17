@@ -1,0 +1,23 @@
+<div class="page-card">
+  <h2>Diários de Obra</h2>
+
+  <table class="tabela-diarios">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Data</th>
+      <th>Obra</th>
+      <th>Responsável</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let d of diarios">
+      <td>{{ d.id }}</td>
+      <td>{{ d.data }}</td>
+      <td>{{ d.obra }}</td>
+      <td>{{ d.responsavel }}</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
