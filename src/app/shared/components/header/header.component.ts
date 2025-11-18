@@ -1,4 +1,10 @@
-import { Component, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Output,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef
+} from '@angular/core';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
@@ -27,8 +33,10 @@ export class HeaderComponent {
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private titleService: Title
+    private title: Title,
+    private cdr: ChangeDetectorRef
   ) {
+
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -60,17 +68,18 @@ export class HeaderComponent {
       }
     }
 
-    // Se quiser sempre iniciar com “Início”
-    if (crumbs.length === 0 || crumbs[0].label !== 'Início') {
+    // garante sempre o início
+    if (!crumbs.length || crumbs[0].label !== 'Início') {
       crumbs.unshift({ label: 'Início', url: '/dashboard' });
     }
 
     this.breadcrumbs = crumbs;
 
-    // Atualiza o título do navegador com o último breadcrumb
-    const last = this.breadcrumbs[this.breadcrumbs.length - 1];
+    const last = crumbs[crumbs.length - 1];
     if (last) {
-      this.titleService.setTitle(`${last.label} • Hefesto - Diário de Obra Digital`);
+      this.title.setTitle(`${last.label} • Hefesto - Diário de Obra Digital`);
     }
+
+    this.cdr.markForCheck(); // Força a atualização em OnPush
   }
 }
