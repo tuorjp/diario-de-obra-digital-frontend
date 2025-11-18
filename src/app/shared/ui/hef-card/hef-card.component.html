@@ -1,0 +1,21 @@
+<div class="hef-card">
+
+  <div class="card-header">
+    <h2>{{ title }}</h2>
+
+    <button
+      *ngIf="actionLabel"
+      mat-mdc-button
+      class="edit-btn"
+      (click)="actionClick?.()"
+    >
+      <mat-icon>{{ actionIcon }}</mat-icon>
+      {{ actionLabel }}
+    </button>
+  </div>
+
+  <div class="card-body">
+    <ng-content></ng-content>
+  </div>
+
+</div>
