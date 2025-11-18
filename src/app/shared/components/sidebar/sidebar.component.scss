@@ -7,7 +7,7 @@
   border-right: 1px solid #dcdcdc;
 }
 
-/* Logo */
+/* LOGO */
 .logo-area {
   text-align: center;
   padding: 2rem 1rem 1rem 1rem;
@@ -28,67 +28,57 @@
   }
 }
 
-/* linha */
+/* LINHA */
 .separator {
   width: 100%;
   height: 1px;
   background: #e3e3e3;
 }
 
-/* Menu */
+/* MENU */
 .menu {
   display: flex;
   flex-direction: column;
 }
 
-.menu-item a {
+.menu-item a,
+.logout a {
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+  font-weight: 300;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 140%;
+  letter-spacing: 0;
+
   display: flex;
   align-items: center;
   width: 100%;
   padding: 0.85rem 1.2rem;
   gap: 14px;
-  font-size: 0.95rem;
-  font-weight: 400;
+
   color: #122640;
   cursor: pointer;
   text-decoration: none;
   transition: background 0.15s ease;
 }
 
-.menu-item a:hover {
+.menu-item a:hover,
+.logout a:hover {
   background: #eef3fb;
 }
 
-/* estado ativo */
 .menu-item a.active {
   background: #e6ecf7 !important;
   font-weight: 500;
   color: #122640 !important;
 }
 
-/* empurra o botão sair para o rodapé */
+/* empurra botão sair para baixo */
 .grow-space {
   flex: 1;
 }
 
-/* botão sair */
-.logout a {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  padding: 0.85rem 1.2rem;
-  gap: 14px;
-  font-size: 0.95rem;
-  font-weight: 400;
-  color: #122640;
-  text-decoration: none;
-}
-
-.logout a:hover {
-  background: #eef3fb;
-}
-
-/* Ícones */
+/* ICONES */
 mat-icon {
   font-size: 22px;
   width: 22px;
