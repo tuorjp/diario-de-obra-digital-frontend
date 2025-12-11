@@ -1,28 +1,52 @@
 .page-container {
   padding: 1rem;
-  max-width: 1000px; // Largura confortável para formulário
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+// Breadcrumb
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin: 0 4px;
+  }
+
+  .current {
+    color: #333;
+  }
 }
 
 // Card estilo
 .card {
   background: #fff;
-  border-radius: 12px;
-  border: 1px solid #e0e0e0;
+  border-radius: 12px; // Arredondamento do protótipo
   box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
   overflow: hidden;
+  padding: 0;
 }
 
 .card-header {
+  background-color: #f8f9fa; // Leve cinza no fundo do header se desejar, ou branco
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid #f0f0f0;
-  background-color: #fafafa; // Fundo levemente cinza no header conforme imagem
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: #122640; // Azul escuro
-    font-weight: 700;
+    color: var(--hefesto-2); // Azul escuro do tema
+    font-weight: 600;
   }
 }
 
