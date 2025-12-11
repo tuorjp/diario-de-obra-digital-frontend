@@ -1,39 +1,102 @@
-.page-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+.page-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
 
-  h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #122640;
+// Breadcrumb
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 1.5rem;
+
+  mat-icon {
+    font-size: 16px;
+    height: 16px;
+    width: 16px;
+    margin: 0 4px;
+  }
+
+  .current {
+    color: #333;
   }
 }
 
-.tabela-users {
-  width: 100%;
-  border-collapse: collapse;
-
-  th, td {
-    padding: 0.9rem 0.7rem;
-    border-bottom: 1px solid #e3e3e3;
-    color: #122640;
-  }
-
-  th {
-    text-align: left;
-    font-weight: 600;
-    background: #f8f9fb;
-  }
-
-  tr:hover {
-    background: #eef3fb;
-  }
+// Card Principal
+.profile-card {
+  background: #fff;
+  border-radius: 12px; // Arredondamento do protótipo
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
 }
 
-.table-header-container {
+.card-header {
+  background-color: #f8f9fa; // Leve cinza no fundo do header se desejar, ou branco
+  padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--hefesto-2); // Azul escuro do tema
+    font-weight: 600;
+  }
+
+  .edit-btn {
+    background-color: #9cb0d9; // Azul claro do logo (Hefesto-1)
+    color: #122640;
+    border-radius: 20px;
+    box-shadow: none;
+    font-weight: 500;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.card-content {
+  padding: 2rem;
+  display: grid;
+  // Cria 5 colunas iguais, adaptável
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 2rem;
+  column-gap: 1.5rem;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555; // Cinza um pouco mais claro para o valor
+    line-height: 1.4;
+  }
 }

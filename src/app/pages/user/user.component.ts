@@ -1,32 +1,68 @@
-import {Component, ChangeDetectionStrategy, inject} from '@angular/core';
+import {Component, OnInit, inject, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {MatButtonModule} from '@angular/material/button';
-import {MatDialog} from '@angular/material/dialog';
-import {UserForm} from './user-form/user-form';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { UserService } from '../../services/user-service';
+import { UserProfileDto } from '../../utils/dto/user-profile.dto';
+import { DatePipe } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  imports: [
-    MatButtonModule,
-    CommonModule,
-  ],
+  imports: [CommonModule, MatButtonModule, MatIconModule],
+  providers: [DatePipe],
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './user.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserComponent {
-  users = [
-    { id: 1, usuario: 'admin@gmail.com', nome: 'Administrador', perfil: 'ADMIN', status: 'Ativo' },
-    { id: 2, usuario: 'jose@gmail.com', nome: 'José', perfil: 'FISCAL', status: 'Ativo' },
-    { id: 3, usuario: 'jp@gmail.com', nome: 'Engenheiro', perfil: 'ADMIN', status: 'Ativo' },
-  ];
+export class UserComponent implements OnInit {
+  private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
+  private router = inject(Router);
 
-  readonly dialog = inject(MatDialog);
+  user: UserProfileDto | null = null;
+  loading = true;
+  errorMessage = '';
 
-  openDialog(id:number | null = null) {
-    const dialogRef = this.dialog.open(UserForm, {
-      data: { id: id }
+  ngOnInit(): void {
+    this.loadUserProfile();
+  }
+
+  loadUserProfile() {
+    this.loading = true;
+    this.errorMessage = '';
+    // Força atualização imediata para mostrar o loading
+    this.cdr.markForCheck();
+
+    this.userService.getMyProfile().subscribe({
+      next: (data) => {
+        console.log('Dados recebidos:', data);
+        this.user = data;
+        this.loading = false;
+
+        // 2. A MÁGICA: Avisa ao Angular para atualizar a tela AGORA
+        this.cdr.markForCheck();
+      },
+      error: (err) => {
+        console.error('Erro:', err);
+        this.loading = false;
+
+        if (err.status === 403) {
+          this.errorMessage = 'Acesso negado. Tente fazer login novamente.';
+        } else if (err.status === 0) {
+          this.errorMessage = 'Backend indisponível ou bloqueado.';
+        } else {
+          this.errorMessage = 'Erro ao carregar dados.';
+        }
+
+        // Avisa ao Angular para atualizar a tela com a mensagem de erro
+        this.cdr.markForCheck();
+      }
     });
+  }
+
+  onEdit() {
+    this.router.navigate(['/user/edit']);
   }
 }

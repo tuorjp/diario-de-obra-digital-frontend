@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-diarios',
   standalone: true,
+  imports: [CommonModule],
   templateUrl: './diarios.component.html',
   styleUrls: ['./diarios.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
