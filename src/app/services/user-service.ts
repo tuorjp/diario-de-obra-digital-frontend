@@ -14,9 +14,21 @@ export class UserService {
     const id = user.id;
 
     if(!id) {
-      return this.http.post<string>(`${this.baseUrl}/register`, user);
+      return this.http.post(`${this.baseUrl}/register`, user, { responseType: 'text' });
     } else {
-      return this.http.post<string>(`${this.baseUrl}/edit`, user);
+      return this.http.put<string>(`${this.baseUrl}/edit`, user);
     }
+  }
+
+  public findByEmail(login: string): Observable<UserRegisterDto> {
+    return this.http.get(`${this.baseUrl}/find-by-login/${login}`)
+  }
+  
+  public findById(id: number): Observable<UserRegisterDto> {
+    return this.http.get(`${this.baseUrl}/find-by-id/${id}`)
+  }
+
+  public findAll(): Observable<UserRegisterDto[]> {
+    return this.http.get<UserRegisterDto[]>(`${this.baseUrl}/list`);
   }
 }

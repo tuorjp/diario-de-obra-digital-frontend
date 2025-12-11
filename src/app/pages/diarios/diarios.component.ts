@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-diarios',
@@ -6,6 +7,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './diarios.component.html',
   styleUrls: ['./diarios.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    NgForOf
+  ]
 })
 export class DiariosComponent {
   diarios = [

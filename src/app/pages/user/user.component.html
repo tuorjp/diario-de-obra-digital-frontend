@@ -1,12 +1,18 @@
+<div style="margin-bottom: 2rem;">
+  <app-user-card [user]="loggedUser()" (editClicked)="openDialog($event)"></app-user-card>
+</div>
+
 <div class="page-card">
   <div class="table-header-container">
     <h2>Usuários</h2>
+
     <button
-      class="mat-primary"
-      matButton="filled"
+      mat-icon-button
+      color="primary"
+      matTooltip="Novo Usuário"
       (click)="openDialog()"
     >
-      Novo
+      <mat-icon>add</mat-icon>
     </button>
   </div>
 
@@ -22,19 +28,20 @@
     </thead>
 
     <tbody>
-      @for (user of users; track user.id) {
+      @for (user of users(); track user.id) {
         <tr>
-          <td>{{ user.usuario }}</td>
-          <td>{{ user.nome }}</td>
-          <td>{{ user.perfil }}</td>
-          <td>{{ user.status }}</td>
+          <td>{{ user.login }}</td>
+          <td>{{ user.name }}</td>
+          <td>{{ user.role }}</td>
+          <td>{{ user.status ? "Ativo" : "Inativo"}}</td>
           <td>
             <button
-              class="mat-primary"
-              matButton="filled"
-              (click)="openDialog(user.id)"
+              mat-icon-button
+              color="primary"
+              matTooltip="Editar Usuário"
+              (click)="openDialog(user)"
             >
-              Editar
+              <mat-icon>edit</mat-icon>
             </button>
           </td>
         </tr>

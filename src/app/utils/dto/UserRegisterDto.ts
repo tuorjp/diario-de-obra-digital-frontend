@@ -3,5 +3,6 @@ export class UserRegisterDto {
   login?: string;
   name?: string;
   password?: string;
-  userRole?: string;
+  role?: string;
+  status?: boolean;
 }

@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import {NgForOf} from '@angular/common';
 
 @Component({
   selector: 'app-obras',
@@ -6,6 +7,9 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
   templateUrl: './obras.component.html',
   styleUrls: ['./obras.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [
+    NgForOf
+  ]
 })
 export class ObrasComponent {
   obras = [

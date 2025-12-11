@@ -1,4 +1,4 @@
-import {Component, inject} from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
   MatDialogActions,
@@ -20,7 +20,7 @@ import {UserService} from '../../../services/user-service';
   templateUrl: './user-form.html',
   styleUrl: './user-form.css'
 })
-export class UserForm {
+export class UserForm implements OnInit{
   readonly dialogRef = inject(MatDialogRef<UserForm>);
   readonly data = inject(MAT_DIALOG_DATA);
   private formBuilder = inject(FormBuilder);
@@ -31,31 +31,43 @@ export class UserForm {
   userForm = this.formBuilder.group({
     name: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    password: ['', Validators.required],
+    password: [''],
     role: ['', Validators.required],
   })
 
   userId = this.data?.id;
+  user = this.data?.user;
+  isEditMode = !this.user;
+
+  ngOnInit(): void {
+    if(this.user) {
+      this.userForm.patchValue({
+        name: this.user?.name,
+        email: this.user?.login,
+        role: this.user?.role,
+      });
+    }
+  }
 
   onNoClick() {
-    this.dialogRef.close();
+    this.dialogRef.close(false);
   }
 
   handleNewUserClick() {
     if (this.userForm.valid) {
-      console.log(this.userForm.value);
       const formValues = this.userForm.value;
-      const user = new UserRegisterDto();
+      const userDto = new UserRegisterDto();
 
-      user.id = this.userId;
-      user.name = formValues.name ?? "";
-      user.userRole = formValues.role ?? RolesEnum.USER;
-      user.login = formValues.email ?? "";
-      user.password = formValues.password ?? "";
+      userDto.id = this.userId;
+      userDto.name = formValues.name ?? "";
+      userDto.role = formValues.role ?? RolesEnum.USER;
+      userDto.login = formValues.email ?? "";
+      userDto.password = formValues.password ?? "";
 
-      this.userService.saveUser(user).subscribe({
+      this.userService.saveUser(userDto).subscribe({
         next: (res) => {
           console.log(res);
+          this.dialogRef.close(true);
         },
         error: (e) => {
           console.log(e);
