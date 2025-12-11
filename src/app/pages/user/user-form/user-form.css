@@ -1,0 +1,22 @@
+:host {
+  display: block;
+  min-width: 500px;
+}
+
+.user-dialog-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding-top: 10px;
+}
+
+.full-width {
+  grid-column: 1 / -1;
+}
+
+.user-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 0 24px 20px;
+}

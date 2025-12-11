@@ -1,95 +1,44 @@
-<hef-card
-  title="Perfil de Usuário"
-  actionLabel="Editar Perfil"
-  actionIcon="edit"
-  [actionClick]="onEditProfile"
->
-
-  <div class="grid">
-
-    <!-- Linha 1 -->
-    <div class="field">
-      <label>Nome:</label>
-      <div class="value">Juliana Evelyn Clarice Pires</div>
-    </div>
-
-    <div class="field">
-      <label>Função:</label>
-      <div class="value">Engenheiro</div>
-    </div>
-
-    <div class="field">
-      <label>Registro CREA:</label>
-      <div class="value">5168415</div>
-    </div>
-
-    <div class="field">
-      <label>UF CREA:</label>
-      <div class="value">Goiás</div>
-    </div>
-
-    <div class="field">
-      <label>CPF:</label>
-      <div class="value">046.659.785-44</div>
-    </div>
-
-    <!-- Linha 2 -->
-    <div class="field">
-      <label>E-mail:</label>
-      <div class="value">juliana_evelyn@outlook.com</div>
-    </div>
-
-    <div class="field">
-      <label>Telefone 1:</label>
-      <div class="value">(62) 99988-7755</div>
-    </div>
-
-    <div class="field">
-      <label>Telefone 2:</label>
-      <div class="value">(62) 99988-7755</div>
-    </div>
-
-    <div class="field">
-      <label>Data Admissão:</label>
-      <div class="value">02/02/2024</div>
-    </div>
-
-    <div class="field">
-      <label>Situação:</label>
-      <div class="value">Trabalhando</div>
-    </div>
-
-    <!-- Linha 3 -->
-    <div class="field">
-      <label>Endereço:</label>
-      <div class="value">Avenida Tancredo Neves</div>
-    </div>
-
-    <div class="field">
-      <label>Número:</label>
-      <div class="value">s/n</div>
-    </div>
-
-    <div class="field">
-      <label>CEP:</label>
-      <div class="value">85866-000</div>
-    </div>
-
-    <div class="field">
-      <label>Complemento do endereço:</label>
-      <div class="value">Bairro Vila A</div>
-    </div>
-
-    <div class="field">
-      <label>Cidade:</label>
-      <div class="value">Foz do Iguaçu</div>
-    </div>
-
-    <div class="field">
-      <label>UF:</label>
-      <div class="value">Paraná</div>
-    </div>
-
+<div class="page-card">
+  <div class="table-header-container">
+    <h2>Usuários</h2>
+    <button
+      class="mat-primary"
+      matButton="filled"
+      (click)="openDialog()"
+    >
+      Novo
+    </button>
   </div>
 
-</hef-card>
+  <table class="tabela-users">
+    <thead>
+    <tr>
+      <th>Email</th>
+      <th>Nome</th>
+      <th>Perfil</th>
+      <th>Status</th>
+      <th>Ações</th>
+    </tr>
+    </thead>
+
+    <tbody>
+      @for (user of users; track user.id) {
+        <tr>
+          <td>{{ user.usuario }}</td>
+          <td>{{ user.nome }}</td>
+          <td>{{ user.perfil }}</td>
+          <td>{{ user.status }}</td>
+          <td>
+            <button
+              class="mat-primary"
+              matButton="filled"
+              (click)="openDialog(user.id)"
+            >
+              Editar
+            </button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
