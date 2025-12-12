@@ -14,9 +14,25 @@
       <p>{{ user.name }}</p>
     </div>
     <div class="info-group">
+      <label>CPF:</label>
+      <p>{{ user.cpf }}</p>
+    </div>
+    <div class="info-group">
+      <label>Data Cadastro:</label>
+      <p>{{ user.creationDate | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div class="info-group">
+      <label>Situação:</label>
+      <p>{{ user.enabled ? 'Ativo' : 'Inativo' }}</p>
+    </div>
+    <div class="info-group">
       <label>Função:</label>
       <p>{{ user.role }}</p>
     </div>
+
+    <div class="section-divider"></div>
+
+
     <div class="info-group">
       <label>Registro Crea:</label>
       <p>{{ user.crea || '-' }}</p>
@@ -25,11 +41,6 @@
       <label>UF Crea:</label>
       <p>{{ user.creaUf || '-' }}</p>
     </div>
-    <div class="info-group">
-      <label>CPF:</label>
-      <p>{{ user.cpf }}</p>
-    </div>
-
     <div class="info-group">
       <label>E-mail:</label>
       <p>{{ user.login }}</p>
@@ -42,33 +53,12 @@
       <label>Telefone 2:</label>
       <p>{{ user.phone2 || '-' }}</p>
     </div>
-    <div class="info-group">
-      <label>Data Cadastro:</label>
-      <p>{{ user.creationDate | date:'dd/MM/yyyy' }}</p>
-    </div>
-    <div class="info-group">
-      <label>Situação:</label>
-      <p>{{ user.enabled ? 'Ativo' : 'Inativo' }}</p>
-    </div>
 
-    <div class="info-group">
-      <label>Endereço:</label>
-      <p>{{ user.address }}</p>
-    </div>
-    <div class="info-group">
-      <label>Número:</label>
-      <p>{{ user.addressNumber }}</p>
-    </div>
+    <div class="section-divider"></div>
+
     <div class="info-group">
       <label>CEP:</label>
       <p>{{ user.zipCode }}</p>
-    </div>
-    <div class="info-group"></div>
-    <div class="info-group"></div>
-
-    <div class="info-group">
-      <label>Complemento do endereço:</label>
-      <p>{{ user.complement || '-' }}</p>
     </div>
     <div class="info-group">
       <label>Cidade:</label>
@@ -78,8 +68,19 @@
       <label>UF:</label>
       <p>{{ user.state }}</p>
     </div>
-    <div class="info-group"></div>
-    <div class="info-group"></div>
+    <div class="info-group">
+      <label>Número:</label>
+      <p>{{ user.addressNumber }}</p>
+    </div>
+
+    <div class="info-group span-2">
+    <label>Endereço:</label>
+    <p>{{ user.address }}</p>
+  </div>
+    <div class="info-group span-2">
+      <label>Complemento:</label>
+      <p>{{ user.complement || '-' }}</p>
+    </div>
 
   </div>
 
@@ -91,4 +92,3 @@
     <mat-icon style="vertical-align: middle; margin-right: 5px;">error</mat-icon>
     <span>{{ errorMessage }}</span>
   </div>
-</div>
