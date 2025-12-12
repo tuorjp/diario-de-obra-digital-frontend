@@ -9,7 +9,7 @@ export interface UserProfileDto {
   creaUf: string;
   cpf: string;
   creationDate: string;
-  status: string;
+  enabled: boolean;
   address: string;
   addressNumber: string;
   zipCode: string;

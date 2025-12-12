@@ -13,7 +13,7 @@ import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
 import {RolesEnum} from '../../../utils/enums/RolesEnum';
 import {MatSelectModule} from '@angular/material/select';
 import {UserRegisterDto} from '../../../utils/dto/UserRegisterDto';
-import {UserService} from '../../../services/user-service';
+import {UserService} from '../../../services/user.service';
 @Component({
   selector: 'app-user-form',
   imports: [MatDialogContent, MatDialogTitle, MatFormField, MatLabel, MatInput, MatDialogActions, MatButton, ReactiveFormsModule, MatError, MatSelectModule],

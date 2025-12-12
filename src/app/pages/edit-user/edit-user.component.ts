@@ -1,30 +1,32 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { CommonModule, Location, DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { UserService } from '../../services/user-service';
+import { UserService } from '../../services/user.service';
+import { CepService } from '../../services/cep.service';
 import { EditUserDto } from '../../utils/dto/edit-user.dto';
-import { CommonModule, Location, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-edit-user',
   standalone: true,
   imports: [
     CommonModule,
-    ReactiveFormsModule, // Essencial para funcionar o [formGroup]
+    ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
     MatSnackBarModule
   ],
-  providers: [DatePipe], // Essencial para injetar o DatePipe
+  providers: [DatePipe],
   templateUrl: './edit-user.component.html',
   styleUrl: './edit-user.component.scss'
 })
 export class EditUserComponent implements OnInit {
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private cepService = inject(CepService);
   private router = inject(Router);
   private location = inject(Location);
   private snackBar = inject(MatSnackBar);
@@ -46,6 +48,9 @@ export class EditUserComponent implements OnInit {
   }
 
   private initForm(): void {
+    // Regex para validar formato (XX) 9XXXX-XXXX
+    const phonePattern = /^\(\d{2}\) \d{5}-\d{4}$/;
+
     this.form = this.fb.group({
       id: [null],
       name: ['', Validators.required],
@@ -57,19 +62,79 @@ export class EditUserComponent implements OnInit {
       status: [{ value: '', disabled: true }],
       creationDate: [{ value: '', disabled: true }],
 
+      // BLOQUEADOS (Preenchidos via CEP):
+      city: [{ value: '', disabled: true }],
+      state: [{ value: '', disabled: true }],
+
       // EDITÁVEIS:
       crea: [''],
       creaUf: [''],
-      phone1: [''],
-      phone2: [''],
+
+      // Validação de Celular
+      phone1: ['', [Validators.pattern(phonePattern)]],
+      phone2: ['', [Validators.pattern(phonePattern)]],
+
       zipCode: [''],
       address: [''],
       addressNumber: [''],
       complement: [''],
-      city: [''],
-      state: [''],
+
       password: ['']
     });
+  }
+
+  // Máscara de Telefone: (XX) 9XXXX-XXXX
+  formatarTelefone(event: any): void {
+    const input = event.target;
+    let value = input.value.replace(/\D/g, ''); // Remove tudo que não é número
+
+    if (value.length > 11) {
+      value = value.substring(0, 11);
+    }
+
+    // Aplica a máscara visualmente
+    if (value.length > 10) {
+      // Formato (11) 91234-5678
+      value = value.replace(/^(\d\d)(\d{5})(\d{4}).*/, '($1) $2-$3');
+    } else if (value.length > 6) {
+      // Formato parcial enquanto digita
+      value = value.replace(/^(\d\d)(\d{4})(\d{0,4}).*/, '($1) $2-$3');
+    } else if (value.length > 2) {
+      value = value.replace(/^(\d\d)(\d{0,5}).*/, '($1) $2');
+    } else if (value.length > 0) {
+      value = value.replace(/^(\d*)/, '($1');
+    }
+
+    input.value = value;
+    // Atualiza o valor no FormControl para garantir a validação
+    this.form.get(input.id)?.setValue(value, { emitEvent: false });
+  }
+
+  consultaCep(): void {
+    const cep = this.form.get('zipCode')?.value;
+
+    if (cep && cep.length >= 8) {
+      this.loading = true;
+      this.cepService.buscarCep(cep).subscribe({
+        next: (dados) => {
+          this.loading = false;
+          if (dados && !dados.erro) {
+            this.form.patchValue({
+              address: dados.logradouro,
+              city: dados.localidade,
+              state: dados.uf
+            });
+            document.getElementById('addressNumber')?.focus();
+          } else {
+            this.snackBar.open('CEP não encontrado.', 'Fechar', { duration: 3000 });
+          }
+        },
+        error: () => {
+          this.loading = false;
+          this.snackBar.open('Erro ao buscar CEP.', 'Fechar', { duration: 3000 });
+        }
+      });
+    }
   }
 
   private loadCurrentUser(): void {
@@ -80,12 +145,14 @@ export class EditUserComponent implements OnInit {
 
         const formattedDate = user.creationDate ? this.datePipe.transform(user.creationDate, 'dd/MM/yyyy') : '';
 
+        const statusTexto = user.enabled ? 'Ativo' : 'Inativo';
+
         this.form.patchValue({
           id: user.id,
           name: user.name,
           login: user.login,
           role: user.role,
-          status: user.status,
+          status: statusTexto,
           creationDate: formattedDate,
           cpf: user.cpf,
           crea: user.crea,
@@ -111,12 +178,15 @@ export class EditUserComponent implements OnInit {
 
   onSubmit(): void {
     if (this.form.invalid) {
-      this.snackBar.open('Preencha os campos obrigatórios.', 'Fechar', { duration: 3000 });
+      this.snackBar.open('Preencha os campos corretamente (verifique o formato do telefone).', 'Fechar', { duration: 3000 });
       return;
     }
 
     const formValue = this.form.getRawValue();
+
     delete formValue.creationDate;
+
+    delete formValue.status;
 
     if (!formValue.password) {
       delete formValue.password;

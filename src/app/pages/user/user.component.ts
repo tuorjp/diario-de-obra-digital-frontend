@@ -2,7 +2,7 @@ import {Component, OnInit, inject, ChangeDetectorRef, ChangeDetectionStrategy} f
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { UserService } from '../../services/user-service';
+import { UserService } from '../../services/user.service';
 import { UserProfileDto } from '../../utils/dto/user-profile.dto';
 import { DatePipe } from '@angular/common';
 import { Router } from '@angular/router';
