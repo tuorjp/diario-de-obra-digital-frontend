@@ -1,6 +1,6 @@
 .page-container {
   padding: 1rem;
-  max-width: 1200px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -21,32 +21,30 @@
 
   .current {
     color: #333;
+    font-weight: 500;
   }
 }
 
-// Card estilo
+// Card
 .card {
   background: #fff;
-  border-radius: 12px; // Arredondamento do protótipo
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border-radius: 12px;
   border: 1px solid #e0e0e0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
   overflow: hidden;
   padding: 0;
 }
 
 .card-header {
-  background-color: #f8f9fa; // Leve cinza no fundo do header se desejar, ou branco
   padding: 1.5rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
+  background-color: #fafafa;
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: var(--hefesto-2); // Azul escuro do tema
-    font-weight: 600;
+    color: #122640;
+    font-weight: 700;
   }
 }
 
@@ -54,7 +52,7 @@
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem; // Espaço entre linhas
+  gap: 1.5rem;
 }
 
 // Grid Systems
@@ -71,7 +69,6 @@
     grid-template-columns: 1fr 1fr;
   }
 
-  // Exemplo para Número (pequeno) e Complemento (grande)
   &.two-col-skew {
     grid-template-columns: 150px 1fr;
   }
@@ -80,8 +77,14 @@
     grid-template-columns: 1fr 1fr 1fr;
   }
 
+  // NOVO: Layout específico para CEP, Cidade, UF, Número
+  &.four-col-address {
+    // Proporções: CEP (médio), Cidade (maior), UF (curto), Número (curto/médio)
+    grid-template-columns: 1.2fr 2fr 0.5fr 0.8fr;
+  }
+
   @media (max-width: 768px) {
-    grid-template-columns: 1fr !important; // Em mobile vira tudo 1 coluna
+    grid-template-columns: 1fr !important;
   }
 }
 
@@ -97,15 +100,44 @@
   }
 }
 
-// Estilo dos Inputs (replicando "Nova Obra")
+// Wrapper para input + ícone de senha
+.input-with-icon {
+  position: relative;
+  width: 100%;
+
+  .custom-input {
+    padding-right: 40px;
+  }
+
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #999;
+    font-size: 1.2rem;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:hover {
+      color: #666;
+    }
+  }
+}
+
+// Estilo dos Inputs
 .custom-input {
   width: 100%;
   padding: 0.75rem 1rem;
   font-size: 0.95rem;
   color: #555;
   background-color: #fff;
-  border: 1px solid #dcdcdc; // Borda cinza suave
-  border-radius: 6px; // Arredondamento leve
+  border: 1px solid #dcdcdc;
+  border-radius: 6px;
   transition: border-color 0.2s;
   font-family: inherit;
 
@@ -115,7 +147,7 @@
 
   &:focus {
     outline: none;
-    border-color: #9cb0d9; // Azul claro do tema ao focar
+    border-color: #9cb0d9;
     box-shadow: 0 0 0 3px rgba(156, 176, 217, 0.2);
   }
 
@@ -126,7 +158,7 @@
 }
 
 select.custom-input {
-  appearance: none; // Remove estilo padrão do browser
+  appearance: none;
   background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: right 1rem center;
@@ -167,14 +199,22 @@ select.custom-input {
   }
 
   .btn-save {
-    background-color: #2c2c2c; // Cor escura do botão "Cadastrar" da imagem
+    background-color: #2c2c2c;
     color: #fff;
-    width: 100%; // No mobile
-    max-width: 200px; // No desktop
+    width: 100%; // Mobile
+    max-width: 200px; // Desktop
 
     &:disabled {
       background-color: #ccc;
       cursor: not-allowed;
     }
   }
+}
+
+// Mensagem de Erro
+.error-msg {
+  color: #d32f2f;
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
 }
