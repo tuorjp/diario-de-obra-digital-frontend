@@ -1,39 +1,100 @@
-.page-card {
-  background: #ffffff;
-  border-radius: 20px;
-  padding: 2rem 2.5rem;
-  border: 1px solid #e5e5e5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-
-  h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #122640;
-  }
+.profile-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+  overflow: hidden;
+  margin: 1rem;
 }
 
-.tabela-users {
-  width: 100%;
-  border-collapse: collapse;
-
-  th, td {
-    padding: 0.9rem 0.7rem;
-    border-bottom: 1px solid #e3e3e3;
-    color: #122640;
-  }
-
-  th {
-    text-align: left;
-    font-weight: 600;
-    background: #f8f9fb;
-  }
-
-  tr:hover {
-    background: #eef3fb;
-  }
-}
-
-.table-header-container {
+.card-header {
+  background-color: #f8f9fa;
+  padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    color: var(--hefesto-2);
+    font-weight: 600;
+  }
+
+  .edit-btn {
+    background-color: #9cb0d9;
+    color: #122640;
+    border-radius: 20px;
+    box-shadow: none;
+    font-weight: 500;
+
+    mat-icon {
+      margin-right: 4px;
+    }
+  }
+}
+
+.card-content {
+  padding: 2rem;
+  display: grid;
+  // 5 colunas para flexibilidade
+  grid-template-columns: repeat(5, 1fr);
+  row-gap: 1.5rem;
+  column-gap: 1.5rem;
+
+  // Responsividade
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-group {
+  display: flex;
+  flex-direction: column;
+
+  label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    margin: 0;
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.4;
+    // Garante que se o texto for muito longo, quebre linha ao invés de estourar
+    word-break: break-word;
+  }
+
+  // --- Classes para ocupar mais colunas ---
+  &.span-2 {
+    grid-column: span 2;
+    @media (max-width: 768px) { grid-column: span 1; }
+  }
+
+  &.span-3 {
+    grid-column: span 3;
+    @media (max-width: 1024px) { grid-column: span 2; }
+    @media (max-width: 768px) { grid-column: span 1; }
+  }
+}
+
+// Divisor de Seção
+.section-divider {
+  grid-column: 1 / -1; // Ocupa a linha inteira
+  border-top: 1px solid #eee;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  width: 100%;
 }

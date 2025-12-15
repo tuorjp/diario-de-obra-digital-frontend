@@ -1,51 +1,94 @@
-<div style="margin-bottom: 2rem;">
-  <app-user-card [user]="loggedUser()" (editClicked)="openDialog($event)"></app-user-card>
-</div>
-
-<div class="page-card">
-  <div class="table-header-container">
-    <h2>Usuários</h2>
-
-    <button
-      mat-icon-button
-      color="primary"
-      matTooltip="Novo Usuário"
-      (click)="openDialog()"
-    >
-      <mat-icon>add</mat-icon>
+<div class="profile-card">
+  <div class="card-header">
+    <h2>Perfil de Usuário</h2>
+    <button mat-flat-button color="primary" class="edit-btn" (click)="onEdit()">
+      <mat-icon>edit</mat-icon>
+      Editar Perfil
     </button>
   </div>
 
-  <table class="tabela-users">
-    <thead>
-    <tr>
-      <th>Email</th>
-      <th>Nome</th>
-      <th>Perfil</th>
-      <th>Status</th>
-      <th>Ações</th>
-    </tr>
-    </thead>
+  <div class="card-content" *ngIf="user && !loading && !errorMessage">
 
-    <tbody>
-      @for (user of users(); track user.id) {
-        <tr>
-          <td>{{ user.login }}</td>
-          <td>{{ user.name }}</td>
-          <td>{{ user.role }}</td>
-          <td>{{ user.status ? "Ativo" : "Inativo"}}</td>
-          <td>
-            <button
-              mat-icon-button
-              color="primary"
-              matTooltip="Editar Usuário"
-              (click)="openDialog(user)"
-            >
-              <mat-icon>edit</mat-icon>
-            </button>
-          </td>
-        </tr>
-      }
-    </tbody>
-  </table>
-</div>
+    <div class="info-group">
+      <label>Nome:</label>
+      <p>{{ user.name }}</p>
+    </div>
+    <div class="info-group">
+      <label>CPF:</label>
+      <p>{{ user.cpf }}</p>
+    </div>
+    <div class="info-group">
+      <label>Data Cadastro:</label>
+      <p>{{ user.creationDate | date:'dd/MM/yyyy' }}</p>
+    </div>
+    <div class="info-group">
+      <label>Situação:</label>
+      <p>{{ user.enabled ? 'Ativo' : 'Inativo' }}</p>
+    </div>
+    <div class="info-group">
+      <label>Função:</label>
+      <p>{{ user.role }}</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+
+    <div class="info-group">
+      <label>Registro Crea:</label>
+      <p>{{ user.crea || '-' }}</p>
+    </div>
+    <div class="info-group">
+      <label>UF Crea:</label>
+      <p>{{ user.creaUf || '-' }}</p>
+    </div>
+    <div class="info-group">
+      <label>E-mail:</label>
+      <p>{{ user.login }}</p>
+    </div>
+    <div class="info-group">
+      <label>Telefone 1:</label>
+      <p>{{ user.phone1 || '-' }}</p>
+    </div>
+    <div class="info-group">
+      <label>Telefone 2:</label>
+      <p>{{ user.phone2 || '-' }}</p>
+    </div>
+
+    <div class="section-divider"></div>
+
+    <div class="info-group">
+      <label>CEP:</label>
+      <p>{{ user.zipCode }}</p>
+    </div>
+    <div class="info-group">
+      <label>Cidade:</label>
+      <p>{{ user.city }}</p>
+    </div>
+    <div class="info-group">
+      <label>UF:</label>
+      <p>{{ user.state }}</p>
+    </div>
+    <div class="info-group">
+      <label>Número:</label>
+      <p>{{ user.addressNumber }}</p>
+    </div>
+
+    <div class="info-group span-2">
+    <label>Endereço:</label>
+    <p>{{ user.address }}</p>
+  </div>
+    <div class="info-group span-2">
+      <label>Complemento:</label>
+      <p>{{ user.complement || '-' }}</p>
+    </div>
+
+  </div>
+
+  <div *ngIf="loading" style="padding: 2rem; text-align: center;">
+    <p>Carregando dados do usuário...</p>
+  </div>
+
+  <div *ngIf="errorMessage" style="padding: 2rem; text-align: center; color: #d32f2f;">
+    <mat-icon style="vertical-align: middle; margin-right: 5px;">error</mat-icon>
+    <span>{{ errorMessage }}</span>
+  </div>

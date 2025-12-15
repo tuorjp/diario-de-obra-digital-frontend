@@ -1,0 +1,215 @@
+<div class="card">
+  <div class="card-header">
+    <h2>Editar Perfil</h2>
+  </div>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-content">
+
+    <div class="form-row full-width">
+      <div class="form-group">
+        <label for="name">Nome*</label>
+        <input
+          type="text"
+          id="name"
+          formControlName="name"
+          class="custom-input"
+          maxlength="40"
+          placeholder="Digite seu nome">
+
+        <small class="error-msg" *ngIf="form.get('name')?.invalid && (form.get('name')?.dirty || form.get('name')?.touched)">
+          Nome obrigatório (apenas letras, máx 40 caracteres).
+        </small>
+      </div>
+    </div>
+
+    <div class="form-row three-col">
+      <div class="form-group">
+        <label for="cpf">CPF</label>
+        <input type="text" id="cpf" formControlName="cpf" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="creationDate">Data Cadastro</label>
+        <input type="text" id="creationDate" formControlName="creationDate" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="status">Situação</label>
+        <input type="text" id="status" formControlName="status" class="custom-input">
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 0.5rem 0;">
+
+    <div class="form-row three-col">
+      <div class="form-group">
+        <label for="role">Função</label>
+        <input type="text" id="role" formControlName="role" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="crea">Registro Crea</label>
+        <input type="text" id="crea" formControlName="crea" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="creaUf">UF Crea</label>
+        <select id="creaUf" formControlName="creaUf" class="custom-input">
+          <option value="">Selecionar</option>
+          <option value="AC">AC</option><option value="AL">AL</option><option value="AP">AP</option>
+          <option value="AM">AM</option><option value="BA">BA</option><option value="CE">CE</option>
+          <option value="DF">DF</option><option value="ES">ES</option><option value="GO">GO</option>
+          <option value="MA">MA</option><option value="MT">MT</option><option value="MS">MS</option>
+          <option value="MG">MG</option><option value="PA">PA</option><option value="PB">PB</option>
+          <option value="PR">PR</option><option value="PE">PE</option><option value="PI">PI</option>
+          <option value="RJ">RJ</option><option value="RN">RN</option><option value="RS">RS</option>
+          <option value="RO">RO</option><option value="RR">RR</option><option value="SC">SC</option>
+          <option value="SP">SP</option><option value="SE">SE</option><option value="TO">TO</option>
+        </select>
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 0.5rem 0;">
+
+    <div class="form-row full-width">
+      <div class="form-group">
+        <label for="login">E-mail (Login)</label>
+        <input type="email" id="login" formControlName="login" class="custom-input">
+      </div>
+    </div>
+
+    <div class="form-row two-col">
+      <div class="form-group">
+        <label for="phone1">Telefone 1*</label>
+        <input
+          type="text"
+          id="phone1"
+          formControlName="phone1"
+          class="custom-input"
+          (input)="formatarTelefone($event)"
+          maxlength="15"
+          placeholder="(99) 99999-9999">
+
+        <small class="error-msg" *ngIf="form.get('phone1')?.invalid && (form.get('phone1')?.touched || form.get('phone1')?.dirty)">
+          Telefone obrigatório e no formato (XX) 9XXXX-XXXX.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="phone2">Telefone 2</label>
+        <input
+          type="text"
+          id="phone2"
+          formControlName="phone2"
+          class="custom-input"
+          (input)="formatarTelefone($event)"
+          maxlength="15"
+          placeholder="(99) 99999-9999">
+
+        <small class="error-msg" *ngIf="form.get('phone2')?.invalid && form.get('phone2')?.dirty">
+          Formato inválido.
+        </small>
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 0.5rem 0;">
+
+    <div class="form-row four-col-address">
+      <div class="form-group">
+        <label for="zipCode">CEP</label>
+        <input
+          type="text"
+          id="zipCode"
+          formControlName="zipCode"
+          class="custom-input"
+          (blur)="consultaCep()"
+          placeholder="00000-000">
+      </div>
+      <div class="form-group">
+        <label for="city">Cidade</label>
+        <input type="text" id="city" formControlName="city" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="state">UF</label>
+        <input type="text" id="state" formControlName="state" class="custom-input">
+      </div>
+      <div class="form-group">
+        <label for="addressNumber">Número</label>
+        <input
+          type="text"
+          id="addressNumber"
+          formControlName="addressNumber"
+          class="custom-input"
+          maxlength="5">
+      </div>
+    </div>
+
+    <div class="form-row full-width">
+      <div class="form-group">
+        <label for="address">Endereço (Logradouro)</label>
+        <input
+          type="text"
+          id="address"
+          formControlName="address"
+          class="custom-input"
+          maxlength="100">
+      </div>
+    </div>
+
+    <div class="form-row full-width">
+      <div class="form-group">
+        <label for="complement">Complemento</label>
+        <input
+          type="text"
+          id="complement"
+          formControlName="complement"
+          class="custom-input"
+          maxlength="50">
+      </div>
+    </div>
+
+    <hr style="border: 0; border-top: 1px solid #eee; margin: 0.5rem 0;">
+
+    <div class="form-row two-col">
+      <div class="form-group">
+        <label for="password">Nova Senha (Opcional)</label>
+        <div class="input-with-icon">
+          <input
+            [type]="hidePassword ? 'password' : 'text'"
+            id="password"
+            formControlName="password"
+            class="custom-input"
+            placeholder="********">
+          <mat-icon class="toggle-password" (click)="hidePassword = !hidePassword">
+            {{ hidePassword ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </div>
+        <small class="error-msg" *ngIf="form.get('password')?.invalid && form.get('password')?.dirty">
+          A senha deve ter no mínimo 6 caracteres.
+        </small>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Nova Senha</label>
+        <div class="input-with-icon">
+          <input
+            [type]="hideConfirmPassword ? 'password' : 'text'"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            class="custom-input"
+            placeholder="********">
+          <mat-icon class="toggle-password" (click)="hideConfirmPassword = !hideConfirmPassword">
+            {{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </div>
+        <small class="error-msg" *ngIf="form.get('confirmPassword')?.hasError('passwordMismatch')">
+          As senhas não conferem.
+        </small>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn-cancel" (click)="onCancel()">Cancelar</button>
+      <button type="submit" class="btn-save" [disabled]="loading">
+        {{ loading ? 'Salvando...' : 'Salvar Alterações' }}
+      </button>
+    </div>
+
+  </form>
+</div>
