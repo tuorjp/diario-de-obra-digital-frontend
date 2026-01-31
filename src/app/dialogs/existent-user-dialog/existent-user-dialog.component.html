@@ -1,0 +1,63 @@
+<div class="dialog-container">
+  <div class="dialog-header" [class.header-active]="data.user.enabled" [class.header-inactive]="!data.user.enabled">
+    <mat-icon class="warning-icon">warning</mat-icon>
+    <h2>{{ data.user.enabled ? 'Usuário Ativo Encontrado' : 'Usuário Inativo Encontrado' }}</h2>
+  </div>
+
+  <div class="dialog-content">
+
+    <div class="alert-box">
+      Os seguintes dados já estão cadastrados no sistema:
+      <strong>{{ formattedFields }}</strong>.
+    </div>
+
+    <p class="intro-text" *ngIf="!data.user.enabled">
+      Esses dados pertencem a um usuário que está <strong>INATIVO</strong>.
+      Deseja reativar e editar este cadastro?
+    </p>
+
+    <p class="intro-text" *ngIf="data.user.enabled">
+      Esses dados pertencem a um usuário que já está <strong>ATIVO</strong>.
+      Deseja abrir o cadastro existente para edição?
+    </p>
+
+    <div class="user-details-card">
+      <div class="detail-row">
+        <span class="label">Nome:</span>
+        <span class="value">{{ data.user.name }}</span>
+      </div>
+
+      <div class="detail-row" [class.highlight]="isConflict('Login')">
+        <span class="label">Login:</span>
+        <span class="value">{{ data.user.login }}</span>
+      </div>
+
+      <div class="detail-row" [class.highlight]="isConflict('CPF')">
+        <span class="label">CPF:</span>
+        <span class="value">{{ data.user.cpf }}</span>
+      </div>
+
+      <div class="detail-row" *ngIf="data.user.crea" [class.highlight]="isConflict('CREA')">
+        <span class="label">CREA:</span>
+        <span class="value">{{ data.user.crea }} / {{ data.user.creaUf }}</span>
+      </div>
+
+      <div class="detail-row">
+        <span class="label">Situação Atual:</span>
+        <span class="value status-text" [class.active]="data.user.enabled" [class.inactive]="!data.user.enabled">
+          {{ data.user.enabled ? 'Ativo' : 'Inativo' }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-stroked-button (click)="onCancel()" class="btn-cancel">
+      Não, corrigir dados
+    </button>
+
+    <button mat-flat-button (click)="onConfirm()" class="btn-confirm">
+      {{ data.user.enabled ? 'Sim, editar existente' : 'Sim, reativar existente' }}
+    </button>
+  </div>
+</div>

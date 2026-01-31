@@ -1,6 +1,12 @@
 <div class="profile-card">
   <div class="card-header">
-    <h2>Perfil de Usuário</h2>
+    <h2>
+      Perfil de Usuário -
+      <span *ngIf="user?.role" [ngClass]="getRoleClass(user?.role)">
+       {{ user?.role }}
+      </span>
+    </h2>
+
     <button mat-flat-button color="primary" class="edit-btn" (click)="onEdit()">
       <mat-icon>edit</mat-icon>
       Editar Perfil
@@ -31,7 +37,6 @@
     </div>
 
     <div class="section-divider"></div>
-
 
     <div class="info-group">
       <label>Registro Crea:</label>
@@ -74,9 +79,9 @@
     </div>
 
     <div class="info-group span-2">
-    <label>Endereço:</label>
-    <p>{{ user.address }}</p>
-  </div>
+      <label>Endereço:</label>
+      <p>{{ user.address }}</p>
+    </div>
     <div class="info-group span-2">
       <label>Complemento:</label>
       <p>{{ user.complement || '-' }}</p>
@@ -92,3 +97,4 @@
     <mat-icon style="vertical-align: middle; margin-right: 5px;">error</mat-icon>
     <span>{{ errorMessage }}</span>
   </div>
+</div>

@@ -131,3 +131,19 @@ a:hover {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+// Remove o padding padrão e ajusta a borda do container do Angular Material
+.custom-dialog-container {
+  .mat-mdc-dialog-container {
+    padding: 0 !important; // Remove o espaço branco ao redor
+    border-radius: 12px !important; // Garante que o wrapper tenha o mesmo raio
+    overflow: hidden !important; // Corta o conteúdo (como o cabeçalho laranja)
+  }
+
+  // Suporte para versões anteriores do Angular Material (sem MDC)
+  .mat-dialog-container {
+    padding: 0 !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+  }
+}

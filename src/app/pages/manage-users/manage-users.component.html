@@ -1,0 +1,133 @@
+<div class="page-container">
+
+  <div class="card">
+    <div class="card-header">
+      <h2>Gerenciar Usuários</h2>
+
+      <button mat-flat-button class="btn-add" (click)="onAddUser()">
+        <mat-icon>add</mat-icon>
+        Novo Usuário
+      </button>
+    </div>
+
+    <div class="filters-bar">
+
+      <div class="search-group">
+        <mat-icon>search</mat-icon>
+        <input
+          type="text"
+          placeholder="Pesquisar..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchInput()">
+      </div>
+
+      <div class="filter-group">
+        <select [(ngModel)]="roleFilter" (change)="onFilterChange()" class="custom-select" title="Filtrar por Função">
+          <option value="">Todas as Funções</option>
+          <option value="ADMIN">Administrador</option>
+          <option value="GESTOR">Gestor</option>
+          <option value="ENGENHEIRO">Engenheiro</option>
+          <option value="FISCAL">Fiscal</option>
+          <option value="USER">Usuário Padrão</option>
+        </select>
+      </div>
+
+      <label class="checkbox-filter">
+        <input type="checkbox" [(ngModel)]="hideInactive" (change)="onFilterChange()">
+        <span>Ocultar inativos</span>
+      </label>
+
+      <div class="separator-vertical"></div>
+
+      <div class="filter-group sort-group">
+        <span class="label-sort">Ordenar por:</span>
+        <select [(ngModel)]="sortField" (change)="onFilterChange()" class="custom-select" style="min-width: 130px;">
+          <option value="name">Nome</option>
+          <option value="login">Login</option>
+          <option value="role">Função</option>
+          <option value="creationDate">Data Cadastro</option>
+          <option value="enabled">Situação</option>
+        </select>
+      </div>
+
+      <button class="sort-btn" (click)="toggleSortDirection()" [title]="sortDirection === 'asc' ? 'Crescente' : 'Decrescente'">
+        <mat-icon>{{ sortDirection === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</mat-icon>
+      </button>
+
+    </div>
+
+    <div class="card-content">
+      <div *ngIf="loading" class="loading-state">
+        Carregando usuários...
+      </div>
+
+      <div *ngIf="!loading && users.length === 0" class="empty-state">
+        Nenhum usuário encontrado.
+      </div>
+
+      <table class="custom-table" *ngIf="!loading && users.length > 0">
+        <thead>
+        <tr>
+          <th>Nome</th>
+          <th>Login</th>
+          <th>Função</th>
+          <th>Data Cadastro</th>
+          <th style="text-align: center;">Situação</th>
+          <th class="actions">Ações</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of users">
+          <td><strong>{{ user.name }}</strong></td>
+          <td>{{ user.login }}</td>
+          <td>
+              <span class="role-badge" [ngClass]="getRoleClass(user.role)">
+                {{ user.role }}
+              </span>
+          </td>
+          <td>{{ user.creationDate | date:'dd/MM/yyyy' }}</td>
+          <td style="text-align: center;">
+              <span class="status-badge" [class.active]="user.enabled" [class.inactive]="!user.enabled">
+                {{ user.enabled ? 'Ativo' : 'Inativo' }}
+              </span>
+          </td>
+          <td class="actions">
+            <a mat-icon-button title="Editar" [routerLink]="['/user/edit', user.id]" style="color: #666;">
+              <mat-icon>edit</mat-icon>
+            </a>
+            <button mat-icon-button title="Desativar/Ativar" (click)="onToggleStatus(user)" color="warn">
+              <mat-icon>{{ user.enabled ? 'delete' : 'restore_from_trash' }}</mat-icon>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+      <div class="pagination-footer" *ngIf="!loading && totalPages > 1">
+
+        <span class="page-info">
+          Página {{ page + 1 }} de {{ totalPages }} (Exibindo {{ startRange }}-{{ endRange }} de {{ totalElements }} usuários)
+        </span>
+
+        <div class="page-actions">
+          <button mat-icon-button [disabled]="page === 0" (click)="firstPage()" title="Primeira Página">
+            <mat-icon>first_page</mat-icon>
+          </button>
+
+          <button mat-icon-button [disabled]="page === 0" (click)="prevPage()" title="Anterior">
+            <mat-icon>chevron_left</mat-icon>
+          </button>
+
+          <button mat-icon-button [disabled]="page >= totalPages - 1" (click)="nextPage()" title="Próxima">
+            <mat-icon>chevron_right</mat-icon>
+          </button>
+
+          <button mat-icon-button [disabled]="page >= totalPages - 1" (click)="lastPage()" title="Última Página">
+            <mat-icon>last_page</mat-icon>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

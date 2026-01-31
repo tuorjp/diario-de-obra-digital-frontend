@@ -65,4 +65,15 @@ export class UserComponent implements OnInit {
   onEdit() {
     this.router.navigate(['/user/edit']);
   }
+
+  getRoleClass(role?: string): string {
+    const r = role?.toUpperCase() || '';
+    switch (r) {
+      case 'ADMIN': return 'role-admin';
+      case 'GESTOR': return 'role-gestor';
+      case 'ENGENHEIRO': return 'role-engenheiro';
+      case 'FISCAL': return 'role-fiscal';
+      default: return '';
+    }
+  }
 }
