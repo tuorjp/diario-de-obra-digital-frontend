@@ -22,6 +22,19 @@
     font-weight: 600;
   }
 
+  .role-admin,
+  .role-gestor {
+    color: #C2420B;
+  }
+
+  .role-engenheiro {
+    color: #BABF15;
+  }
+
+  .role-fiscal {
+    color: #9CB0D9;
+  }
+
   .edit-btn {
     background-color: #9cb0d9;
     color: #122640;
@@ -77,7 +90,7 @@
     word-break: break-word;
   }
 
-  // --- Classes para ocupar mais colunas ---
+  // Classes para ocupar mais colunas
   &.span-2 {
     grid-column: span 2;
     @media (max-width: 768px) { grid-column: span 1; }

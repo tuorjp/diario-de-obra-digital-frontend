@@ -1,0 +1,158 @@
+// PALETA DE CORES
+$hefesto-1: #9CB0D9;
+$hefesto-2: #122640;
+$hefesto-3: #BFBFBF;
+$hefesto-4: #BABF15;
+$hefesto-5: #C2420B;
+
+.dialog-container {
+  max-width: 500px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.dialog-header {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: #fff;
+  background-color: $hefesto-2;
+
+  .warning-icon {
+    color: #ffd740;
+    transform: scale(1.2);
+  }
+
+  h2 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+
+}
+
+.dialog-content {
+  padding: 1.5rem 2rem;
+
+  .alert-box {
+    background-color: rgba($hefesto-4, 0.15);
+    color: darken($hefesto-4, 25%);
+    border: 1px solid rgba($hefesto-4, 0.3);
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .intro-text {
+    color: #555;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+
+    strong {
+      color: $hefesto-2;
+    }
+  }
+}
+
+.user-details-card {
+  background-color: #f8f9fa;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    // Espaçamento vertical interno da linha
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    //  CONFIGURAÇÃO DO DESTAQUE
+    &.highlight {
+      background-color: rgba($hefesto-5, 0.08);
+      margin: 0 -1rem;
+      padding-left: 1rem;
+      padding-right: 1rem;
+
+      border-top: 1px solid rgba($hefesto-5, 0.2);
+      border-bottom: 1px solid rgba($hefesto-5, 0.2);
+
+      .value {
+        color: $hefesto-5;
+        font-weight: 600;
+      }
+
+      .label {
+        color: $hefesto-5;
+        font-weight: 600;
+      }
+    }
+
+    .label {
+      font-weight: 600;
+      color: #666;
+    }
+
+    .value {
+      color: $hefesto-2;
+      font-weight: 500;
+
+      &.status-text.active {
+        color: darken($hefesto-4, 10%);
+        font-weight: 600;
+      }
+      &.status-text.inactive {
+        color: $hefesto-5;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.dialog-actions {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  background-color: #fff;
+  border-top: 1px solid #f0f0f0;
+
+  button {
+    font-size: 0.95rem;
+    padding: 0.5rem 1.2rem;
+  }
+
+  .btn-cancel {
+    color: #666;
+    border-color: #ccc;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+  }
+
+  .btn-confirm {
+    background-color: $hefesto-2;
+    color: #fff;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+}
