@@ -1,23 +1,38 @@
 <div class="page-card">
   <h2>Obras</h2>
 
-  <table class="tabela-obras">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Nome da Obra</th>
-      <th>Cidade</th>
-      <th>Status</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    <tr *ngFor="let obra of obras">
-      <td>{{ obra.id }}</td>
-      <td>{{ obra.nome }}</td>
-      <td>{{ obra.cidade }}</td>
-      <td>{{ obra.status }}</td>
-    </tr>
-    </tbody>
-  </table>
+  @if (loading()) {
+    <p class="status-msg">Carregando obras...</p>
+  } @else if (error()) {
+    <p class="status-msg error">{{ error() }}</p>
+  } @else if (obras().length === 0) {
+    <p class="status-msg">Nenhuma obra encontrada.</p>
+  } @else {
+    <table class="tabela-obras">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Projeto</th>
+          <th>Contratante</th>
+          <th>Contratada</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (obra of obras(); track obra.id) {
+          <tr>
+            <td>{{ obra.id }}</td>
+            <td>{{ obra.projeto }}</td>
+            <td>{{ obra.contratante }}</td>
+            <td>{{ obra.contratada }}</td>
+            <td>
+              <span class="badge" [class.badge-ativa]="obra.status === 'ATIVA'" [class.badge-inativa]="obra.status === 'INATIVA'">
+                {{ obra.status }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
 </div>

@@ -1,0 +1,13 @@
+export * from './authenticationController.service';
+import { AuthenticationControllerService } from './authenticationController.service';
+export * from './authenticationController.serviceInterface';
+export * from './fileUploadTestController.service';
+import { FileUploadTestControllerService } from './fileUploadTestController.service';
+export * from './fileUploadTestController.serviceInterface';
+export * from './obraController.service';
+import { ObraControllerService } from './obraController.service';
+export * from './obraController.serviceInterface';
+export * from './userController.service';
+import { UserControllerService } from './userController.service';
+export * from './userController.serviceInterface';
+export const APIS = [AuthenticationControllerService, FileUploadTestControllerService, ObraControllerService, UserControllerService];

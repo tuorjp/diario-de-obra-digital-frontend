@@ -32,3 +32,34 @@
     background: #eef3fb;
   }
 }
+
+.status-msg {
+  color: #555;
+  font-size: 0.95rem;
+  padding: 1rem 0;
+
+  &.error {
+    color: #c0392b;
+    font-weight: 500;
+  }
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+
+  &.badge-ativa {
+    background: #d4f8e8;
+    color: #1a7a4a;
+  }
+
+  &.badge-inativa {
+    background: #fde8e8;
+    color: #b91c1c;
+  }
+}
