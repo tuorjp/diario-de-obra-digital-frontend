@@ -3,33 +3,407 @@
   border-radius: 20px;
   padding: 2rem 2.5rem;
   border: 1px solid #e5e5e5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
 
-  h2 {
-    margin-bottom: 1.5rem;
-    font-size: 1.8rem;
-    color: #122640;
+/* ── Header ─────────────────────────────────────── */
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+
+  .header-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+
+    h2 {
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: #122640;
+      margin: 0;
+    }
   }
+}
+
+/* ── Status Filters ─ checkboxes nativos ─────────── */
+.status-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.filter-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.88rem;
+  color: #333;
+  cursor: pointer;
+  user-select: none;
+
+  input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: #122640;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+}
+
+/* ── Nova Obra Button ────────────────────────────── */
+.btn-nova-obra {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.3rem;
+  background: #b5b83b;
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 24px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background: #9da037;
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  .btn-plus {
+    font-size: 1.15rem;
+    line-height: 1;
+    font-weight: 700;
+  }
+}
+
+/* ── Controls Bar ────────────────────────────────── */
+.controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-group {
+  display: flex;
+  align-items: center;
+}
+
+.search-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .search-icon {
+    position: absolute;
+    left: 0.75rem;
+    color: #999;
+    pointer-events: none;
+  }
+
+  .search-input {
+    padding: 0.55rem 0.75rem 0.55rem 2.25rem;
+    border: 1.5px solid #d0d0d0;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    font-size: 0.88rem;
+    color: #333;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 180px;
+    background: #fff;
+
+    &:focus {
+      border-color: #122640;
+    }
+
+    &::placeholder {
+      color: #bbb;
+    }
+  }
+}
+
+.sort-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .sort-select {
+    appearance: none;
+    padding: 0.55rem 2rem 0.55rem 0.85rem;
+    border: 1.5px solid #d0d0d0;
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #333;
+    background: #fff;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.2s;
+
+    &:focus {
+      border-color: #122640;
+    }
+  }
+
+  .select-chevron {
+    position: absolute;
+    right: 0.6rem;
+    color: #666;
+    pointer-events: none;
+  }
+}
+
+.btn-sort-code {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  background: #ebebeb;
+  color: #333;
+  font-size: 0.88rem;
+  font-weight: 500;
+  border: 1.5px solid #d0d0d0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+
+  &:hover {
+    background: #ddd;
+  }
+}
+
+/* ── Table ───────────────────────────────────────── */
+.table-wrapper {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #c9cdd4;
 }
 
 .tabela-obras {
   width: 100%;
   border-collapse: collapse;
 
-  th, td {
-    padding: 0.9rem 0.7rem;
-    border-bottom: 1px solid #e3e3e3;
-    color: #122640;
+  // ── Header ──────────────────────────────────────
+  thead tr {
+    background: #122640;
   }
 
   th {
-    text-align: left;
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
     font-weight: 600;
-    background: #f8f9fb;
+    color: #ffffff; // SEMPRE branco, sem exceção
+    text-align: center;
+    letter-spacing: 0.02em;
+    border-right: 1px solid rgba(255, 255, 255, 0.18);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &.col-nome {
+      text-align: left;
+    }
+
+    // só o Nome é left no header
   }
 
-  tr:hover {
+  // ── Body cells ──────────────────────────────────
+  td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid #eee;
+    border-right: 1px solid #c9cdd4;
+    font-size: 0.9rem;
+    text-align: center;
+    vertical-align: middle;
+    color: #333;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover {
+    background: #f4f7fc;
+  }
+
+  // ── Column widths & specific td-only styles ─────
+  // (nenhuma dessas regras afeta o th porque usam
+  //  seletores de td ou são aninhadas em tbody)
+
+  .col-contrato {
+    width: 100px;
+  }
+
+  td.col-nome {
+    text-align: left;
+    font-weight: 500;
+    min-width: 200px;
+  }
+
+  .col-cidade {
+    width: 160px;
+  }
+
+  tbody td.col-cidade {
+    color: #555;
+  }
+
+  .col-status {
+    width: 130px;
+  }
+
+  .col-data {
+    width: 120px;
+  }
+
+  tbody td.col-data {
+    color: #555;
+  }
+
+  .col-acoes {
+    width: 160px;
+    white-space: nowrap;
+  }
+
+  .empty-row {
+    text-align: center;
+    color: #888;
+    padding: 2rem;
+    font-size: 0.95rem;
+  }
+}
+
+/* ── Status Badge ────────────────────────────────── */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+
+  &.badge-ativa {
+    background: #d4f8e8;
+    color: #1a7a4a;
+  }
+
+  &.badge-inativa {
+    background: #fde8e8;
+    color: #b91c1c;
+  }
+
+  &.badge-concluida {
+    background: #e0eaff;
+    color: #1d4ed8;
+  }
+}
+
+/* ── Action Buttons ──────────────────────────────── */
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #555;
+  transition: background 0.15s, color 0.15s;
+  margin-left: 1px;
+
+  &:hover {
     background: #eef3fb;
+    color: #122640;
+  }
+
+  &.action-btn--delete:hover {
+    background: #fde8e8;
+    color: #b91c1c;
+  }
+}
+
+/* ── Pagination ──────────────────────────────────── */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.3rem;
+  padding-top: 1rem;
+
+  .page-info {
+    font-size: 0.88rem;
+    color: #555;
+    padding: 0 0.5rem;
+  }
+
+  .page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #fff;
+    color: #555;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover:not(:disabled) {
+      background: #eef3fb;
+      color: #122640;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: default;
+    }
+  }
+}
+
+/* ── Loading ─────────────────────────────────────── */
+.status-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem 0;
+  gap: 0.75rem;
+  color: #777;
+  font-size: 0.95rem;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e3e3e3;
+  border-top-color: #122640;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
@@ -41,25 +415,5 @@
   &.error {
     color: #c0392b;
     font-weight: 500;
-  }
-}
-
-.badge {
-  display: inline-block;
-  padding: 0.25rem 0.7rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-
-  &.badge-ativa {
-    background: #d4f8e8;
-    color: #1a7a4a;
-  }
-
-  &.badge-inativa {
-    background: #fde8e8;
-    color: #b91c1c;
   }
 }

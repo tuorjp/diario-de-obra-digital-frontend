@@ -10,12 +10,13 @@
 import { UserProfileDTO } from './userProfileDTO';
 
 
-export interface ObraResponseDTO { 
+export interface ObraResponseDTO {
     id?: number;
     contratante?: string;
     contratada?: string;
     projeto?: string;
     status?: ObraResponseDTO.StatusEnum;
+    dataInicio?: string;
     fiscal?: UserProfileDTO;
     engenheiros?: Set<UserProfileDTO>;
 }
