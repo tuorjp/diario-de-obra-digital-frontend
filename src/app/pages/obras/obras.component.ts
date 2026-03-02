@@ -171,13 +171,31 @@ export class ObrasComponent implements OnInit, OnDestroy {
     }
   }
 
-  formatDate(dateStr?: string): string {
+  formatDate(dateStr?: string | any): string {
     if (!dateStr) return '—';
+
+    // Fallback if backend (Spring/Jackson) returns an array like [yyyy, MM, dd]
+    if (Array.isArray(dateStr) && dateStr.length >= 3) {
+      const [year, month, day] = dateStr;
+      return `${day.toString().padStart(2, '0')}/${month.toString().padStart(2, '0')}/${year}`;
+    }
+
     try {
-      const d = new Date(dateStr);
+      let parsedDate = dateStr;
+      // Prevent timezone shifting bug for 'YYYY-MM-DD' strings
+      if (typeof dateStr === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(dateStr.trim())) {
+        parsedDate = `${dateStr.trim()}T12:00:00`;
+      }
+
+      const d = new Date(parsedDate);
+      // Valid date check
+      if (isNaN(d.getTime())) {
+        return typeof dateStr === 'string' ? dateStr : '—';
+      }
+
       return d.toLocaleDateString('pt-BR');
     } catch {
-      return dateStr;
+      return typeof dateStr === 'string' ? dateStr : '—';
     }
   }
 }
