@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ObraControllerService } from '../../../api/api/obraController.service';
@@ -24,6 +25,7 @@ import { ObraResponseDTO } from '../../../api/model/obraResponseDTO';
 })
 export class ObrasComponent implements OnInit, OnDestroy {
   private obraService = inject(ObraControllerService);
+  private router = inject(Router);
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<void>();
 
@@ -133,7 +135,9 @@ export class ObrasComponent implements OnInit, OnDestroy {
   }
 
   onVisualizar(obra: ObraResponseDTO): void {
-    console.log('[ObrasComponent] Visualizar:', obra.id);
+    if (obra.id) {
+      this.router.navigate(['/obras/visualizar', obra.id], { state: { obra } });
+    }
   }
 
   onEditar(obra: ObraResponseDTO): void {
