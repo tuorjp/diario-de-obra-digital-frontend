@@ -32,15 +32,7 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     loading = signal<boolean>(true);
     error = signal<string | null>(null);
 
-    // Mock data to match Figma since these don't exist in backend yet
-    mockEndereco = 'Avenida Tancredo Neves';
-    mockComplemento = 'Bairro Vila A';
-    mockNumero = 's/n';
-    mockCep = '85866-000';
-    mockCidade = 'Foz do Iguaçu';
-    mockEstado = 'Paraná';
-    mockPrevisaoFim = '06/12/2026';
-    mockObservacoes = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.';
+    mockPrevisaoFim = '06/12/2026'; // TODO: add dataPrevisaoFim to backend DTO
 
     diariosMock = signal<DiarioMock[]>([
         { data: '21/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Pendente' },
@@ -53,8 +45,8 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     constructor() {
         const nav = this.router.getCurrentNavigation();
         if (nav?.extras.state && nav.extras.state['obra']) {
+            // Use router state for immediate display, but always refresh from API
             this.obra.set(nav.extras.state['obra']);
-            this.loading.set(false);
         }
     }
 
@@ -64,9 +56,8 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
             if (idStr) {
                 const id = parseInt(idStr, 10);
                 if (!isNaN(id)) {
-                    if (!this.obra()) {
-                        this.loadObra(id);
-                    }
+                    // Always load from backend to get complete data (e.g. observacao)
+                    this.loadObra(id);
                 } else {
                     this.error.set('ID de obra inválido.');
                     this.loading.set(false);
@@ -116,8 +107,9 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     }
 
     onEditarObra(): void {
-        if (this.obra()) {
-            console.log('Editar obra', this.obra()?.id);
+        const o = this.obra();
+        if (o?.id) {
+            this.router.navigate(['/obras/editar', o.id]);
         }
     }
 

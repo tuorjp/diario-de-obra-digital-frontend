@@ -55,11 +55,11 @@
                     </div>
                     <div class="data-item">
                         <span class="label">Endereço:</span>
-                        <span class="value">{{ mockEndereco }}</span>
+                        <span class="value">{{ obra()?.endereco?.endereco || '—' }}</span>
                     </div>
                     <div class="data-item">
                         <span class="label">Complemento do endereço:</span>
-                        <span class="value">{{ mockComplemento }}</span>
+                        <span class="value">{{ obra()?.endereco?.complemento || '—' }}</span>
                     </div>
                 </div>
 
@@ -88,21 +88,21 @@
                     <div class="row">
                         <div class="data-item mt-address">
                             <span class="label">Número:</span>
-                            <span class="value">{{ mockNumero }}</span>
+                            <span class="value">{{ obra()?.endereco?.numero || '—' }}</span>
                         </div>
                         <div class="data-item mt-address">
                             <span class="label">CEP:</span>
-                            <span class="value">{{ mockCep }}</span>
+                            <span class="value">{{ obra()?.endereco?.cep || '—' }}</span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="data-item">
                             <span class="label">Cidade</span>
-                            <span class="value">{{ mockCidade }}</span>
+                            <span class="value">{{ obra()?.endereco?.cidade || '—' }}</span>
                         </div>
                         <div class="data-item">
                             <span class="label">UF:</span>
-                            <span class="value">{{ mockEstado }}</span>
+                            <span class="value">{{ obra()?.endereco?.uf || '—' }}</span>
                         </div>
                     </div>
                 </div>
@@ -154,7 +154,7 @@
         <div class="card-section">
             <div class="data-item vertical">
                 <span class="label">Observações:</span>
-                <p class="observacoes-text">{{ mockObservacoes }}</p>
+                <p class="observacoes-text">{{ obra()?.observacao || 'Nenhuma observação informada.' }}</p>
             </div>
         </div>
 

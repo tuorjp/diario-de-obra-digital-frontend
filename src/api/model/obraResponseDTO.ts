@@ -8,6 +8,7 @@
  * Do not edit the class manually.
  */
 import { UserProfileDTO } from './userProfileDTO';
+import { EnderecoObraDTO } from './enderecoObraDTO';
 
 
 export interface ObraResponseDTO {
@@ -17,8 +18,10 @@ export interface ObraResponseDTO {
     projeto?: string;
     status?: ObraResponseDTO.StatusEnum;
     dataInicio?: string;
+    observacao?: string;
     fiscal?: UserProfileDTO;
     engenheiros?: Set<UserProfileDTO>;
+    endereco?: EnderecoObraDTO;
 }
 export namespace ObraResponseDTO {
     export const StatusEnum = {

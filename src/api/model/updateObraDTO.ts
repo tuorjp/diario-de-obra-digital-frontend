@@ -9,11 +9,18 @@
  */
 
 
-export interface UpdateObraDTO { 
+import { EnderecoObraDTO } from './enderecoObraDTO';
+
+export interface UpdateObraDTO {
     contratante?: string;
     contratada?: string;
     projeto?: string;
+    numeroContrato?: string;
+    dataInicio?: string;
+    dataPrevistaFim?: string;
+    observacao?: string;
     fiscalId?: number;
     engenheiroIds?: Set<number>;
+    endereco?: EnderecoObraDTO;
 }
 

@@ -194,16 +194,9 @@ export class ObraControllerService extends BaseService implements ObraController
         const localVarTransferCache: boolean = options?.transferCache ?? true;
 
 
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
+        // Force JSON responseType: selectHeaderAccept(['*/*']) returns '*/*' which
+        // fails isJsonMime(), incorrectly setting responseType to 'blob'.
+        const responseType_: 'text' | 'json' | 'blob' = 'json';
 
         let localVarPath = `/obra/${this.configuration.encodeParam({ name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "number", dataFormat: "int64" })}`;
         const { basePath, withCredentials } = this.configuration;

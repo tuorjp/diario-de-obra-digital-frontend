@@ -127,7 +127,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
 
   // Action handlers (stubs — will navigate later)
   onNovaObra(): void {
-    console.log('[ObrasComponent] Nova obra clicked');
+    this.router.navigate(['/obras/nova']);
   }
 
   onVerDiarios(obra: ObraResponseDTO): void {
@@ -141,7 +141,9 @@ export class ObrasComponent implements OnInit, OnDestroy {
   }
 
   onEditar(obra: ObraResponseDTO): void {
-    console.log('[ObrasComponent] Editar:', obra.id);
+    if (obra.id) {
+      this.router.navigate(['/obras/editar', obra.id]);
+    }
   }
 
   onExcluir(obra: ObraResponseDTO): void {
