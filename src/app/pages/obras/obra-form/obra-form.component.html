@@ -1,0 +1,215 @@
+<div class="page-container">
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a (click)="goHome()" class="breadcrumb-link">Início</a>
+    <span class="separator">></span>
+    <a (click)="goObras()" class="breadcrumb-link">Obras</a>
+    <span class="separator">></span>
+    <span class="current">{{ isEditMode ? 'Editar Obra' : 'Nova Obra' }}</span>
+  </div>
+
+  <!-- Loading state -->
+  @if (loading) {
+  <div class="status-state">
+    <div class="spinner"></div>
+    <p>Carregando dados...</p>
+  </div>
+  } @else {
+  <div class="form-card">
+    <h1 class="form-title">{{ isEditMode ? 'Editar Obra' : 'Cadastrar Obra' }}</h1>
+
+    @if (errorMsg) {
+    <div class="alert-error">{{ errorMsg }}</div>
+    }
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- Row 1: Nome da Obra + Nº Contrato -->
+      <div class="form-row row-nome-contrato">
+        <div class="field field-nome">
+          <label for="projeto">Nome da Obra*</label>
+          <input id="projeto" formControlName="projeto" type="text" placeholder="Value"
+            [class.invalid]="form.get('projeto')?.invalid && form.get('projeto')?.touched" />
+          @if (form.get('projeto')?.invalid && form.get('projeto')?.touched) {
+          <span class="field-error">Campo obrigatório</span>
+          }
+        </div>
+        <div class="field field-contrato">
+          <label for="numeroContrato">Nº Contrato</label>
+          <input id="numeroContrato" formControlName="numeroContrato" type="text" placeholder="Value" />
+        </div>
+      </div>
+
+      <!-- Row 2: Contratante -->
+      <div class="form-row">
+        <div class="field field-full">
+          <label for="contratante">Contratante*</label>
+          <input id="contratante" formControlName="contratante" type="text" placeholder="Value"
+            [class.invalid]="form.get('contratante')?.invalid && form.get('contratante')?.touched" />
+          @if (form.get('contratante')?.invalid && form.get('contratante')?.touched) {
+          <span class="field-error">Campo obrigatório</span>
+          }
+        </div>
+      </div>
+
+      <!-- Row 3: Contratada -->
+      <div class="form-row">
+        <div class="field field-full">
+          <label for="contratada">Contratada*</label>
+          <input id="contratada" formControlName="contratada" type="text" placeholder="Value"
+            [class.invalid]="form.get('contratada')?.invalid && form.get('contratada')?.touched" />
+          @if (form.get('contratada')?.invalid && form.get('contratada')?.touched) {
+          <span class="field-error">Campo obrigatório</span>
+          }
+        </div>
+      </div>
+
+      <!-- Row 4: Datas + CEP + Cidade + UF -->
+      <div class="form-row row-dates-address">
+        <div class="field field-date">
+          <label for="dataInicio">Data Início</label>
+          <div class="date-wrapper">
+            <input id="dataInicio" formControlName="dataInicio" type="date" />
+          </div>
+        </div>
+        <div class="field field-date">
+          <label for="dataPrevistaFim">Data Prevista Fim</label>
+          <div class="date-wrapper">
+            <input id="dataPrevistaFim" formControlName="dataPrevistaFim" type="date" />
+          </div>
+        </div>
+        <div class="field field-cep">
+          <label for="cep">CEP</label>
+          <input id="cep" formControlName="cep" type="text" placeholder="Value"
+            (blur)="onCepBlur()" maxlength="9" />
+        </div>
+        <div class="field field-cidade">
+          <label for="cidade">Cidade</label>
+          <input id="cidade" formControlName="cidade" type="text" placeholder="Value" />
+        </div>
+        <div class="field field-uf">
+          <label for="uf">UF</label>
+          <div class="select-wrapper">
+            <select id="uf" formControlName="uf">
+              <option value="">Selecionar</option>
+              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5: Endereço -->
+      <div class="form-row">
+        <div class="field field-full">
+          <label for="endereco">Endereço</label>
+          <input id="endereco" formControlName="endereco" type="text" placeholder="Value" />
+        </div>
+      </div>
+
+      <!-- Row 6: Complemento + Número -->
+      <div class="form-row row-comp-num">
+        <div class="field field-complemento">
+          <label for="complemento">Complemento do Endereço</label>
+          <input id="complemento" formControlName="complemento" type="text" placeholder="Value" />
+        </div>
+        <div class="field field-numero">
+          <label for="numero">Número</label>
+          <input id="numero" formControlName="numero" type="text" placeholder="Value" />
+        </div>
+      </div>
+
+      <!-- Row 7: Fiscal + CREA + UF CREA -->
+      <div class="form-row row-person">
+        <div class="field field-person-name">
+          <label for="fiscalId">Fiscal</label>
+          <input id="fiscalId-search" type="text" placeholder="Value" class="hidden-input" style="display:none" />
+          <select id="fiscalId" formControlName="fiscalId">
+            <option [value]="null">Selecionar</option>
+            <option *ngFor="let u of fiscais" [value]="u.id">{{ u.name }}</option>
+          </select>
+        </div>
+        <div class="field field-crea">
+          <label>Registro Crea</label>
+          <input type="text" [value]="fiscalCrea" placeholder="Value" readonly />
+        </div>
+        <div class="field field-crea-uf">
+          <label>UF Crea</label>
+          <div class="select-wrapper">
+            <select [value]="fiscalCreaUf" disabled>
+              <option value="">Selecionar</option>
+              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 8: Engenheiro 1 + CREA + UF CREA -->
+      <div class="form-row row-person">
+        <div class="field field-person-name">
+          <label for="engenheiroId1">Engenheiro 1</label>
+          <select id="engenheiroId1" formControlName="engenheiroId1">
+            <option [value]="null">Selecionar</option>
+            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
+          </select>
+        </div>
+        <div class="field field-crea">
+          <label>Registro Crea</label>
+          <input type="text" [value]="eng1Crea" placeholder="Value" readonly />
+        </div>
+        <div class="field field-crea-uf">
+          <label>UF Crea</label>
+          <div class="select-wrapper">
+            <select [value]="eng1CreaUf" disabled>
+              <option value="">Selecionar</option>
+              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 9: Engenheiro 2 + CREA + UF CREA -->
+      <div class="form-row row-person">
+        <div class="field field-person-name">
+          <label for="engenheiroId2">Engenheiro 2</label>
+          <select id="engenheiroId2" formControlName="engenheiroId2">
+            <option [value]="null">Selecionar</option>
+            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
+          </select>
+        </div>
+        <div class="field field-crea">
+          <label>Registro Crea</label>
+          <input type="text" [value]="eng2Crea" placeholder="Value" readonly />
+        </div>
+        <div class="field field-crea-uf">
+          <label>UF Crea</label>
+          <div class="select-wrapper">
+            <select [value]="eng2CreaUf" disabled>
+              <option value="">Selecionar</option>
+              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 10: Observações -->
+      <div class="form-row">
+        <div class="field field-full">
+          <label for="observacao">Observações</label>
+          <textarea id="observacao" formControlName="observacao" placeholder="Value" rows="4"></textarea>
+        </div>
+      </div>
+
+      <!-- Submit Button -->
+      <div class="form-actions">
+        <button type="submit" class="btn-submit" [disabled]="saving">
+          @if (saving) {
+          <span class="spinner-sm"></span> Salvando...
+          } @else {
+          {{ isEditMode ? 'Salvar Alterações' : 'Cadastrar' }}
+          }
+        </button>
+      </div>
+    </form>
+  </div>
+  }
+</div>

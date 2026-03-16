@@ -1,0 +1,267 @@
+/* ─── Page Shell ─────────────────────────────────────────────── */
+.page-container {
+  padding: 24px 40px;
+  min-height: 100%;
+  background: #f3f4f6;
+}
+
+/* ─── Breadcrumb ─────────────────────────────────────────────── */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 24px;
+
+  .breadcrumb-link {
+    color: #374151;
+    cursor: pointer;
+    text-decoration: none;
+
+    &:hover { text-decoration: underline; }
+  }
+
+  .separator { color: #9ca3af; }
+
+  .current {
+    color: #374151;
+    font-weight: 500;
+  }
+}
+
+/* ─── Card ───────────────────────────────────────────────────── */
+.form-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 32px 40px 40px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  max-width: 960px;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 28px;
+}
+
+/* ─── Alerts ─────────────────────────────────────────────────── */
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 13px;
+  margin-bottom: 20px;
+}
+
+/* ─── Form Rows ──────────────────────────────────────────────── */
+.form-row {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 18px;
+  align-items: flex-start;
+}
+
+/* Row specific layouts */
+.row-nome-contrato {
+  .field-nome { flex: 1 1 auto; }
+  .field-contrato { flex: 0 0 150px; }
+}
+
+.row-dates-address {
+  flex-wrap: wrap;
+  gap: 12px;
+
+  .field-date { flex: 0 0 auto; }
+  .field-cep { flex: 0 0 140px; }
+  .field-cidade { flex: 1 1 160px; }
+  .field-uf { flex: 0 0 120px; }
+}
+
+.row-comp-num {
+  .field-complemento { flex: 1; }
+  .field-numero { flex: 0 0 160px; }
+}
+
+.row-person {
+  align-items: flex-end;
+
+  .field-person-name { flex: 1 1 auto; }
+  .field-crea { flex: 0 0 200px; }
+  .field-crea-uf { flex: 0 0 140px; }
+}
+
+/* ─── Fields ─────────────────────────────────────────────────── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &.field-full { flex: 1; }
+
+  label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+  }
+
+  input[type='text'],
+  input[type='date'],
+  textarea {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #111827;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.15s;
+    font-family: inherit;
+    width: 100%;
+    box-sizing: border-box;
+
+    &:focus { border-color: #6b7280; }
+
+    &.invalid {
+      border-color: #ef4444;
+    }
+
+    &[readonly] {
+      background: #f9fafb;
+      color: #6b7280;
+      cursor: default;
+    }
+
+    &::placeholder { color: #9ca3af; }
+  }
+
+  select {
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    padding: 8px 32px 8px 12px;
+    font-size: 14px;
+    color: #111827;
+    background: #ffffff;
+    outline: none;
+    appearance: none;
+    width: 100%;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s;
+
+    &:focus { border-color: #6b7280; }
+
+    &:disabled {
+      background: #f9fafb;
+      color: #6b7280;
+      cursor: default;
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+  }
+
+  .field-error {
+    font-size: 11px;
+    color: #ef4444;
+  }
+}
+
+/* ─── Date wrapper (mimics the Figma date input with calendar icon) */
+.date-wrapper {
+  position: relative;
+
+  input[type='date'] {
+    padding-right: 36px;
+    min-width: 160px;
+  }
+}
+
+/* ─── Select wrapper (custom chevron) ───────────────────────── */
+.select-wrapper {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+    width: 6px;
+    height: 6px;
+    border-right: 2px solid #6b7280;
+    border-bottom: 2px solid #6b7280;
+    pointer-events: none;
+  }
+
+  select { padding-right: 32px; }
+}
+
+/* ─── Submit Button ──────────────────────────────────────────── */
+.form-actions {
+  margin-top: 28px;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 13px 24px;
+  background: #1f2937;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background 0.15s;
+
+  &:hover:not(:disabled) { background: #111827; }
+
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+}
+
+/* ─── Spinner ────────────────────────────────────────────────── */
+.status-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 200px;
+  color: #6b7280;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #374151;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+.spinner-sm {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

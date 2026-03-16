@@ -66,11 +66,9 @@ export class UserForm implements OnInit{
 
       this.userService.saveUser(userDto).subscribe({
         next: (res) => {
-          console.log(res);
           this.dialogRef.close(true);
         },
         error: (e) => {
-          console.log(e);
         }
       });
 
