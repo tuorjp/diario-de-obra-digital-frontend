@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,6 +26,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
   private obraService = inject(ObraControllerService);
   private userService = inject(UserService);
   private cepService = inject(CepService);
+  private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
 
   form!: FormGroup;
@@ -110,6 +111,8 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       next: (users: any) => {
         const list: UserProfileDTO[] = Array.isArray(users) ? users : [];
         this.allUsers = list;
+        this.fiscais = list.filter(u => u.role === 'FISCAL');
+        this.engenheiros = list.filter(u => u.role === 'ENGENHEIRO');
       },
       error: () => console.warn('Erro ao carregar usuários.')
     });
@@ -117,63 +120,75 @@ export class ObraFormComponent implements OnInit, OnDestroy {
 
   private loadObra(id: number): void {
     this.loading = true;
+    this.cdr.detectChanges(); // Força a tela a mostrar carregando imediatamente
+
     this.obraService.findById(id).pipe(takeUntil(this.destroy$)).subscribe({
       next: (data: any) => {
-        const obra = (data && data.data) ? data.data : data;
-        // Convert date arrays to ISO strings if needed
-        const toIso = (d: any): string => {
-          if (!d) return '';
-          if (Array.isArray(d) && d.length >= 3) {
-            const [y, m, day] = d;
-            return `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        try {
+          const obra = (data && data.data) ? data.data : data;
+          // Convert date arrays to ISO strings if needed
+          const toIso = (d: any): string => {
+            if (!d) return '';
+            if (Array.isArray(d) && d.length >= 3) {
+              const [y, m, day] = d;
+              return `${y}-${String(m).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
+            if (typeof d === 'string') return d;
+            return '';
+          };
+
+          this.form.patchValue({
+            projeto: obra.projeto ?? '',
+            numeroContrato: obra.numeroContrato ?? '',
+            contratante: obra.contratante ?? '',
+            contratada: obra.contratada ?? '',
+            dataInicio: toIso(obra.dataInicio),
+            dataPrevistaFim: toIso(obra.dataPrevistaFim),
+            cep: obra.endereco?.cep ?? '',
+            cidade: obra.endereco?.cidade ?? '',
+            uf: obra.endereco?.uf ?? '',
+            endereco: obra.endereco?.endereco ?? '',
+            complemento: obra.endereco?.complemento ?? '',
+            numero: obra.endereco?.numero ?? '',
+            fiscalId: obra.fiscal?.id ?? null,
+            observacao: obra.observacao ?? ''
+          });
+
+          // Populate CREA info for auto-display
+          if (obra.fiscal) {
+            this.fiscalCrea = obra.fiscal.crea ?? '';
+            this.fiscalCreaUf = obra.fiscal.creaUf ?? '';
           }
-          if (typeof d === 'string') return d;
-          return '';
-        };
 
-        this.form.patchValue({
-          projeto: obra.projeto ?? '',
-          numeroContrato: obra.numeroContrato ?? '',
-          contratante: obra.contratante ?? '',
-          contratada: obra.contratada ?? '',
-          dataInicio: toIso(obra.dataInicio),
-          dataPrevistaFim: toIso(obra.dataPrevistaFim),
-          cep: obra.endereco?.cep ?? '',
-          cidade: obra.endereco?.cidade ?? '',
-          uf: obra.endereco?.uf ?? '',
-          endereco: obra.endereco?.endereco ?? '',
-          complemento: obra.endereco?.complemento ?? '',
-          numero: obra.endereco?.numero ?? '',
-          fiscalId: obra.fiscal?.id ?? null,
-          observacao: obra.observacao ?? ''
-        });
+          // Handle engenheiros (up to 2)
+          const engs: UserProfileDTO[] = obra.engenheiros
+            ? Array.from(obra.engenheiros as Set<UserProfileDTO>)
+            : [];
+          if (engs[0]) {
+            this.form.patchValue({ engenheiroId1: engs[0].id });
+            this.eng1Crea = engs[0].crea ?? '';
+            this.eng1CreaUf = engs[0].creaUf ?? '';
+          }
+          if (engs[1]) {
+            this.form.patchValue({ engenheiroId2: engs[1].id });
+            this.eng2Crea = engs[1].crea ?? '';
+            this.eng2CreaUf = engs[1].creaUf ?? '';
+          }
 
-        // Populate CREA info for auto-display
-        if (obra.fiscal) {
-          this.fiscalCrea = obra.fiscal.crea ?? '';
-          this.fiscalCreaUf = obra.fiscal.creaUf ?? '';
+          this.loading = false;
+          this.cdr.detectChanges(); // Força atualização da tela
+        } catch (e: any) {
+          console.error("[ObraForm] Erro interno no loadObra:", e);
+          this.errorMsg = `Erro ao processar dados da obra: ${e.message || e}`;
+          this.loading = false;
+          this.cdr.detectChanges(); // Força atualização da tela
         }
-
-        // Handle engenheiros (up to 2)
-        const engs: UserProfileDTO[] = obra.engenheiros
-          ? Array.from(obra.engenheiros as Set<UserProfileDTO>)
-          : [];
-        if (engs[0]) {
-          this.form.patchValue({ engenheiroId1: engs[0].id });
-          this.eng1Crea = engs[0].crea ?? '';
-          this.eng1CreaUf = engs[0].creaUf ?? '';
-        }
-        if (engs[1]) {
-          this.form.patchValue({ engenheiroId2: engs[1].id });
-          this.eng2Crea = engs[1].crea ?? '';
-          this.eng2CreaUf = engs[1].creaUf ?? '';
-        }
-
-        this.loading = false;
       },
       error: err => {
+        console.error('[ObraForm] Erro no findById', err);
         this.errorMsg = `Erro ao carregar obra: ${err.status}`;
         this.loading = false;
+        this.cdr.detectChanges(); // Força atualização da tela
       }
     });
   }
@@ -242,7 +257,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       dataPrevistaFim: v.dataPrevistaFim || undefined,
       observacao: v.observacao || undefined,
       fiscalId: v.fiscalId ? Number(v.fiscalId) : undefined,
-      engenheiroIds: engenheiroIds.size > 0 ? engenheiroIds : undefined,
+      engenheiroIds: engenheiroIds.size > 0 ? (Array.from(engenheiroIds) as any) : undefined,
       endereco: Object.values(endereco).some(x => x) ? endereco : undefined
     };
 

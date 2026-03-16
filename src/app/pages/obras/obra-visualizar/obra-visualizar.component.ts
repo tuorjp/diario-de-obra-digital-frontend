@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 import { ObraControllerService } from '../../../../api/api/obraController.service';
 import { ObraResponseDTO } from '../../../../api/model/obraResponseDTO';
 import { UserProfileDTO } from '../../../../api/model/userProfileDTO';
+import { UserService } from '../../../services/user.service';
 
 interface DiarioMock {
     data: string;
@@ -26,13 +27,13 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     private router = inject(Router);
     private location = inject(Location);
     private obraService = inject(ObraControllerService);
+    private userService = inject(UserService);
     private destroy$ = new Subject<void>();
 
     obra = signal<ObraResponseDTO | null>(null);
     loading = signal<boolean>(true);
     error = signal<string | null>(null);
-
-    mockPrevisaoFim = '06/12/2026'; // TODO: add dataPrevisaoFim to backend DTO
+    isGestorOrAdmin = signal<boolean>(false);
 
     diariosMock = signal<DiarioMock[]>([
         { data: '21/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Pendente' },
@@ -51,6 +52,13 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.userService.getMyProfile().pipe(takeUntil(this.destroy$)).subscribe({
+            next: (profile) => {
+                this.isGestorOrAdmin.set(profile.role === 'GESTOR' || profile.role === 'ADMIN');
+            },
+            error: (err) => console.error('Error fetching user profile', err)
+        });
+
         this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe(params => {
             const idStr = params.get('id');
             if (idStr) {
@@ -103,7 +111,6 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     }
 
     onInserirDiario(): void {
-        console.log('Inserir diário');
     }
 
     onEditarObra(): void {

@@ -60,7 +60,6 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: () => {
-          console.log('Login bem-sucedido!');
           this.router.navigate(['/home']); // redireciona após login
         },
         error: (err: any) => {

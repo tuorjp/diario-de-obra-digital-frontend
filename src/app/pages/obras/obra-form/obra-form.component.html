@@ -85,7 +85,7 @@
         </div>
         <div class="field field-cidade">
           <label for="cidade">Cidade</label>
-          <input id="cidade" formControlName="cidade" type="text" placeholder="Selecionar" readonly />
+          <input id="cidade" formControlName="cidade" type="text" placeholder="Value" />
         </div>
         <div class="field field-uf">
           <label for="uf">UF</label>
@@ -125,7 +125,7 @@
           <input id="fiscalId-search" type="text" placeholder="Value" class="hidden-input" style="display:none" />
           <select id="fiscalId" formControlName="fiscalId">
             <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of allUsers" [value]="u.id">{{ u.name }}</option>
+            <option *ngFor="let u of fiscais" [value]="u.id">{{ u.name }}</option>
           </select>
         </div>
         <div class="field field-crea">
@@ -149,7 +149,7 @@
           <label for="engenheiroId1">Engenheiro 1</label>
           <select id="engenheiroId1" formControlName="engenheiroId1">
             <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of allUsers" [value]="u.id">{{ u.name }}</option>
+            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
           </select>
         </div>
         <div class="field field-crea">
@@ -173,7 +173,7 @@
           <label for="engenheiroId2">Engenheiro 2</label>
           <select id="engenheiroId2" formControlName="engenheiroId2">
             <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of allUsers" [value]="u.id">{{ u.name }}</option>
+            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
           </select>
         </div>
         <div class="field field-crea">

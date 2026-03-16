@@ -14,6 +14,7 @@ import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ObraControllerService } from '../../../api/api/obraController.service';
 import { ObraResponseDTO } from '../../../api/model/obraResponseDTO';
+import { UserService } from '../../services/user.service';
 
 @Component({
   selector: 'app-obras',
@@ -25,6 +26,7 @@ import { ObraResponseDTO } from '../../../api/model/obraResponseDTO';
 })
 export class ObrasComponent implements OnInit, OnDestroy {
   private obraService = inject(ObraControllerService);
+  private userService = inject(UserService);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<void>();
@@ -35,6 +37,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
   error = signal<string | null>(null);
   currentPage = signal(0);
   totalPages = signal(1);
+  isGestorOrAdmin = signal<boolean>(false);
 
   // Filters & Search
   termoBusca = '';
@@ -47,6 +50,14 @@ export class ObrasComponent implements OnInit, OnDestroy {
   readonly pageSize = 13;
 
   ngOnInit(): void {
+    // Check user role
+    this.userService.getMyProfile().pipe(takeUntil(this.destroy$)).subscribe({
+      next: (profile) => {
+        this.isGestorOrAdmin.set(profile.role === 'GESTOR' || profile.role === 'ADMIN');
+      },
+      error: (err) => console.error('Error fetching user profile', err)
+    });
+
     // Debounce search input
     this.searchSubject
       .pipe(debounceTime(400), distinctUntilChanged(), takeUntil(this.destroy$))
@@ -131,7 +142,6 @@ export class ObrasComponent implements OnInit, OnDestroy {
   }
 
   onVerDiarios(obra: ObraResponseDTO): void {
-    console.log('[ObrasComponent] Ver diários:', obra.id);
   }
 
   onVisualizar(obra: ObraResponseDTO): void {

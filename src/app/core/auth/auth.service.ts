@@ -15,8 +15,6 @@ export class AuthService {
     // AJUSTE CRÍTICO: 'responseType: text' impede que o Angular quebre ao receber uma string pura
     return this.http.post(this.apiUrl, credentials, { responseType: 'text' as 'json' }).pipe(
       tap((response: any) => {
-        console.log('Resposta do Login no Backend:', response);
-
         let tokenToSave = null;
 
         try {
@@ -30,7 +28,6 @@ export class AuthService {
 
         if (tokenToSave) {
           localStorage.setItem('TK', tokenToSave);
-          console.log('Token salvo com sucesso:', tokenToSave);
         } else {
           console.error('Token não encontrado na resposta!', response);
         }

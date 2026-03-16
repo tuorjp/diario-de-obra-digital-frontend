@@ -37,7 +37,6 @@ export class UserComponent implements OnInit {
 
     this.userService.getMyProfile().subscribe({
       next: (data) => {
-        console.log('Dados recebidos:', data);
         this.user = data;
         this.loading = false;
 

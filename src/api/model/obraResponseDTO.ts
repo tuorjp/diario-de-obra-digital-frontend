@@ -18,6 +18,7 @@ export interface ObraResponseDTO {
     projeto?: string;
     status?: ObraResponseDTO.StatusEnum;
     dataInicio?: string;
+    dataPrevistaFim?: string;
     observacao?: string;
     fiscal?: UserProfileDTO;
     engenheiros?: Set<UserProfileDTO>;
