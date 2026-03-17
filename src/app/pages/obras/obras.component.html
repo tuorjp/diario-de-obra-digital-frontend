@@ -39,10 +39,10 @@
           (input)="onBuscaChange()" />
       </div>
       <div class="sort-select-wrap">
-        <select class="sort-select" [(ngModel)]="sortField" (change)="onSortChange()">
+        <select class="sort-select" [(ngModel)]="searchField" (change)="onSearchFieldChange()">
           <option value="projeto">Por nome</option>
           <option value="id">Por código</option>
-          <option value="status">Por status</option>
+          <option value="contratada">Por contratada</option>
           <option value="contratante">Por contratante</option>
         </select>
         <svg class="select-chevron" xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none"
@@ -53,15 +53,29 @@
     </div>
     <button class="btn-sort-code" (click)="toggleSortDir()">
       Ordenar por código
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
-        stroke="currentColor" stroke-width="2">
-        <line x1="8" y1="6" x2="21" y2="6" />
-        <line x1="8" y1="12" x2="21" y2="12" />
-        <line x1="8" y1="18" x2="21" y2="18" />
-        <line x1="3" y1="6" x2="3.01" y2="6" />
-        <line x1="3" y1="12" x2="3.01" y2="12" />
-        <line x1="3" y1="18" x2="3.01" y2="18" />
-      </svg>
+      @if (sortField === 'id' && sortDir === 'asc') {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="19" x2="12" y2="5"></line>
+          <polyline points="5 12 12 5 19 12"></polyline>
+        </svg>
+      } @else if (sortField === 'id' && sortDir === 'desc') {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <polyline points="19 12 12 19 5 12"></polyline>
+        </svg>
+      } @else {
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
+          stroke="currentColor" stroke-width="2">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <line x1="3" y1="6" x2="3.01" y2="6" />
+          <line x1="3" y1="12" x2="3.01" y2="12" />
+          <line x1="3" y1="18" x2="3.01" y2="18" />
+        </svg>
+      }
     </button>
   </div>
 
@@ -96,7 +110,7 @@
         <tr>
           <td class="col-contrato">{{ obra.id }}</td>
           <td class="col-nome">{{ obra.projeto }}</td>
-          <td class="col-cidade">{{ obra.contratante }}</td>
+          <td class="col-cidade">{{ obra.endereco?.cidade || '-' }}</td>
           <td class="col-status">
             <span class="badge" [ngClass]="getStatusClass(obra.status)">
               {{ getStatusLabel(obra.status) }}

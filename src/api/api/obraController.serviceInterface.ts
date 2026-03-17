@@ -60,7 +60,7 @@ export interface ObraControllerServiceInterface {
      * @param term 
      * @param status 
      */
-    search(page?: number, size?: number, sortField?: string, sortDir?: string, term?: string, status?: 'ATIVA' | 'INATIVA', extraHttpRequestParams?: any): Observable<PageObraResponseDTO>;
+    search(page?: number, size?: number, sortField?: string, sortDir?: string, searchField?: string, term?: string, status?: 'ATIVA' | 'INATIVA', extraHttpRequestParams?: any): Observable<PageObraResponseDTO>;
 
     /**
      * 

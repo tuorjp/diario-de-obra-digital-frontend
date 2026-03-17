@@ -29,7 +29,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
   private userService = inject(UserService);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
-  private searchSubject = new Subject<void>();
+  private searchSubject = new Subject<string>();
 
   // Data state
   obras = signal<ObraResponseDTO[]>([]);
@@ -41,6 +41,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
 
   // Filters & Search
   termoBusca = '';
+  searchField = 'projeto';
   sortField = 'projeto';
   sortDir = 'asc';
   filtroAtiva = true;
@@ -74,15 +75,21 @@ export class ObrasComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private buildStatusParam(): 'ATIVA' | 'INATIVA' | undefined {
-    // For now map the main filter: if only "Em andamento" checked → ATIVA
-    if (this.filtroAtiva && !this.filtroConcluida && !this.filtroCancelada) {
-      return 'ATIVA';
+  private buildStatusParam(): any {
+    const statuses: string[] = [];
+
+    if (this.filtroAtiva) statuses.push('ATIVA');
+    if (this.filtroConcluida) statuses.push('CONCLUIDA');
+    if (this.filtroCancelada) statuses.push('INATIVA');
+
+    // If none are checked, or all are checked, fetch all
+    if (statuses.length === 0 || statuses.length === 3) {
+      return undefined;
     }
-    if (!this.filtroAtiva && (this.filtroConcluida || this.filtroCancelada)) {
-      return 'INATIVA';
-    }
-    return undefined; // all or no filter
+    
+    // Instead of array which might fail if backend doesn't accept array natively without proper conversion,
+    // let's join by comma. Spring handles comma-separated strings to Collections naturally too.
+    return statuses.join(',');
   }
 
   loadObras(): void {
@@ -93,7 +100,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
     const term = this.termoBusca.trim() || undefined;
 
     this.obraService
-      .search(this.currentPage(), this.pageSize, this.sortField, this.sortDir, term, statusParam)
+      .search(this.currentPage(), this.pageSize, this.sortField, this.sortDir, this.searchField, term, statusParam as any)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (page) => {
@@ -110,17 +117,20 @@ export class ObrasComponent implements OnInit, OnDestroy {
 
   // Event Handlers
   onBuscaChange(): void {
-    this.searchSubject.next();
-  }
-
-  onSortChange(): void {
-    this.currentPage.set(0);
-    this.loadObras();
+    this.searchSubject.next(this.termoBusca);
   }
 
   onFiltroChange(): void {
     this.currentPage.set(0);
     this.loadObras();
+  }
+
+  onSearchFieldChange(): void {
+    // If user changes search field while having a term, trigger search
+    if (this.termoBusca.trim() !== '') {
+      this.currentPage.set(0);
+      this.loadObras();
+    }
   }
 
   toggleSortDir(): void {
@@ -174,7 +184,8 @@ export class ObrasComponent implements OnInit, OnDestroy {
   getStatusLabel(status?: ObraResponseDTO.StatusEnum | string): string {
     switch (status) {
       case 'ATIVA': return 'Em andamento';
-      case 'INATIVA': return 'Inativa';
+      case 'INATIVA': return 'Cancelada'; // The UI shows Cancelada
+      case 'CONCLUIDA': return 'Concluída';
       default: return status ?? '—';
     }
   }
@@ -183,6 +194,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
     switch (status) {
       case 'ATIVA': return 'badge-ativa';
       case 'INATIVA': return 'badge-inativa';
+      case 'CONCLUIDA': return 'badge-concluida';
       default: return '';
     }
   }

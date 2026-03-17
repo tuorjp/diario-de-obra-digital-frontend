@@ -225,10 +225,10 @@ export class ObraControllerService extends BaseService implements ObraController
      * @param reportProgress flag to report request and response progress.
      * @param options additional options
      */
-    public search(page?: number, size?: number, sortField?: string, sortDir?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<PageObraResponseDTO>;
-    public search(page?: number, size?: number, sortField?: string, sortDir?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<HttpResponse<PageObraResponseDTO>>;
-    public search(page?: number, size?: number, sortField?: string, sortDir?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<HttpEvent<PageObraResponseDTO>>;
-    public search(page?: number, size?: number, sortField?: string, sortDir?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<any> {
+    public search(page?: number, size?: number, sortField?: string, sortDir?: string, searchField?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'body', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<PageObraResponseDTO>;
+    public search(page?: number, size?: number, sortField?: string, sortDir?: string, searchField?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'response', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<HttpResponse<PageObraResponseDTO>>;
+    public search(page?: number, size?: number, sortField?: string, sortDir?: string, searchField?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe?: 'events', reportProgress?: boolean, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<HttpEvent<PageObraResponseDTO>>;
+    public search(page?: number, size?: number, sortField?: string, sortDir?: string, searchField?: string, term?: string, status?: 'ATIVA' | 'INATIVA', observe: any = 'body', reportProgress: boolean = false, options?: { httpHeaderAccept?: '*/*', context?: HttpContext, transferCache?: boolean }): Observable<any> {
 
         let localVarQueryParameters = new OpenApiHttpParams(this.encoder);
 
@@ -263,6 +263,15 @@ export class ObraControllerService extends BaseService implements ObraController
             localVarQueryParameters,
             'sortDir',
             <any>sortDir,
+            QueryParamStyle.Form,
+            true,
+        );
+
+
+        localVarQueryParameters = this.addToHttpParams(
+            localVarQueryParameters,
+            'searchField',
+            <any>searchField,
             QueryParamStyle.Form,
             true,
         );

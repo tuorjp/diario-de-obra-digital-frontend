@@ -111,8 +111,8 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       next: (users: any) => {
         const list: UserProfileDTO[] = Array.isArray(users) ? users : [];
         this.allUsers = list;
-        this.fiscais = list.filter(u => u.role === 'FISCAL');
-        this.engenheiros = list.filter(u => u.role === 'ENGENHEIRO');
+        this.fiscais = list.filter(u => u.role === 'FISCAL' && u.enabled);
+        this.engenheiros = list.filter(u => u.role === 'ENGENHEIRO' && u.enabled);
       },
       error: () => console.warn('Erro ao carregar usuários.')
     });
@@ -158,12 +158,22 @@ export class ObraFormComponent implements OnInit, OnDestroy {
           if (obra.fiscal) {
             this.fiscalCrea = obra.fiscal.crea ?? '';
             this.fiscalCreaUf = obra.fiscal.creaUf ?? '';
+            if (!this.fiscais.some(f => f.id === obra.fiscal.id)) {
+              this.fiscais.push(obra.fiscal);
+            }
           }
 
           // Handle engenheiros (up to 2)
           const engs: UserProfileDTO[] = obra.engenheiros
-            ? Array.from(obra.engenheiros as Set<UserProfileDTO>)
+            ? Array.from(obra.engenheiros as any)
             : [];
+          
+          engs.forEach(e => {
+            if (e.id && !this.engenheiros.some(x => x.id === e.id)) {
+              this.engenheiros.push(e);
+            }
+          });
+
           if (engs[0]) {
             this.form.patchValue({ engenheiroId1: engs[0].id });
             this.eng1Crea = engs[0].crea ?? '';
