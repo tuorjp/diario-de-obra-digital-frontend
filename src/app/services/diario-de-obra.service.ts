@@ -14,17 +14,17 @@ export class DiarioDeObraService {
   public searchDiarios(
     page: number,
     size: number,
-    obra?: number,
+    obra?: string,
     data?: string,
-    autor?: number
+    autor?: string
   ): Observable<Page<DiarioResponseDto>> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('size', size.toString());
 
-    if (obra) params = params.set('obra', obra.toString());
+    if (obra) params = params.set('obra', obra);
     if (data) params = params.set('data', data);
-    if (autor) params = params.set('autor', autor.toString());
+    if (autor) params = params.set('autor', autor);
 
     return this.http.get<Page<DiarioResponseDto>>(this.baseUrl, { params });
   }

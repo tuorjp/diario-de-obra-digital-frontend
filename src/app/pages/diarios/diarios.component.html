@@ -14,22 +14,22 @@
   <div class="controls-bar">
     <div class="search-group">
       <div class="search-input-wrap">
-        <input type="number" class="search-input" placeholder="ID da Obra" [(ngModel)]="filterObra" />
+        <input type="text" class="search-input" placeholder="Nome da Obra" [(ngModel)]="filterObra" />
       </div>
       <div class="search-input-wrap" style="margin-left: 10px;">
         <input type="date" class="search-input date-input" [(ngModel)]="filterData" />
       </div>
       <div class="search-input-wrap" style="margin-left: 10px;">
-        <input type="number" class="search-input" placeholder="ID do Autor" [(ngModel)]="filterAutor" />
+        <input type="text" class="search-input" placeholder="Nome do Autor" [(ngModel)]="filterAutor" />
       </div>
     </div>
-    
+
     <div style="display: flex; gap: 10px;">
       <button class="btn-sort-code" (click)="onFilterChange()" style="background: #122640; color: white;">
         Listar
       </button>
       <button class="btn-sort-code" (click)="clearFilters()" style="color: #b91c1c;">
-        Limpar
+        Limpar Filtros
       </button>
     </div>
   </div>
@@ -61,10 +61,10 @@
           <td class="col-id">{{ diario.id }}</td>
           <td class="col-nome">{{ diario.projeto }}</td>
           <td class="col-data">{{ diario.data | date:'dd/MM/yyyy' }}</td>
-          <td class="col-autor">{{ diario.nomeAutor }}</td>
+          <td class="col-autor">{{ diario.autorNome }}</td>
           <td class="col-status">
-            <span class="badge" 
-              [class.badge-ativa]="diario.status === 'VALIDO'" 
+            <span class="badge"
+              [class.badge-ativa]="diario.status === 'VALIDO'"
               [class.badge-inativa]="diario.status === 'INVALIDO'"
               [class.badge-pendente]="diario.status === 'AGUARDANDO_AVALIACAO'">
               {{ diario.status }}

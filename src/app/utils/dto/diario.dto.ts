@@ -7,14 +7,14 @@ export interface DiarioResponseDto {
   observacoes?: string;
   status: 'AGUARDANDO_AVALIACAO' | 'VALIDO' | 'INVALIDO';
   autorId: number;
-  nomeAutor: string;
+  autorNome: string;
   validadorId?: number;
   nomeValidador?: string;
   comentarioValidacao?: string;
 }
 
 export interface DiarioListFilter {
-  obra?: number;
+  obra?: string;
   data?: string;
-  autor?: number;
+  autor?: string;
 }

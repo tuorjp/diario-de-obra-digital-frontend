@@ -41,9 +41,9 @@ export class DiariosComponent implements OnInit {
   totalPages = 0;
 
   // Filters
-  filterObra?: number;
+  filterObra?: string;
   filterData?: string;
-  filterAutor?: number;
+  filterAutor?: string;
 
   userRole: string | null = null;
   userId: number | null = null;
