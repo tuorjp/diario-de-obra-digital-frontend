@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
+import { Component, EventEmitter, Output, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ObraControllerService } from '../../../../../api/api/obraController.service';
@@ -19,6 +19,7 @@ export class ObraModalComponent {
   
   @Output() obraSelected = new EventEmitter<ObraResponseDTO>();
   private obraService = inject(ObraControllerService);
+  private cdr = inject(ChangeDetectorRef);
 
   open() {
     this.isOpen = true;
@@ -37,9 +38,11 @@ export class ObraModalComponent {
         next: (page) => {
           this.obras = page.content || [];
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: () => {
           this.loading = false;
+          this.cdr.detectChanges();
         }
       });
   }

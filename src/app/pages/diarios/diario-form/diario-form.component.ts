@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, inject, ViewChild, ElementRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -25,6 +25,7 @@ export class DiarioFormComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
   private datePipe = inject(DatePipe);
+  private cdr = inject(ChangeDetectorRef);
 
   @ViewChild('obraModal') obraModal!: ObraModalComponent;
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -103,9 +104,23 @@ export class DiarioFormComponent implements OnInit {
         this.condicaoClimatica = diario.condicaoClimatica;
         this.observacoes = diario.observacoes || '';
         
-        this.maoDeObraAdicionada = diario.maoDeObra || [];
-        this.equipamentosAdicionados = diario.equipamentos || [];
-        this.servicosAdicionados = diario.servicos || [];
+        this.maoDeObraAdicionada = (diario.maoDeObra || []).map(mo => ({
+          maoDeObraId: mo.maoDeObraId,
+          maoDeObraNome: (mo as any).nome,
+          quantidade: mo.quantidade
+        }));
+        
+        this.equipamentosAdicionados = (diario.equipamentos || []).map(eq => ({
+          equipamentoId: eq.equipamentoId,
+          equipamentoNome: (eq as any).nome,
+          quantidade: eq.quantidade
+        }));
+        
+        this.servicosAdicionados = (diario.servicos || []).map(sv => ({
+          servicoId: sv.servicoId,
+          servicoNome: (sv as any).nome,
+          quantidade: (sv as any).quantidade || 1
+        }));
         
         this.ocorrenciasAdicionadas = (diario.ocorrencias || []).map(o => ({
            tipo: o.tipo,
@@ -113,6 +128,7 @@ export class DiarioFormComponent implements OnInit {
         }));
 
         this.fotosExistentes = diario.fotos || [];
+        this.cdr.detectChanges();
       },
       error: () => this.snackBar.open('Erro ao carregar diário', 'OK')
     });
@@ -277,7 +293,7 @@ export class DiarioFormComponent implements OnInit {
         error: () => this.snackBar.open('Erro ao atualizar diário', 'OK', { duration: 3000 })
       });
     } else {
-      this.diarioService.createDiario(diarioBlob, this.fotosNovas).subscribe({
+      this.diarioService.createDiario(this.obraSelecionada.id!, diarioBlob, this.fotosNovas).subscribe({
         next: () => {
           this.snackBar.open('Diário criado com sucesso!', 'OK', { duration: 3000 });
           this.router.navigate(['/diarios']);

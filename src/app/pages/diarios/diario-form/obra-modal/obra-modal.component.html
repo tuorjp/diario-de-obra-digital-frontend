@@ -7,7 +7,7 @@
     <div class="modal-body">
       <div class="search-bar">
         <input type="text" placeholder="Buscar por nome do projeto..." [(ngModel)]="termoBusca" (keyup.enter)="search()" />
-        <button (click)="search()">Pesquisar</button>
+        <button type="button" (click)="search()">Pesquisar</button>
       </div>
 
       <div *ngIf="loading" class="loading">Buscando obras...</div>

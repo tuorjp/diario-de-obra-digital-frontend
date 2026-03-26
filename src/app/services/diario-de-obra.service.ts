@@ -47,16 +47,16 @@ export class DiarioDeObraService {
     return this.http.get<DiarioResponseDto>(`${this.baseUrl}/${id}`);
   }
 
-  public createDiario(diarioBlob: Blob, fotos: File[]): Observable<DiarioResponseDto> {
+  public createDiario(obraId: number, diarioBlob: Blob, fotos: File[]): Observable<DiarioResponseDto> {
     const formData = new FormData();
-    formData.append('diario', diarioBlob);
+    formData.append('dados', diarioBlob);
     fotos.forEach(foto => formData.append('fotos', foto));
-    return this.http.post<DiarioResponseDto>(this.baseUrl, formData);
+    return this.http.post<DiarioResponseDto>(`${this.baseUrl}/${obraId}`, formData);
   }
 
   public updateDiario(id: number, diarioBlob: Blob, fotos: File[]): Observable<DiarioResponseDto> {
     const formData = new FormData();
-    formData.append('diario', diarioBlob);
+    formData.append('dados', diarioBlob);
     fotos.forEach(foto => formData.append('fotos', foto));
     return this.http.put<DiarioResponseDto>(`${this.baseUrl}/${id}`, formData);
   }
