@@ -42,4 +42,34 @@ export class DiarioDeObraService {
     const payload = comentario ? { comentario } : {};
     return this.http.patch<DiarioResponseDto>(`${this.baseUrl}/${id}/reprovar`, payload);
   }
+
+  public getDiario(id: number): Observable<DiarioResponseDto> {
+    return this.http.get<DiarioResponseDto>(`${this.baseUrl}/${id}`);
+  }
+
+  public createDiario(diarioBlob: Blob, fotos: File[]): Observable<DiarioResponseDto> {
+    const formData = new FormData();
+    formData.append('diario', diarioBlob);
+    fotos.forEach(foto => formData.append('fotos', foto));
+    return this.http.post<DiarioResponseDto>(this.baseUrl, formData);
+  }
+
+  public updateDiario(id: number, diarioBlob: Blob, fotos: File[]): Observable<DiarioResponseDto> {
+    const formData = new FormData();
+    formData.append('diario', diarioBlob);
+    fotos.forEach(foto => formData.append('fotos', foto));
+    return this.http.put<DiarioResponseDto>(`${this.baseUrl}/${id}`, formData);
+  }
+
+  public getEquipamentos(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8090/catalogo/equipamentos');
+  }
+
+  public getMaoDeObra(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8090/catalogo/maodeobras');
+  }
+
+  public getServicos(): Observable<any[]> {
+    return this.http.get<any[]>('http://localhost:8090/catalogo/servicos');
+  }
 }

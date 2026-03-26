@@ -1,0 +1,26 @@
+<div class="modal-backdrop" *ngIf="isOpen">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2>Selecionar Obra</h2>
+      <button class="close-btn" (click)="close()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="search-bar">
+        <input type="text" placeholder="Buscar por nome do projeto..." [(ngModel)]="termoBusca" (keyup.enter)="search()" />
+        <button (click)="search()">Pesquisar</button>
+      </div>
+
+      <div *ngIf="loading" class="loading">Buscando obras...</div>
+
+      <div class="obras-list" *ngIf="!loading">
+        <div class="obra-item" *ngFor="let obra of obras" (click)="selectObra(obra)">
+          <div class="obra-info">
+            <strong>{{obra.projeto}}</strong>
+            <span>Contratante: {{obra.contratante}}</span>
+          </div>
+        </div>
+        <div *ngIf="obras.length === 0" class="no-results">Nenhuma obra encontrada.</div>
+      </div>
+    </div>
+  </div>
+</div>
