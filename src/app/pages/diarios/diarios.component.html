@@ -1,23 +1,131 @@
 <div class="page-card">
-  <h2>Diários de Obra</h2>
 
-  <table class="tabela-diarios">
-    <thead>
-    <tr>
-      <th>ID</th>
-      <th>Data</th>
-      <th>Obra</th>
-      <th>Responsável</th>
-    </tr>
-    </thead>
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-left">
+      <h2>Diários de Obra</h2>
+    </div>
+    <button class="btn-novo-diario" (click)="onAddDiario()">
+      <span class="btn-plus">+</span> Novo Diário
+    </button>
+  </div>
 
-    <tbody>
-    <tr *ngFor="let d of diarios">
-      <td>{{ d.id }}</td>
-      <td>{{ d.data }}</td>
-      <td>{{ d.obra }}</td>
-      <td>{{ d.responsavel }}</td>
-    </tr>
-    </tbody>
-  </table>
+  <!-- Search and Sort Controls (Filters) -->
+  <div class="controls-bar">
+    <div class="search-group">
+      <div class="search-input-wrap">
+        <input type="text" class="search-input" placeholder="Nome da Obra" [(ngModel)]="filterObra" />
+      </div>
+      <div class="search-input-wrap" style="margin-left: 10px;">
+        <input type="date" class="search-input date-input" [(ngModel)]="filterData" />
+      </div>
+      <div class="search-input-wrap" style="margin-left: 10px;">
+        <input type="text" class="search-input" placeholder="Nome do Autor" [(ngModel)]="filterAutor" />
+      </div>
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-sort-code" (click)="onFilterChange()" style="background: #122640; color: white;">
+        Listar
+      </button>
+      <button class="btn-sort-code" (click)="clearFilters()" style="color: #b91c1c;">
+        Limpar Filtros
+      </button>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div *ngIf="loading" class="status-state">
+    <div class="spinner"></div>
+    <p>Carregando diários...</p>
+  </div>
+
+  <div *ngIf="!loading && diarios.length === 0" class="status-state">
+    <p class="status-msg">Nenhum diário encontrado.</p>
+  </div>
+
+  <div class="cards-wrapper" *ngIf="!loading && diarios.length > 0">
+    <div class="diario-card" *ngFor="let diario of diarios">
+      <div class="card-header">
+        <div class="card-title-group">
+          <span class="card-id">#{{ diario.id }}</span>
+          <h3 class="card-projeto">{{ diario.projeto }}</h3>
+        </div>
+        <div class="card-options">
+          <button class="btn-more-options" (click)="toggleDropdown(diario.id, $event)" title="Opções">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="5" r="2" />
+              <circle cx="12" cy="12" r="2" />
+              <circle cx="12" cy="19" r="2" />
+            </svg>
+          </button>
+          
+          <div class="options-dropdown" *ngIf="activeDropdownId === diario.id">
+            <button class="dropdown-item" *ngIf="canEdit(diario)" [routerLink]="['/diarios/edit', diario.id]">
+              Editar
+            </button>
+            <button class="dropdown-item color-green" *ngIf="canApproveReject(diario)" (click)="onAprovar(diario)">
+              Aprovar
+            </button>
+            <button class="dropdown-item color-orange" *ngIf="canApproveReject(diario)" (click)="onReprovar(diario)">
+              Reprovar
+            </button>
+            <button class="dropdown-item color-red" *ngIf="canDelete(diario)" (click)="onDelete(diario)">
+              Excluir
+            </button>
+            <div *ngIf="!canEdit(diario) && !canApproveReject(diario) && !canDelete(diario)" class="dropdown-empty">
+              Sem ações permitidas
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="info-group">
+          <span class="info-label">Data</span>
+          <span class="info-value">{{ diario.data | date:'dd/MM/yyyy' }}</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Autor</span>
+          <span class="info-value">{{ diario.autorNome }}</span>
+        </div>
+        <div class="info-group">
+          <span class="info-label">Status</span>
+          <span class="badge"
+              [class.badge-ativa]="diario.status === 'VALIDO'"
+              [class.badge-inativa]="diario.status === 'INVALIDO'"
+              [class.badge-pendente]="diario.status === 'AGUARDANDO_AVALIACAO'">
+              {{ diario.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="pagination" *ngIf="!loading && totalPages > 1">
+    <button class="page-btn" (click)="firstPage()" [disabled]="page === 0" title="Primeira página">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="11 17 6 12 11 7" />
+        <polyline points="18 17 13 12 18 7" />
+      </svg>
+    </button>
+    <button class="page-btn" (click)="prevPage()" [disabled]="page === 0" title="Página anterior">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="15 18 9 12 15 6" />
+      </svg>
+    </button>
+    <span class="page-info">{{ page + 1 }} de {{ totalPages }}</span>
+    <button class="page-btn" (click)="nextPage()" [disabled]="page >= totalPages - 1" title="Próxima página">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="9 18 15 12 9 6" />
+      </svg>
+    </button>
+    <button class="page-btn" (click)="lastPage()" [disabled]="page >= totalPages - 1" title="Última página">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <polyline points="13 17 18 12 13 7" />
+        <polyline points="6 17 11 12 6 7" />
+      </svg>
+    </button>
+  </div>
+
 </div>

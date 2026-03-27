@@ -5,6 +5,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { authGuard } from './core/auth/auth.guard';
 import { UserComponent } from './pages/user/user.component';
 import { DiariosComponent } from './pages/diarios/diarios.component';
+import { DiarioFormComponent } from './pages/diarios/diario-form/diario-form.component';
 import { ObrasComponent } from './pages/obras/obras.component';
 import { ObraVisualizarComponent } from './pages/obras/obra-visualizar/obra-visualizar.component';
 import { ObraFormComponent } from './pages/obras/obra-form/obra-form.component';
@@ -29,6 +30,8 @@ export const routes: Routes = [
       { path: 'obras/nova', component: ObraFormComponent, data: { title: 'Nova Obra' } },
       { path: 'obras/editar/:id', component: ObraFormComponent, data: { title: 'Editar Obra' } },
       { path: 'diarios', component: DiariosComponent, data: { title: 'Diários de Obra' } },
+      { path: 'diarios/new', component: DiarioFormComponent, data: { title: 'Novo Diário' } },
+      { path: 'diarios/edit/:id', component: DiarioFormComponent, data: { title: 'Editar Diário' } },
 
       //  Rotas de Admin (Gerenciar Usuários)
       { path: 'manage-users', component: ManageUsersComponent, data: { title: 'Gerenciar Usuários' } },

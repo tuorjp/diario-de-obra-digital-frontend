@@ -1,0 +1,181 @@
+<div class="page-card">
+  <div class="page-header">
+    <div class="header-left">
+      <h2>{{ isEditMode ? 'Editar Diário de Obra' : 'Novo Diário de Obra' }}</h2>
+    </div>
+  </div>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <button class="tab-btn" [class.active]="activeTab === 'DIARIO'" (click)="setTab('DIARIO')">Diário</button>
+    <button class="tab-btn" [class.active]="activeTab === 'OCORRENCIAS'" (click)="setTab('OCORRENCIAS')">Ocorrências</button>
+  </div>
+
+  <div class="form-container">
+    
+    <!-- TAB: DIARIO -->
+    <div *ngIf="activeTab === 'DIARIO'" class="tab-content">
+      
+      <div class="field-row">
+        <div class="form-group flex-2">
+          <label>Obra *</label>
+          <div class="input-with-button">
+            <input type="text" readonly [value]="obraSelecionada?.projeto || 'Selecione uma obra'" />
+            <button (click)="openObraModal()" type="button" class="btn-search" *ngIf="!isEditMode">Buscar Obra</button>
+          </div>
+        </div>
+        <div class="form-group flex-1">
+          <label>Data *</label>
+          <input type="date" [(ngModel)]="dataDiario" [disabled]="isEditMode" />
+        </div>
+        <div class="form-group flex-1">
+          <label>Condição Climática *</label>
+          <select [(ngModel)]="condicaoClimatica">
+            <option value="ENSOLARADO">Ensolarado</option>
+            <option value="NUBLADO">Nublado</option>
+            <option value="CHUVOSO">Chuvoso</option>
+            <option value="IMPRATICAVEL">Impraticável</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ITEMS LISTS -->
+      <div class="dynamic-lists">
+        <!-- Equipamentos -->
+        <div class="list-section">
+          <h3>Equipamentos</h3>
+          <mat-form-field appearance="outline" class="w-100 mb-1">
+            <mat-label>Buscar equipamento...</mat-label>
+            <input type="text" matInput [(ngModel)]="buscaEquipamento" 
+                   (input)="filtrarEq()" [matAutocomplete]="autoEq"/>
+            <mat-autocomplete #autoEq="matAutocomplete" (optionSelected)="selecionarEq($event)" [displayWith]="displayFn">
+              <mat-option *ngFor="let c of eqFiltrados" [value]="c">{{c.nome}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="item-added" *ngFor="let eq of equipamentosAdicionados; let i = index">
+            <span>{{ eq.equipamentoNome }}</span>
+            <input type="number" [(ngModel)]="eq.quantidade" min="1" class="qtd-input" title="Quantidade">
+            <button (click)="removeEquipamento(i)" class="btn-remove">×</button>
+          </div>
+        </div>
+
+        <!-- Mão de Obra -->
+        <div class="list-section">
+          <h3>Mão de Obra</h3>
+          <mat-form-field appearance="outline" class="w-100 mb-1">
+            <mat-label>Buscar profissional...</mat-label>
+            <input type="text" matInput [(ngModel)]="buscaMaoDeObra" 
+                   (input)="filtrarMo()" [matAutocomplete]="autoMo"/>
+            <mat-autocomplete #autoMo="matAutocomplete" (optionSelected)="selecionarMo($event)" [displayWith]="displayFn">
+              <mat-option *ngFor="let c of moFiltrados" [value]="c">{{c.nome}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="item-added" *ngFor="let mo of maoDeObraAdicionada; let i = index">
+            <span>{{ mo.maoDeObraNome }}</span>
+            <input type="number" [(ngModel)]="mo.quantidade" min="1" class="qtd-input" title="Quantidade">
+            <button (click)="removeMaoDeObra(i)" class="btn-remove">×</button>
+          </div>
+        </div>
+
+        <!-- Serviços -->
+        <div class="list-section">
+          <h3>Serviços Executados</h3>
+          <mat-form-field appearance="outline" class="w-100 mb-1">
+            <mat-label>Buscar serviço...</mat-label>
+            <input type="text" matInput [(ngModel)]="buscaServico" 
+                   (input)="filtrarSv()" [matAutocomplete]="autoSv"/>
+            <mat-autocomplete #autoSv="matAutocomplete" (optionSelected)="selecionarSv($event)" [displayWith]="displayFn">
+              <mat-option *ngFor="let c of svFiltrados" [value]="c">{{c.nome}}</mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <div class="item-added" *ngFor="let sv of servicosAdicionados; let i = index">
+            <span>{{ sv.servicoNome }}</span>
+            <input type="number" step="0.5" [(ngModel)]="sv.quantidade" min="0.1" class="qtd-input" title="Quantidade">
+            <button (click)="removeServico(i)" class="btn-remove">×</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group mt-1">
+        <label>Observações</label>
+        <textarea [(ngModel)]="observacoes" rows="3" placeholder="Observações gerais sobre o andamento..."></textarea>
+      </div>
+
+      <div class="form-group mt-1">
+        <label>Fotos da Obra</label>
+        <!-- Drag and Drop Zone -->
+        <div class="drop-zone" (drop)="onDrop($event)" (dragover)="onDragOver($event)" (click)="fileInput.click()">
+          <p>Arraste fotos aqui ou clique para selecionar</p>
+          <input type="file" multiple #fileInput (change)="onFileSelected($event)" style="display:none;" accept="image/*">
+        </div>
+        
+        <!-- Novas Fotos Preview -->
+        <div class="novas-fotos" *ngIf="fotosNovas.length > 0">
+          <div class="foto-chip" *ngFor="let f of fotosNovas; let i = index">
+            {{ f.name }} <button (click)="removeFotoNova(i)">x</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CAROUSEL -->
+      <div class="carousel-container mt-1" *ngIf="fotosNovas.length > 0">
+        <h4>Visualização de Fotos</h4>
+        <div class="carousel">
+          <button class="nav-btn left" (click)="prevPhoto()" *ngIf="fotosNovas.length > 1">‹</button>
+          
+          <div class="carousel-img-wrapper" style="position: relative;">
+             <button class="btn-remove-carousel" title="Remover Foto" (click)="removeFotoNova(carouselCurrentIndex)" 
+                     style="position: absolute; top: 10px; right: 10px; background: rgba(255,0,0,0.8); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 10;">
+               ×
+             </button>
+             <img [src]="getFileUrl(fotosNovas[carouselCurrentIndex])" alt="Foto da Obra">
+          </div>
+          
+          <button class="nav-btn right" (click)="nextPhoto()" *ngIf="fotosNovas.length > 1">›</button>
+        </div>
+        <p class="carousel-info">{{ carouselCurrentIndex + 1 }} / {{ fotosNovas.length }}</p>
+      </div>
+
+    </div>
+
+
+    <!-- TAB: OCORRÊNCIAS -->
+    <div *ngIf="activeTab === 'OCORRENCIAS'" class="tab-content">
+      <div class="add-ocorrencia-card">
+        <h3>Nova Ocorrência</h3>
+        <div class="field-row">
+          <div class="form-group flex-1">
+            <label>Tipo</label>
+            <input type="text" [(ngModel)]="tempOcorrenciaTipo" placeholder="Ex: Atraso Relacionado ao Clima">
+          </div>
+        </div>
+        <div class="form-group mt-1">
+          <label>Ocorrência / Descrição</label>
+          <textarea [(ngModel)]="tempOcorrenciaDescricao" rows="2" placeholder="Descreva o que houve..."></textarea>
+        </div>
+        <button class="btn-add-ocorrencia mt-1" (click)="addOcorrencia()">Adicionar à Lista</button>
+      </div>
+
+      <div class="ocorrencias-list mt-1">
+        <h4>Ocorrências Registradas</h4>
+        <div class="ocorrencia-item" *ngFor="let oc of ocorrenciasAdicionadas; let i = index">
+          <div class="ocorrencia-body">
+            <strong>{{ oc.tipo }}</strong>
+            <p>{{ oc.ocorrencia }}</p>
+          </div>
+          <button (click)="removeOcorrencia(i)" class="btn-remove">Ação Refazer/Remover</button>
+        </div>
+        <p *ngIf="ocorrenciasAdicionadas.length === 0" class="sub-text">Nenhuma ocorrência relatada.</p>
+      </div>
+    </div>
+
+
+    <div class="form-actions mt-2">
+      <button class="btn-cancel" (click)="cancelar()">Cancelar</button>
+      <button class="btn-save" (click)="salvar()">{{ isEditMode ? 'Salvar Alterações' : 'Criar Diário' }}</button>
+    </div>
+
+  </div>
+</div>
+
+<app-obra-modal #obraModal (obraSelected)="onObraSelected($event)"></app-obra-modal>

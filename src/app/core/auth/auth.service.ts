@@ -19,8 +19,15 @@ export class AuthService {
 
         try {
           // Tenta ler como JSON (caso o backend retorne { "token": "..." })
-          const jsonResponse = JSON.parse(response);
+          const jsonResponse = typeof response === 'string' ? JSON.parse(response) : response;
           tokenToSave = jsonResponse.token || jsonResponse;
+          
+          if (jsonResponse.id) {
+            localStorage.setItem('user_id', jsonResponse.id.toString());
+          }
+          if (jsonResponse.role) {
+            localStorage.setItem('user_role', jsonResponse.role);
+          }
         } catch (e) {
           // Se der erro ao parsear, é porque é uma String pura (o token direto)
           tokenToSave = response;
@@ -37,6 +44,8 @@ export class AuthService {
 
   logout(): void {
     localStorage.removeItem('TK');
+    localStorage.removeItem('user_id');
+    localStorage.removeItem('user_role');
   }
 
   isLoggedIn(): boolean {
@@ -47,5 +56,14 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem('TK');
+  }
+
+  getUserId(): number | null {
+    const id = localStorage.getItem('user_id');
+    return id ? parseInt(id, 10) : null;
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('user_role');
   }
 }
