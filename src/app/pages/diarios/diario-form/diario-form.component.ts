@@ -127,8 +127,23 @@ export class DiarioFormComponent implements OnInit {
            ocorrencia: o.ocorrencia
         }));
 
-        this.fotosExistentes = diario.fotos || [];
-        this.cdr.detectChanges();
+        const fetchPromises = (diario.fotos || []).map(async (filename: string) => {
+          const url = this.getPhotoUrl(filename);
+          try {
+            const response = await fetch(url);
+            const blob = await response.blob();
+            return new File([blob], filename, { type: blob.type });
+          } catch (e) {
+            console.error('Erro ao baixar foto existente', filename, e);
+            return null;
+          }
+        });
+        
+        Promise.all(fetchPromises).then(files => {
+          const validFiles = files.filter(f => f !== null) as File[];
+          this.fotosNovas.push(...validFiles);
+          this.cdr.detectChanges();
+        });
       },
       error: () => this.snackBar.open('Erro ao carregar diário', 'OK')
     });
@@ -232,6 +247,9 @@ export class DiarioFormComponent implements OnInit {
 
   removeFotoNova(index: number) {
     this.fotosNovas.splice(index, 1);
+    if (this.carouselCurrentIndex >= this.fotosNovas.length) {
+      this.carouselCurrentIndex = Math.max(0, this.fotosNovas.length - 1);
+    }
   }
 
   onDragOver(event: any) {
@@ -250,15 +268,19 @@ export class DiarioFormComponent implements OnInit {
 
   // Carousel functions
   nextPhoto() {
-    if (this.fotosExistentes.length > 0) {
-      this.carouselCurrentIndex = (this.carouselCurrentIndex + 1) % this.fotosExistentes.length;
+    if (this.fotosNovas.length > 0) {
+      this.carouselCurrentIndex = (this.carouselCurrentIndex + 1) % this.fotosNovas.length;
     }
   }
 
   prevPhoto() {
-    if (this.fotosExistentes.length > 0) {
-      this.carouselCurrentIndex = (this.carouselCurrentIndex - 1 + this.fotosExistentes.length) % this.fotosExistentes.length;
+    if (this.fotosNovas.length > 0) {
+      this.carouselCurrentIndex = (this.carouselCurrentIndex - 1 + this.fotosNovas.length) % this.fotosNovas.length;
     }
+  }
+
+  getFileUrl(file: File): string {
+    return URL.createObjectURL(file);
   }
 
   getPhotoUrl(filename: string): string {

@@ -117,17 +117,23 @@
         </div>
       </div>
 
-      <!-- CAROUSEL (Apenas Edição / Fotos Existentes) -->
-      <div class="carousel-container mt-1" *ngIf="isEditMode && fotosExistentes.length > 0">
-        <h4>Fotos Anexadas</h4>
+      <!-- CAROUSEL -->
+      <div class="carousel-container mt-1" *ngIf="fotosNovas.length > 0">
+        <h4>Visualização de Fotos</h4>
         <div class="carousel">
-          <button class="nav-btn left" (click)="prevPhoto()" *ngIf="fotosExistentes.length > 1">‹</button>
-          <div class="carousel-img-wrapper">
-             <img [src]="getPhotoUrl(fotosExistentes[carouselCurrentIndex])" alt="Foto da Obra">
+          <button class="nav-btn left" (click)="prevPhoto()" *ngIf="fotosNovas.length > 1">‹</button>
+          
+          <div class="carousel-img-wrapper" style="position: relative;">
+             <button class="btn-remove-carousel" title="Remover Foto" (click)="removeFotoNova(carouselCurrentIndex)" 
+                     style="position: absolute; top: 10px; right: 10px; background: rgba(255,0,0,0.8); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 10;">
+               ×
+             </button>
+             <img [src]="getFileUrl(fotosNovas[carouselCurrentIndex])" alt="Foto da Obra">
           </div>
-          <button class="nav-btn right" (click)="nextPhoto()" *ngIf="fotosExistentes.length > 1">›</button>
+          
+          <button class="nav-btn right" (click)="nextPhoto()" *ngIf="fotosNovas.length > 1">›</button>
         </div>
-        <p class="carousel-info">{{ carouselCurrentIndex + 1 }} / {{ fotosExistentes.length }}</p>
+        <p class="carousel-info">{{ carouselCurrentIndex + 1 }} / {{ fotosNovas.length }}</p>
       </div>
 
     </div>
