@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef, HostListener } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -47,6 +47,18 @@ export class DiariosComponent implements OnInit {
 
   userRole: string | null = null;
   userId: number | null = null;
+
+  activeDropdownId: number | null = null;
+
+  @HostListener('document:click')
+  closeDropdown() {
+    this.activeDropdownId = null;
+  }
+
+  toggleDropdown(id: number, event: Event) {
+    event.stopPropagation();
+    this.activeDropdownId = this.activeDropdownId === id ? null : id;
+  }
 
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();

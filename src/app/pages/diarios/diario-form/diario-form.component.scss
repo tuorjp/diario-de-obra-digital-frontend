@@ -1,8 +1,15 @@
+* {
+  box-sizing: border-box;
+}
+
 .page-card {
   padding: 1.5rem;
   background: white;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 .page-header {
@@ -70,6 +77,8 @@
   }
 
   input, select, textarea {
+    width: 100%;
+    box-sizing: border-box;
     padding: 0.5rem;
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -261,11 +270,31 @@
     border: 1px solid #e2e8f0;
     border-radius: 8px;
     margin-bottom: 0.75rem;
+    width: 100%;
+    max-width: 100%;
 
     .ocorrencia-body {
       flex: 1;
-      strong { display: block; margin-bottom: 0.25rem; font-size: 1.05rem; color: #0f172a; }
-      p { margin: 0; color: #475569; font-size: 0.95rem; }
+      min-width: 0;
+      width: 100%;
+
+      strong { 
+        display: block; 
+        margin-bottom: 0.25rem; 
+        font-size: 1.05rem; 
+        color: #0f172a; 
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+      }
+      p { 
+        margin: 0; 
+        color: #475569; 
+        font-size: 0.95rem; 
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+      }
     }
 
     .btn-remove {
@@ -309,5 +338,61 @@
     background: #10b981;
     color: white;
     &:hover { background: #059669; }
+  }
+}
+
+/* ── Responsividade Geral Formulário & Ocorrências ── */
+@media (max-width: 600px) {
+  .page-card {
+    padding: 1rem;
+  }
+
+  .tabs {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    .tab-btn {
+      flex: 1;
+      text-align: center;
+      padding: 0.5rem 1rem;
+    }
+  }
+
+  .field-row {
+    flex-direction: column;
+    gap: 0.75rem;
+    
+    .flex-1, .flex-2 {
+      width: 100%;
+    }
+  }
+
+  .add-ocorrencia-card {
+    padding: 1rem;
+
+    .btn-add-ocorrencia {
+      width: 100%;
+      margin-top: 1rem;
+    }
+  }
+
+  .ocorrencias-list {
+    .ocorrencia-item {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.75rem;
+
+      .btn-remove {
+        align-self: flex-start;
+        width: 100%;
+        text-align: center;
+      }
+    }
+  }
+
+  .form-actions {
+    flex-direction: column;
+    button {
+      width: 100%;
+    }
   }
 }
