@@ -28,7 +28,7 @@
       <div class="form-row row-nome-contrato">
         <div class="field field-nome">
           <label for="projeto">Nome da Obra*</label>
-          <input id="projeto" formControlName="projeto" type="text" placeholder="Value"
+          <input id="projeto" formControlName="projeto" type="text" placeholder="Ex: Construção do Bloco A"
             [class.invalid]="form.get('projeto')?.invalid && form.get('projeto')?.touched" />
           @if (form.get('projeto')?.invalid && form.get('projeto')?.touched) {
           <span class="field-error">Campo obrigatório</span>
@@ -36,7 +36,7 @@
         </div>
         <div class="field field-contrato">
           <label for="numeroContrato">Nº Contrato</label>
-          <input id="numeroContrato" formControlName="numeroContrato" type="text" placeholder="Value" />
+          <input id="numeroContrato" formControlName="numeroContrato" type="text" placeholder="Ex: 2024/001" />
         </div>
       </div>
 
@@ -44,7 +44,7 @@
       <div class="form-row">
         <div class="field field-full">
           <label for="contratante">Contratante*</label>
-          <input id="contratante" formControlName="contratante" type="text" placeholder="Value"
+          <input id="contratante" formControlName="contratante" type="text" placeholder="Ex: Prefeitura Municipal de São Paulo"
             [class.invalid]="form.get('contratante')?.invalid && form.get('contratante')?.touched" />
           @if (form.get('contratante')?.invalid && form.get('contratante')?.touched) {
           <span class="field-error">Campo obrigatório</span>
@@ -56,7 +56,7 @@
       <div class="form-row">
         <div class="field field-full">
           <label for="contratada">Contratada*</label>
-          <input id="contratada" formControlName="contratada" type="text" placeholder="Value"
+          <input id="contratada" formControlName="contratada" type="text" placeholder="Ex: Construtora ABC Ltda."
             [class.invalid]="form.get('contratada')?.invalid && form.get('contratada')?.touched" />
           @if (form.get('contratada')?.invalid && form.get('contratada')?.touched) {
           <span class="field-error">Campo obrigatório</span>
@@ -80,12 +80,12 @@
         </div>
         <div class="field field-cep">
           <label for="cep">CEP</label>
-          <input id="cep" formControlName="cep" type="text" placeholder="Value"
+          <input id="cep" formControlName="cep" type="text" placeholder="Ex: 01310-100"
             (blur)="onCepBlur()" maxlength="9" />
         </div>
         <div class="field field-cidade">
           <label for="cidade">Cidade</label>
-          <input id="cidade" formControlName="cidade" type="text" placeholder="Value" />
+          <input id="cidade" formControlName="cidade" type="text" placeholder="Ex: São Paulo" />
         </div>
         <div class="field field-uf">
           <label for="uf">UF</label>
@@ -102,7 +102,7 @@
       <div class="form-row">
         <div class="field field-full">
           <label for="endereco">Endereço</label>
-          <input id="endereco" formControlName="endereco" type="text" placeholder="Value" />
+          <input id="endereco" formControlName="endereco" type="text" placeholder="Ex: Av. Paulista" />
         </div>
       </div>
 
@@ -110,11 +110,11 @@
       <div class="form-row row-comp-num">
         <div class="field field-complemento">
           <label for="complemento">Complemento do Endereço</label>
-          <input id="complemento" formControlName="complemento" type="text" placeholder="Value" />
+          <input id="complemento" formControlName="complemento" type="text" placeholder="Ex: Apto 42, Bloco B" />
         </div>
         <div class="field field-numero">
           <label for="numero">Número</label>
-          <input id="numero" formControlName="numero" type="text" placeholder="Value" />
+          <input id="numero" formControlName="numero" type="text" placeholder="Ex: 1000" />
         </div>
       </div>
 
@@ -122,7 +122,7 @@
       <div class="form-row row-person">
         <div class="field field-person-name">
           <label for="fiscalId">Fiscal</label>
-          <input id="fiscalId-search" type="text" placeholder="Value" class="hidden-input" style="display:none" />
+          <input id="fiscalId-search" type="text" placeholder="Buscar fiscal" class="hidden-input" style="display:none" />
           <select id="fiscalId" formControlName="fiscalId">
             <option [value]="null">Selecionar</option>
             <option *ngFor="let u of fiscais" [value]="u.id">{{ u.name }}</option>
@@ -130,7 +130,7 @@
         </div>
         <div class="field field-crea">
           <label>Registro Crea</label>
-          <input type="text" [value]="fiscalCrea" placeholder="Value" readonly />
+          <input type="text" [value]="fiscalCrea" placeholder="Registro CREA do fiscal" readonly />
         </div>
         <div class="field field-crea-uf">
           <label>UF Crea</label>
@@ -154,7 +154,7 @@
         </div>
         <div class="field field-crea">
           <label>Registro Crea</label>
-          <input type="text" [value]="eng1Crea" placeholder="Value" readonly />
+          <input type="text" [value]="eng1Crea" placeholder="Registro CREA do engenheiro" readonly />
         </div>
         <div class="field field-crea-uf">
           <label>UF Crea</label>
@@ -178,7 +178,7 @@
         </div>
         <div class="field field-crea">
           <label>Registro Crea</label>
-          <input type="text" [value]="eng2Crea" placeholder="Value" readonly />
+          <input type="text" [value]="eng2Crea" placeholder="Registro CREA do engenheiro" readonly />
         </div>
         <div class="field field-crea-uf">
           <label>UF Crea</label>
@@ -195,7 +195,7 @@
       <div class="form-row">
         <div class="field field-full">
           <label for="observacao">Observações</label>
-          <textarea id="observacao" formControlName="observacao" placeholder="Value" rows="4"></textarea>
+          <textarea id="observacao" formControlName="observacao" placeholder="Informações adicionais sobre a obra..." rows="4"></textarea>
         </div>
       </div>
 
