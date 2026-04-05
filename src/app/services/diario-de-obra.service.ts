@@ -29,6 +29,19 @@ export class DiarioDeObraService {
     return this.http.get<Page<DiarioResponseDto>>(this.baseUrl, { params });
   }
 
+  public searchDiariosByObraId(
+    obraId: number,
+    page: number,
+    size: number
+  ): Observable<Page<DiarioResponseDto>> {
+    const params = new HttpParams()
+      .set('obraId', obraId.toString())
+      .set('page', page.toString())
+      .set('size', size.toString());
+
+    return this.http.get<Page<DiarioResponseDto>>(this.baseUrl, { params });
+  }
+
   public deleteDiario(id: number): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${id}`, { responseType: 'text' as 'json' });
   }

@@ -165,55 +165,93 @@
         <div class="card-section diarios-section">
             <h3 class="section-title">Diários:</h3>
 
+            @if (diariosLoading()) {
+            <div class="diarios-loading">
+                <div class="spinner-sm"></div>
+                <span>Carregando diários...</span>
+            </div>
+            } @else if (diariosError()) {
+            <div class="diarios-error">
+                <p>{{ diariosError() }}</p>
+            </div>
+            } @else {
             <div class="table-wrapper">
                 <table class="tabela-diarios">
                     <thead>
                         <tr>
                             <th class="col-data">Data</th>
-                            <th class="col-eng">Engenheiro Residente</th>
-                            <th class="col-crea">Crea</th>
+                            <th class="col-eng">Autor</th>
                             <th class="col-status">Status</th>
                             <th class="col-acoes">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @for (diario of diariosMock(); track diario.data) {
+                        @if (diarios().length === 0) {
                         <tr>
-                            <td class="col-data text-center">{{ diario.data }}</td>
-                            <td class="col-eng text-center">{{ diario.engenheiro }}</td>
-                            <td class="col-crea text-center">{{ diario.crea }}</td>
-                            <td class="col-status text-center">{{ diario.status }}</td>
+                            <td colspan="4" class="text-center empty-row">Nenhum diário encontrado para esta obra.</td>
+                        </tr>
+                        }
+                        @for (diario of diarios(); track diario.id) {
+                        <tr>
+                            <td class="col-data text-center">{{ formatDate(diario.data) }}</td>
+                            <td class="col-eng text-center">{{ diario.autorNome }}</td>
+                            <td class="col-status text-center">
+                                <span class="status-badge" [ngClass]="getDiarioStatusClass(diario.status)">
+                                    {{ getDiarioStatusLabel(diario.status) }}
+                                </span>
+                            </td>
                             <td class="col-acoes">
-                                <button class="action-btn" title="Visualizar">
+                                <button class="action-btn" title="Visualizar" (click)="onVisualizarDiario(diario)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                         <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                                         <circle cx="12" cy="12" r="3" />
                                     </svg>
                                 </button>
-                                <button class="action-btn" title="Editar">
+                                @if (canEditDiario(diario)) {
+                                <button class="action-btn" title="Editar" (click)="onEditarDiario(diario)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                         <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                                         <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
                                     </svg>
                                 </button>
-                                <button class="action-btn action-btn--delete" title="Excluir">
+                                }
+                                @if (canDeleteDiario(diario)) {
+                                <button class="action-btn action-btn--delete" title="Excluir" (click)="onExcluirDiario(diario)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="none"
                                         viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
                                         <path
                                             d="M3 6h18M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2M10 11v6M14 11v6" />
                                     </svg>
                                 </button>
+                                }
                             </td>
                         </tr>
                         }
                     </tbody>
                 </table>
-                <div class="pagination-mock">
-                    <span class="page-controls">&lt; &lt; 1 de 12 &gt; &gt;</span>
+
+                @if (diarioTotalPages() > 1) {
+                <div class="diario-pagination">
+                    <button class="page-btn" (click)="diarioPrevPage()" [disabled]="diarioPage() === 0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <polyline points="15 18 9 12 15 6" />
+                        </svg>
+                    </button>
+                    <span class="page-info">{{ diarioPage() + 1 }} de {{ diarioTotalPages() }}</span>
+                    <button class="page-btn" (click)="diarioNextPage()"
+                        [disabled]="diarioPage() >= diarioTotalPages() - 1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2.5">
+                            <polyline points="9 18 15 12 9 6" />
+                        </svg>
+                    </button>
                 </div>
+                }
             </div>
+            }
         </div>
     </div>
     }

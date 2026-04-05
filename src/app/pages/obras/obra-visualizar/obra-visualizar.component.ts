@@ -7,13 +7,9 @@ import { ObraControllerService } from '../../../../api/api/obraController.servic
 import { ObraResponseDTO } from '../../../../api/model/obraResponseDTO';
 import { UserProfileDTO } from '../../../../api/model/userProfileDTO';
 import { UserService } from '../../../services/user.service';
-
-interface DiarioMock {
-    data: string;
-    engenheiro: string;
-    crea: string;
-    status: 'Pendente' | 'Validado';
-}
+import { DiarioDeObraService } from '../../../services/diario-de-obra.service';
+import { DiarioResponseDto } from '../../../utils/dto/diario.dto';
+import { AuthService } from '../../../core/auth/auth.service';
 
 @Component({
     selector: 'app-obra-visualizar',
@@ -28,20 +24,28 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     private location = inject(Location);
     private obraService = inject(ObraControllerService);
     private userService = inject(UserService);
+    private diarioService = inject(DiarioDeObraService);
+    private authService = inject(AuthService);
     private destroy$ = new Subject<void>();
+
+    private userRole: string | null = null;
+    private userId: number | null = null;
 
     obra = signal<ObraResponseDTO | null>(null);
     loading = signal<boolean>(true);
     error = signal<string | null>(null);
     isGestorOrAdmin = signal<boolean>(false);
 
-    diariosMock = signal<DiarioMock[]>([
-        { data: '21/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Pendente' },
-        { data: '20/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Validado' },
-        { data: '19/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Validado' },
-        { data: '18/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Validado' },
-        { data: '17/08/2025', engenheiro: 'Juliana Evelyn Clarice Pires', crea: '5168415 - GO', status: 'Validado' },
-    ]);
+    // Diários reais do backend
+    diarios = signal<DiarioResponseDto[]>([]);
+    diariosLoading = signal<boolean>(false);
+    diariosError = signal<string | null>(null);
+
+    // Paginação dos diários
+    diarioPage = signal<number>(0);
+    diarioSize = 10;
+    diarioTotalPages = signal<number>(0);
+    diarioTotalElements = signal<number>(0);
 
     constructor() {
         const nav = this.router.getCurrentNavigation();
@@ -52,6 +56,9 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit(): void {
+        this.userRole = this.authService.getUserRole();
+        this.userId = this.authService.getUserId();
+
         this.userService.getMyProfile().pipe(takeUntil(this.destroy$)).subscribe({
             next: (profile) => {
                 this.isGestorOrAdmin.set(profile.role === 'GESTOR' || profile.role === 'ADMIN');
@@ -90,12 +97,33 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
                 const parsedData = (data && data.data) ? data.data : data;
                 this.obra.set(parsedData);
                 this.loading.set(false);
+                this.loadDiarios(id);
             },
             error: (err) => {
                 this.error.set(`Erro ao carregar os detalhes da obra: ${err.status} ${err.statusText}`);
                 this.loading.set(false);
             }
         });
+    }
+
+    loadDiarios(obraId: number, page: number = 0): void {
+        this.diariosLoading.set(true);
+        this.diariosError.set(null);
+        this.diarioService.searchDiariosByObraId(obraId, page, this.diarioSize)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: (pageData) => {
+                    this.diarios.set(pageData.content);
+                    this.diarioTotalPages.set(pageData.totalPages);
+                    this.diarioTotalElements.set(pageData.totalElements);
+                    this.diarioPage.set(pageData.number ?? page);
+                    this.diariosLoading.set(false);
+                },
+                error: (err) => {
+                    this.diariosError.set('Erro ao carregar os diários desta obra.');
+                    this.diariosLoading.set(false);
+                }
+            });
     }
 
     goBack(): void {
@@ -124,6 +152,91 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
         const obj = this.obra();
         if (!obj || !obj.engenheiros) return [];
         return Array.from(obj.engenheiros);
+    }
+
+    // ---- Ações de diário ----
+    onVisualizarDiario(diario: DiarioResponseDto): void {
+        this.router.navigate(['/diarios/edit', diario.id]);
+    }
+
+    onEditarDiario(diario: DiarioResponseDto): void {
+        this.router.navigate(['/diarios/edit', diario.id]);
+    }
+
+    onExcluirDiario(diario: DiarioResponseDto): void {
+        const confirmado = confirm(`Deseja realmente excluir o diário do dia ${this.formatDate(diario.data)}?`);
+        if (!confirmado) return;
+
+        this.diarioService.deleteDiario(diario.id)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe({
+                next: () => {
+                    const obraId = this.obra()?.id;
+                    if (obraId) {
+                        // Volta para página atual de diários após exclusão
+                        const currentPage = this.diarioPage();
+                        const isLastItem = this.diarios().length === 1 && currentPage > 0;
+                        this.loadDiarios(obraId, isLastItem ? currentPage - 1 : currentPage);
+                    }
+                },
+                error: (err) => {
+                    alert('Erro ao excluir o diário. Tente novamente.');
+                }
+            });
+    }
+
+    // Controle de permissões
+    canEditDiario(diario: DiarioResponseDto): boolean {
+        if (this.userRole === 'ADMIN') return true;
+        if (['ENGENHEIRO', 'GESTOR'].includes(this.userRole || '')) {
+            if (diario.autorId !== this.userId) return false;
+            const diarioDate = new Date(diario.data);
+            const today = new Date();
+            const diffDays = Math.ceil(Math.abs(today.getTime() - diarioDate.getTime()) / (1000 * 60 * 60 * 24));
+            return diffDays <= 5;
+        }
+        return false;
+    }
+
+    canDeleteDiario(diario: DiarioResponseDto): boolean {
+        return this.userRole === 'ADMIN';
+    }
+
+    // Paginação dos diários
+    diarioNextPage(): void {
+        const obraId = this.obra()?.id;
+        if (!obraId) return;
+        const currentPage = this.diarioPage();
+        if (currentPage < this.diarioTotalPages() - 1) {
+            this.loadDiarios(obraId, currentPage + 1);
+        }
+    }
+
+    diarioPrevPage(): void {
+        const obraId = this.obra()?.id;
+        if (!obraId) return;
+        const currentPage = this.diarioPage();
+        if (currentPage > 0) {
+            this.loadDiarios(obraId, currentPage - 1);
+        }
+    }
+
+    getDiarioStatusLabel(status: string): string {
+        switch (status) {
+            case 'VALIDO': return 'Válido';
+            case 'INVALIDO': return 'Inválido';
+            case 'AGUARDANDO_AVALIACAO': return 'Pendente';
+            default: return status ?? '—';
+        }
+    }
+
+    getDiarioStatusClass(status: string): string {
+        switch (status) {
+            case 'VALIDO': return 'status-valido';
+            case 'INVALIDO': return 'status-invalido';
+            case 'AGUARDANDO_AVALIACAO': return 'status-pendente';
+            default: return '';
+        }
     }
 
     formatDate(dateStr?: string | any): string {
