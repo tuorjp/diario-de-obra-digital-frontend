@@ -1,3 +1,4 @@
+// @refresh
 import { Component, OnInit, OnDestroy, inject, signal } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -139,6 +140,12 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     }
 
     onInserirDiario(): void {
+        const o = this.obra();
+        if (o) {
+            this.router.navigate(['/diarios/new'], { state: { obra: o } });
+        } else {
+            this.router.navigate(['/diarios/new']);
+        }
     }
 
     onEditarObra(): void {

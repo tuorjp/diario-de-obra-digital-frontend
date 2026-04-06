@@ -20,7 +20,8 @@ export class DiarioDeObraService {
   ): Observable<Page<DiarioResponseDto>> {
     let params = new HttpParams()
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', 'data,desc');
 
     if (obra) params = params.set('obra', obra);
     if (data) params = params.set('data', data);
@@ -29,17 +30,18 @@ export class DiarioDeObraService {
     return this.http.get<Page<DiarioResponseDto>>(this.baseUrl, { params });
   }
 
+  // Busca diários de uma obra específica pelo ID — usa GET /diario/obra/{obraId}
   public searchDiariosByObraId(
     obraId: number,
     page: number,
     size: number
   ): Observable<Page<DiarioResponseDto>> {
     const params = new HttpParams()
-      .set('obraId', obraId.toString())
       .set('page', page.toString())
-      .set('size', size.toString());
+      .set('size', size.toString())
+      .set('sort', 'data,desc');
 
-    return this.http.get<Page<DiarioResponseDto>>(this.baseUrl, { params });
+    return this.http.get<Page<DiarioResponseDto>>(`${this.baseUrl}/obra/${obraId}`, { params });
   }
 
   public deleteDiario(id: number): Observable<any> {

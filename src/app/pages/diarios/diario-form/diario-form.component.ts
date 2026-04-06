@@ -30,6 +30,13 @@ export class DiarioFormComponent implements OnInit {
   @ViewChild('obraModal') obraModal!: ObraModalComponent;
   @ViewChild('fileInput') fileInput!: ElementRef;
 
+  constructor() {
+    const nav = this.router.getCurrentNavigation();
+    if (nav?.extras.state && nav.extras.state['obra']) {
+      this.obraSelecionada = nav.extras.state['obra'];
+    }
+  }
+
   isEditMode = false;
   diarioId!: number;
   activeTab: 'DIARIO' | 'OCORRENCIAS' = 'DIARIO';

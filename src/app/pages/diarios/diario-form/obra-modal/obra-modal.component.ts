@@ -33,7 +33,7 @@ export class ObraModalComponent {
 
   search() {
     this.loading = true;
-    this.obraService.search(0, 50, 'projeto', 'asc', 'projeto', this.termoBusca.trim() || undefined, 'ATIVA')
+    this.obraService.search(0, 50, 'projeto', 'asc', 'projeto', this.termoBusca.trim() || undefined, ['ATIVA'])
       .subscribe({
         next: (page) => {
           this.obras = page.content || [];
