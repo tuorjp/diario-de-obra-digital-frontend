@@ -75,21 +75,19 @@ export class ObrasComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  private buildStatusParam(): any {
-    const statuses: string[] = [];
+  private buildStatusParam(): Array<'ATIVA' | 'INATIVA' | 'CONCLUIDA'> | undefined {
+    const statuses: Array<'ATIVA' | 'INATIVA' | 'CONCLUIDA'> = [];
 
     if (this.filtroAtiva) statuses.push('ATIVA');
     if (this.filtroConcluida) statuses.push('CONCLUIDA');
     if (this.filtroCancelada) statuses.push('INATIVA');
 
-    // If none are checked, or all are checked, fetch all
+    // If none are checked, or all are checked, fetch all (no filter)
     if (statuses.length === 0 || statuses.length === 3) {
       return undefined;
     }
-    
-    // Instead of array which might fail if backend doesn't accept array natively without proper conversion,
-    // let's join by comma. Spring handles comma-separated strings to Collections naturally too.
-    return statuses.join(',');
+
+    return statuses;
   }
 
   loadObras(): void {
@@ -100,7 +98,7 @@ export class ObrasComponent implements OnInit, OnDestroy {
     const term = this.termoBusca.trim() || undefined;
 
     this.obraService
-      .search(this.currentPage(), this.pageSize, this.sortField, this.sortDir, this.searchField, term, statusParam as any)
+      .search(this.currentPage(), this.pageSize, this.sortField, this.sortDir, this.searchField, term, statusParam)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (page) => {
