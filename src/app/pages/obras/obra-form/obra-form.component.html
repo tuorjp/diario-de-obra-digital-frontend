@@ -69,13 +69,15 @@
         <div class="field field-date">
           <label for="dataInicio">Data Início</label>
           <div class="date-wrapper">
-            <input id="dataInicio" formControlName="dataInicio" type="date" />
+            <input id="dataInicio" formControlName="dataInicio" type="date" 
+              [class.invalid]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)" />
           </div>
         </div>
         <div class="field field-date">
           <label for="dataPrevistaFim">Data Prevista Fim</label>
           <div class="date-wrapper">
-            <input id="dataPrevistaFim" formControlName="dataPrevistaFim" type="date" />
+            <input id="dataPrevistaFim" formControlName="dataPrevistaFim" type="date" 
+              [class.invalid]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)" />
           </div>
         </div>
         <div class="field field-cep">
@@ -97,6 +99,11 @@
           </div>
         </div>
       </div>
+      @if (form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)) {
+      <div class="form-row date-range-error-row">
+        <span class="field-error">A data de início não pode ser posterior à data prevista de fim.</span>
+      </div>
+      }
 
       <!-- Row 5: Endereço -->
       <div class="form-row">

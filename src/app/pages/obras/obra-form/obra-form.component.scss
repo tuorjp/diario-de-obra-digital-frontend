@@ -65,6 +65,15 @@
   align-items: flex-start;
 }
 
+.date-range-error-row {
+  margin-top: -12px;
+  margin-bottom: 18px;
+
+  .field-error {
+    font-size: 12px;
+  }
+}
+
 /* Row specific layouts */
 .row-nome-contrato {
   .field-nome { flex: 1 1 auto; }

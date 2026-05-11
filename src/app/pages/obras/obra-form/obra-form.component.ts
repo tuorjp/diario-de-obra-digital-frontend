@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -90,7 +90,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       engenheiroId1: [null],
       engenheiroId2: [null],
       observacao: ['']
-    });
+    }, { validators: this.dateRangeValidator });
 
     // Watch fiscal change
     this.form.get('fiscalId')?.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(id => {
@@ -283,7 +283,8 @@ export class ObraFormComponent implements OnInit, OnDestroy {
         },
         error: err => {
           this.saving = false;
-          this.errorMsg = `Erro ao salvar: ${err.status} ${err.statusText ?? ''}`;
+          const backendMsg = typeof err.error === 'string' ? err.error : '';
+          this.errorMsg = backendMsg || `Erro ao salvar: ${err.status} ${err.statusText ?? ''}`;
         }
       });
     } else {
@@ -295,7 +296,8 @@ export class ObraFormComponent implements OnInit, OnDestroy {
         },
         error: err => {
           this.saving = false;
-          this.errorMsg = `Erro ao criar obra: ${err.status} ${err.statusText ?? ''}`;
+          const backendMsg = typeof err.error === 'string' ? err.error : '';
+          this.errorMsg = backendMsg || `Erro ao criar obra: ${err.status} ${err.statusText ?? ''}`;
         }
       });
     }
@@ -307,4 +309,13 @@ export class ObraFormComponent implements OnInit, OnDestroy {
 
   goHome(): void { this.router.navigate(['/dashboard']); }
   goObras(): void { this.router.navigate(['/obras']); }
+
+  private dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const start = group.get('dataInicio')?.value;
+    const end = group.get('dataPrevistaFim')?.value;
+    if (start && end && start > end) {
+      return { dateRangeInvalid: true };
+    }
+    return null;
+  }
 }
