@@ -5,35 +5,6 @@
   background: #f3f4f6;
 }
 
-/* ─── Breadcrumb ─────────────────────────────────────────────── */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 24px;
-
-  .breadcrumb-link {
-    color: #374151;
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .separator {
-    color: #9ca3af;
-  }
-
-  .current {
-    color: #374151;
-    font-weight: 500;
-  }
-}
-
 /* ─── Card ───────────────────────────────────────────────────── */
 .form-card {
   background: #ffffff;
@@ -68,7 +39,6 @@
   margin-bottom: 18px;
   align-items: flex-start;
 }
-
 
 /* Row specific layouts */
 .row-nome-contrato {
@@ -111,6 +81,7 @@
   }
 }
 
+/* Layout específico para a linha do Engenheiro e CREA */
 .row-person {
   align-items: flex-end;
 
@@ -124,6 +95,45 @@
 
   .field-crea-uf {
     flex: 0 0 140px;
+  }
+}
+
+/* ─── Autocomplete ───────────── */
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0 0 6px 6px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  li {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #111827;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
   }
 }
 
@@ -166,6 +176,7 @@
       border-color: #ef4444;
     }
 
+    /* Regra que garante o visual bloqueado para os campos readonly */
     &[readonly] {
       background: #f9fafb;
       color: #6b7280;
@@ -214,7 +225,7 @@
   color: #ef4444;
 }
 
-/* ─── Date wrapper (mimics the Figma date input with calendar icon) */
+/* ─── Date wrapper */
 .date-wrapper {
   position: relative;
 
@@ -224,7 +235,7 @@
   }
 }
 
-/* ─── Select wrapper (custom chevron) ───────────────────────── */
+/* ─── Select wrapper */
 .select-wrapper {
   position: relative;
 

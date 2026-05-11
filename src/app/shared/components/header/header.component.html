@@ -1,17 +1,17 @@
 <header class="header">
 
-  <!-- Botão hambúrguer -->
   <button class="hamburger-btn" (click)="menuToggle.emit()">
     <mat-icon>menu</mat-icon>
   </button>
 
-  <!-- Breadcrumb multi-nível -->
-  <nav class="breadcrumbs">
-    <ng-container *ngFor="let crumb of breadcrumbs; let i = index">
+  <nav class="breadcrumb">
+    <ng-container *ngFor="let crumb of breadcrumbs; let last = last">
 
-      <a [routerLink]="crumb.url">{{ crumb.label }}</a>
+      <a *ngIf="!last" [routerLink]="crumb.url" class="breadcrumb-link">{{ crumb.label }}</a>
 
-      <span class="separator" *ngIf="i < breadcrumbs.length - 1">›</span>
+      <span *ngIf="!last" class="separator">></span>
+
+      <span *ngIf="last" class="current">{{ crumb.label }}</span>
 
     </ng-container>
   </nav>
