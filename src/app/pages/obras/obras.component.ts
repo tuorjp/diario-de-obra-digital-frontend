@@ -150,6 +150,9 @@ export class ObrasComponent implements OnInit, OnDestroy {
   }
 
   onVerDiarios(obra: ObraResponseDTO): void {
+    if (obra.projeto) {
+      this.router.navigate(['/diarios'], { queryParams: { obra: obra.projeto } });
+    }
   }
 
   onVisualizar(obra: ObraResponseDTO): void {

@@ -2,7 +2,7 @@ import { Component, OnInit, inject, ChangeDetectorRef, HostListener } from '@ang
 import { CommonModule, DatePipe } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { DiarioDeObraService } from '../../services/diario-de-obra.service';
@@ -30,6 +30,7 @@ export class DiariosComponent implements OnInit {
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
   private cdr = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
 
   diarios: DiarioResponseDto[] = [];
   loading = true;
@@ -63,6 +64,13 @@ export class DiariosComponent implements OnInit {
   ngOnInit(): void {
     this.userRole = this.authService.getUserRole();
     this.userId = this.authService.getUserId();
+
+    // Check for query parameters
+    const obraParam = this.route.snapshot.queryParamMap.get('obra');
+    if (obraParam) {
+      this.filterObra = obraParam;
+    }
+
     this.loadData();
   }
 
