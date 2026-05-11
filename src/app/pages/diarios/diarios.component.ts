@@ -224,4 +224,19 @@ export class DiariosComponent implements OnInit {
       error: () => this.snackBar.open('Erro ao reprovar diário.', 'Fechar', { duration: 3000 })
     });
   }
+
+  imprimirDiario(id: number) {
+    this.snackBar.open('Gerando PDF...', '', { duration: 2000 });
+    this.diarioService.imprimirDiarios([id]).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `diario_de_obra_${id}.pdf`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error: () => this.snackBar.open('Erro ao gerar PDF do diário.', 'Fechar', { duration: 3000 })
+    });
+  }
 }

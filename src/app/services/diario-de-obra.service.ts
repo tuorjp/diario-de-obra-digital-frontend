@@ -87,4 +87,9 @@ export class DiarioDeObraService {
   public getServicos(): Observable<any[]> {
     return this.http.get<any[]>('http://localhost:8090/catalogo/servicos');
   }
+
+  public imprimirDiarios(ids: number[]): Observable<Blob> {
+    const params = new HttpParams().set('ids', ids.join(','));
+    return this.http.get(`${this.baseUrl}/imprimir`, { params, responseType: 'blob' });
+  }
 }
