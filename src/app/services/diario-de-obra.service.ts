@@ -92,4 +92,8 @@ export class DiarioDeObraService {
     const params = new HttpParams().set('ids', ids.join(','));
     return this.http.get(`${this.baseUrl}/imprimir`, { params, responseType: 'blob' });
   }
+
+  public imprimirDiariosObra(obraId: number): Observable<Blob> {
+    return this.http.get(`${this.baseUrl}/obra/${obraId}/imprimir`, { responseType: 'blob' });
+  }
 }

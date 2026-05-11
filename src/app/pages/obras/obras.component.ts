@@ -15,6 +15,8 @@ import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { ObraControllerService } from '../../../api/api/obraController.service';
 import { ObraResponseDTO } from '../../../api/model/obraResponseDTO';
 import { UserService } from '../../services/user.service';
+import { DiarioDeObraService } from '../../services/diario-de-obra.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-obras',
@@ -27,6 +29,8 @@ import { UserService } from '../../services/user.service';
 export class ObrasComponent implements OnInit, OnDestroy {
   private obraService = inject(ObraControllerService);
   private userService = inject(UserService);
+  private diarioService = inject(DiarioDeObraService);
+  private snackBar = inject(MatSnackBar);
   private router = inject(Router);
   private destroy$ = new Subject<void>();
   private searchSubject = new Subject<string>();
@@ -179,6 +183,30 @@ export class ObrasComponent implements OnInit, OnDestroy {
             alert(`Erro ao excluir obra: ${err.status} ${err.statusText}`),
         });
     }
+  }
+
+  onImprimirDiarios(obra: ObraResponseDTO): void {
+    if (!obra.id) return;
+    this.snackBar.open(`Gerando PDF dos diários da obra "${obra.projeto}"...`, '', { duration: 3000 });
+    this.diarioService.imprimirDiariosObra(obra.id)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `diarios_obra_${obra.id}.pdf`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+        },
+        error: (err) => {
+          if (err.status === 400 || err.status === 403) {
+             this.snackBar.open('A obra não possui diários para impressão ou você não tem permissão.', 'Fechar', { duration: 4000 });
+          } else {
+             this.snackBar.open('Erro ao gerar PDF dos diários.', 'Fechar', { duration: 3000 });
+          }
+        }
+      });
   }
 
   // Helpers
