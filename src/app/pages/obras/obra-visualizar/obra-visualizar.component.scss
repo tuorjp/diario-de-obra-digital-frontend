@@ -6,33 +6,6 @@
     margin: 0 auto;
 }
 
-.breadcrumb {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.95rem;
-    color: #4A5568;
-    margin-bottom: 1.5rem;
-
-    a {
-        cursor: pointer;
-        text-decoration: none;
-        color: #4A5568;
-
-        &:hover {
-            text-decoration: underline;
-        }
-    }
-
-    .separator {
-        color: #A0AEC0;
-    }
-
-    .current {
-        font-weight: 500;
-    }
-}
-
 .obra-card {
     background: white;
     border-radius: 12px;
