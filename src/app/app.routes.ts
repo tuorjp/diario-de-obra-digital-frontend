@@ -32,6 +32,7 @@ export const routes: Routes = [
       { path: 'diarios', component: DiariosComponent, data: { title: 'Diários de Obra' } },
       { path: 'diarios/new', component: DiarioFormComponent, data: { title: 'Novo Diário' } },
       { path: 'diarios/edit/:id', component: DiarioFormComponent, data: { title: 'Editar Diário' } },
+      { path: 'diarios/view/:id', component: DiarioFormComponent, data: { title: 'Visualizar Diário' } },
 
       //  Rotas de Admin (Gerenciar Usuários)
       { path: 'manage-users', component: ManageUsersComponent, data: { title: 'Gerenciar Usuários' } },

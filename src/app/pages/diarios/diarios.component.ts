@@ -148,6 +148,15 @@ export class DiariosComponent implements OnInit {
     this.router.navigate(['/diarios/new']);
   }
 
+  formatStatus(status: string): string {
+    switch (status) {
+      case 'VALIDO': return 'Válido';
+      case 'INVALIDO': return 'Inválido';
+      case 'AGUARDANDO_AVALIACAO': return 'Aguardando Avaliação';
+      default: return status;
+    }
+  }
+
   // Role Checks
   canDelete(diario: DiarioResponseDto): boolean {
     return this.userRole === 'ADMIN';

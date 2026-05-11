@@ -61,6 +61,9 @@
           </button>
           
           <div class="options-dropdown" *ngIf="activeDropdownId === diario.id">
+            <button class="dropdown-item color-blue" [routerLink]="['/diarios/view', diario.id]">
+              Visualizar
+            </button>
             <button class="dropdown-item" *ngIf="canEdit(diario)" [routerLink]="['/diarios/edit', diario.id]">
               Editar
             </button>
@@ -73,9 +76,6 @@
             <button class="dropdown-item color-red" *ngIf="canDelete(diario)" (click)="onDelete(diario)">
               Excluir
             </button>
-            <div *ngIf="!canEdit(diario) && !canApproveReject(diario) && !canDelete(diario)" class="dropdown-empty">
-              Sem ações permitidas
-            </div>
           </div>
         </div>
       </div>
@@ -94,7 +94,7 @@
               [class.badge-ativa]="diario.status === 'VALIDO'"
               [class.badge-inativa]="diario.status === 'INVALIDO'"
               [class.badge-pendente]="diario.status === 'AGUARDANDO_AVALIACAO'">
-              {{ diario.status }}
+              {{ formatStatus(diario.status) }}
           </span>
         </div>
       </div>

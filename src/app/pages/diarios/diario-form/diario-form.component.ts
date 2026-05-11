@@ -38,6 +38,7 @@ export class DiarioFormComponent implements OnInit {
   }
 
   isEditMode = false;
+  isViewMode = false;
   diarioId!: number;
   activeTab: 'DIARIO' | 'OCORRENCIAS' = 'DIARIO';
 
@@ -86,8 +87,11 @@ export class DiarioFormComponent implements OnInit {
     this.carregarCatalogos();
 
     const idParam = this.route.snapshot.paramMap.get('id');
+    const isView = this.route.snapshot.url.some(segment => segment.path === 'view');
+    
     if (idParam) {
-      this.isEditMode = true;
+      this.isEditMode = !isView;
+      this.isViewMode = isView;
       this.diarioId = +idParam;
       this.carregarDiario(this.diarioId);
     }
