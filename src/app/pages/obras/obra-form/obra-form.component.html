@@ -1,12 +1,4 @@
 <div class="page-container">
-  <div class="breadcrumb">
-    <a (click)="goHome()" class="breadcrumb-link">Início</a>
-    <span class="separator">></span>
-    <a (click)="goObras()" class="breadcrumb-link">Obras</a>
-    <span class="separator">></span>
-    <span class="current">{{ isEditMode ? 'Editar Obra' : 'Nova Obra' }}</span>
-  </div>
-
   @if (loading) {
     <div class="status-state">
       <div class="spinner"></div>

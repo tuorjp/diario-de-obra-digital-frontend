@@ -36,7 +36,6 @@ export class HeaderComponent {
     private title: Title,
     private cdr: ChangeDetectorRef
   ) {
-
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -52,7 +51,6 @@ export class HeaderComponent {
 
     while (route.firstChild) {
       route = route.firstChild;
-
       const routePath = route.snapshot.url.map(seg => seg.path).join('/');
       const routeData = route.snapshot.data;
 
@@ -68,14 +66,22 @@ export class HeaderComponent {
       }
     }
 
-    // garante sempre o início
+    // Garante sempre o 'Início'
     if (!crumbs.length || crumbs[0].label !== 'Início') {
       crumbs.unshift({ label: 'Início', url: '/dashboard' });
     }
 
-    this.breadcrumbs = crumbs;
+    // Heurística: Se estamos em uma rota de Obras (ex: /obras/editar/17) e a
+    // configuração da rota não inseriu "Obras" automaticamente, nós forçamos a inserção.
+    const currentUrl = this.router.url.split('?')[0];
+    if (currentUrl.includes('/obras/') && !crumbs.some(c => c.label.toLowerCase() === 'obras')) {
+      crumbs.splice(1, 0, { label: 'Obras', url: '/obras' });
+    }
 
-    const last = crumbs[crumbs.length - 1];
+    // Remove duplicatas caso ocorram
+    this.breadcrumbs = crumbs.filter((v, i, a) => a.findIndex(t => (t.label === v.label)) === i);
+
+    const last = this.breadcrumbs[this.breadcrumbs.length - 1];
     if (last) {
       this.title.setTitle(`${last.label} • Hefesto - Diário de Obra Digital`);
     }
