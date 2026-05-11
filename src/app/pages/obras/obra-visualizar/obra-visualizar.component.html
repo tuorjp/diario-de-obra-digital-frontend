@@ -1,13 +1,4 @@
 <div class="page-container">
-    <!-- Breadcrumb nav -->
-    <div class="breadcrumb">
-        <a (click)="goHome()">Início</a>
-        <span class="separator">></span>
-        <a (click)="goObras()">Obras</a>
-        <span class="separator">></span>
-        <span class="current">{{ obra()?.projeto || 'Detalhes da Obra' }}</span>
-    </div>
-
     @if (loading()) {
     <div class="status-state">
         <div class="spinner"></div>
