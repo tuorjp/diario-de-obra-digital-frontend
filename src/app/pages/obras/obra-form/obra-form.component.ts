@@ -107,7 +107,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
   }
 
   private loadUsers(): void {
-    this.userService.getAllUsers().pipe(takeUntil(this.destroy$)).subscribe({
+    this.userService.getFiscaisEEngenheiros().pipe(takeUntil(this.destroy$)).subscribe({
       next: (users: any) => {
         const list: UserProfileDTO[] = Array.isArray(users) ? users : [];
         this.allUsers = list;

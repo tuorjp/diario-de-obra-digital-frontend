@@ -30,6 +30,11 @@ export class UserService {
     return this.http.get<UserProfileDto[]>(`${this.baseUrl}/all?_t=${t}`);
   }
 
+  public getFiscaisEEngenheiros(): Observable<UserProfileDto[]> {
+    const t = new Date().getTime();
+    return this.http.get<UserProfileDto[]>(`${this.baseUrl}/fiscais-e-engenheiros?_t=${t}`);
+  }
+
   //  BUSCA PAGINADA (USADA NA LISTA)
   public searchUsers(
     page: number,

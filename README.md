@@ -1,1 +1,0 @@
-# Estrutura genérica para aplicações Angular
