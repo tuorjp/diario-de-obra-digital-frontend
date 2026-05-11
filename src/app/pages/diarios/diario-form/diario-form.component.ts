@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { DiarioDeObraService } from '../../../services/diario-de-obra.service';
+import { AuthService } from '../../../core/auth/auth.service';
 import { ObraModalComponent } from './obra-modal/obra-modal.component';
 import { ObraResponseDTO } from '../../../../api/model/obraResponseDTO';
 import { CreateOcorrenciaDto, MaoDeObraItemDto, ServicoItemDto, EquipamentoItemDto, DiarioResponseDto } from '../../../utils/dto/diario.dto';
@@ -26,6 +27,7 @@ export class DiarioFormComponent implements OnInit {
   private snackBar = inject(MatSnackBar);
   private datePipe = inject(DatePipe);
   private cdr = inject(ChangeDetectorRef);
+  private authService = inject(AuthService);
 
   @ViewChild('obraModal') obraModal!: ObraModalComponent;
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -40,6 +42,7 @@ export class DiarioFormComponent implements OnInit {
   isEditMode = false;
   isViewMode = false;
   diarioId!: number;
+  diarioCompleto: DiarioResponseDto | null = null;
   activeTab: 'DIARIO' | 'OCORRENCIAS' = 'DIARIO';
 
   // Catalogs
@@ -106,6 +109,7 @@ export class DiarioFormComponent implements OnInit {
   carregarDiario(id: number) {
     this.diarioService.getDiario(id).subscribe({
       next: (diario) => {
+        this.diarioCompleto = diario;
         this.obraSelecionada = { id: diario.obraId, projeto: diario.projeto } as ObraResponseDTO;
         // The API returns an array for localdate sometimes [yyyy, mm, dd] or string
         if (Array.isArray(diario.data)) {
@@ -345,5 +349,34 @@ export class DiarioFormComponent implements OnInit {
 
   cancelar() {
     this.router.navigate(['/diarios']);
+  }
+
+  canApproveReject(): boolean {
+    if (!this.diarioCompleto || this.diarioCompleto.status !== 'AGUARDANDO_AVALIACAO') return false;
+    const role = this.authService.getUserRole();
+    return ['ADMIN', 'GESTOR', 'FISCAL'].includes(role || '');
+  }
+
+  onAprovar() {
+    if (!confirm('Deseja aprovar este diário?')) return;
+    this.diarioService.aprovarDiario(this.diarioId).subscribe({
+      next: () => {
+        this.snackBar.open('Diário aprovado com sucesso!', 'OK', { duration: 3000 });
+        this.router.navigate(['/diarios']);
+      },
+      error: () => this.snackBar.open('Erro ao aprovar diário', 'OK', { duration: 3000 })
+    });
+  }
+
+  onReprovar() {
+    const comentario = prompt('Motivo da reprovação (opcional):');
+    if (comentario === null) return;
+    this.diarioService.reprovarDiario(this.diarioId, comentario).subscribe({
+      next: () => {
+        this.snackBar.open('Diário reprovado com sucesso!', 'OK', { duration: 3000 });
+        this.router.navigate(['/diarios']);
+      },
+      error: () => this.snackBar.open('Erro ao reprovar diário', 'OK', { duration: 3000 })
+    });
   }
 }

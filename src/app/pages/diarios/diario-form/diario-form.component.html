@@ -172,6 +172,8 @@
 
     <div class="form-actions mt-2">
       <button class="btn-cancel" (click)="cancelar()">{{ isViewMode ? 'Voltar' : 'Cancelar' }}</button>
+      <button class="btn-reprovar" (click)="onReprovar()" *ngIf="isViewMode && canApproveReject()">Reprovar</button>
+      <button class="btn-aprovar" (click)="onAprovar()" *ngIf="isViewMode && canApproveReject()">Aprovar</button>
       <button class="btn-save" (click)="salvar()" *ngIf="!isViewMode">{{ isEditMode ? 'Salvar Alterações' : 'Criar Diário' }}</button>
     </div>
 

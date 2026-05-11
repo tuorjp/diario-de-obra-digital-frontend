@@ -339,6 +339,30 @@
     color: white;
     &:hover { background: #059669; }
   }
+
+  .btn-aprovar {
+    background: #BABF15;
+    color: white;
+    border-radius: 24px !important;
+    padding: 0.65rem 2rem !important;
+    &:hover {
+      background: #9da037;
+      transform: translateY(-1px);
+    }
+    &:active { transform: translateY(0); }
+  }
+
+  .btn-reprovar {
+    background: #C2420B;
+    color: white;
+    border-radius: 24px !important;
+    padding: 0.65rem 2rem !important;
+    &:hover {
+      background: #a13609;
+      transform: translateY(-1px);
+    }
+    &:active { transform: translateY(0); }
+  }
 }
 
 /* ── Responsividade Geral Formulário & Ocorrências ── */
