@@ -4,6 +4,11 @@
   padding: 2rem 2.5rem;
   border: 1px solid #e5e5e5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  @media (max-width: 768px) {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
 }
 
 /* ── Header ─────────────────────────────────────── */
@@ -12,6 +17,12 @@
   align-items: flex-start;
   justify-content: space-between;
   margin-bottom: 1.5rem;
+  gap: 1rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: stretch;
+  }
 
   .header-left {
     display: flex;
@@ -23,6 +34,10 @@
       font-weight: 700;
       color: #122640;
       margin: 0;
+
+      @media (max-width: 480px) {
+        font-size: 1.5rem;
+      }
     }
   }
 }
@@ -92,6 +107,12 @@
   gap: 0.75rem;
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
+
+  @media (max-width: 768px) {
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: stretch;
+  }
 }
 
 .search-group {
@@ -122,6 +143,10 @@
     transition: border-color 0.2s;
     width: 180px;
     background: #fff;
+
+    @media (max-width: 480px) {
+      width: 100%;
+    }
 
     &:focus {
       border-color: #122640;
@@ -415,5 +440,101 @@
   &.error {
     color: #c0392b;
     font-weight: 500;
+  }
+}
+
+/* ── Responsive Table (Cards) ────────────────────── */
+@media (max-width: 768px) {
+  .table-wrapper {
+    border: none;
+    background: transparent;
+  }
+
+  .tabela-obras {
+    display: block;
+
+    thead {
+      display: none; // Hide headers on mobile
+    }
+
+    tbody {
+      display: block;
+    }
+
+    tr {
+      display: block;
+      background: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      padding: 1rem;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s;
+
+      &:hover {
+        background: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+    }
+
+    td {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: right !important;
+      padding: 0.6rem 0;
+      border: none !important;
+      border-bottom: 1px solid #f0f0f0 !important;
+      width: 100% !important;
+      min-width: 0 !important;
+
+      &:last-child {
+        border-bottom: none !important;
+        padding-top: 1rem;
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      &::before {
+        content: attr(data-label);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        color: #777;
+        text-align: left;
+        flex: 1;
+      }
+
+      &.col-nome {
+        font-size: 1rem;
+        color: #122640;
+      }
+
+      &.col-acoes {
+        background: #f9fafb;
+        width: 100% !important;
+        margin: 0.5rem -1rem -1rem -1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 0 0 12px 12px;
+
+        &::before {
+          display: none;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+
+    .page-info {
+      order: -1;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
   }
 }
