@@ -78,7 +78,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       numeroContrato: [''],
       contratante: ['', Validators.required],
       contratada: ['', Validators.required],
-      dataInicio: [''],
+      dataInicio: ['', this.notPastDateValidator],
       dataPrevistaFim: [''],
       cep: [''],
       cidade: [''],
@@ -315,6 +315,20 @@ export class ObraFormComponent implements OnInit, OnDestroy {
     const end = group.get('dataPrevistaFim')?.value;
     if (start && end && start > end) {
       return { dateRangeInvalid: true };
+    }
+    return null;
+  }
+
+  private notPastDateValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) return null;
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');
+    const day = String(now.getDate()).padStart(2, '0');
+    const todayStr = `${year}-${month}-${day}`;
+    
+    if (control.value < todayStr) {
+      return { pastDate: true };
     }
     return null;
   }

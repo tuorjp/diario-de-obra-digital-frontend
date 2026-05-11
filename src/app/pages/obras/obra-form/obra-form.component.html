@@ -64,14 +64,18 @@
         </div>
       </div>
 
-      <!-- Row 4: Datas + CEP + Cidade + UF -->
-      <div class="form-row row-dates-address">
+      <!-- Row 4: Datas + CEP -->
+      <div class="form-row row-dates-cep" 
+        [class.has-error]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)">
         <div class="field field-date">
           <label for="dataInicio">Data Início</label>
           <div class="date-wrapper">
             <input id="dataInicio" formControlName="dataInicio" type="date" 
-              [class.invalid]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)" />
+              [class.invalid]="(form.errors?.['dateRangeInvalid'] || form.get('dataInicio')?.invalid) && form.get('dataInicio')?.touched" />
           </div>
+          @if (form.get('dataInicio')?.errors?.['pastDate'] && form.get('dataInicio')?.touched) {
+            <span class="field-error">A data não pode ser no passado.</span>
+          }
         </div>
         <div class="field field-date">
           <label for="dataPrevistaFim">Data Prevista Fim</label>
@@ -85,6 +89,16 @@
           <input id="cep" formControlName="cep" type="text" placeholder="Ex: 01310-100"
             (blur)="onCepBlur()" maxlength="9" />
         </div>
+      </div>
+
+      @if (form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)) {
+      <div class="form-row row-error-tight">
+        <span class="field-error">A data de início não pode ser posterior à data prevista de fim.</span>
+      </div>
+      }
+
+      <!-- Row 5: Cidade + UF -->
+      <div class="form-row row-city-uf">
         <div class="field field-cidade">
           <label for="cidade">Cidade</label>
           <input id="cidade" formControlName="cidade" type="text" placeholder="Ex: São Paulo" />
@@ -99,11 +113,6 @@
           </div>
         </div>
       </div>
-      @if (form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)) {
-      <div class="form-row date-range-error-row">
-        <span class="field-error">A data de início não pode ser posterior à data prevista de fim.</span>
-      </div>
-      }
 
       <!-- Row 5: Endereço -->
       <div class="form-row">

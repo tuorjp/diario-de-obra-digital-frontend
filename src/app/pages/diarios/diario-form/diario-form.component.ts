@@ -49,6 +49,7 @@ export class DiarioFormComponent implements OnInit {
   // Form Data
   obraSelecionada: ObraResponseDTO | null = null;
   dataDiario: string = '';
+  today: string = '';
   condicaoClimatica: string = 'ENSOLARADO';
   observacoes: string = '';
 
@@ -78,7 +79,9 @@ export class DiarioFormComponent implements OnInit {
   carouselCurrentIndex = 0;
 
   ngOnInit(): void {
-    this.dataDiario = this.datePipe.transform(new Date(), 'yyyy-MM-dd') || '';
+    const now = new Date();
+    this.today = this.datePipe.transform(now, 'yyyy-MM-dd') || '';
+    this.dataDiario = this.today;
     
     this.carregarCatalogos();
 
@@ -294,10 +297,14 @@ export class DiarioFormComponent implements OnInit {
     return `http://localhost:8090/diario/fotos/${filename}`;
   }
 
-  // --- Submit ---
   salvar() {
     if (!this.obraSelecionada || !this.dataDiario || !this.condicaoClimatica) {
       this.snackBar.open('Preencha os campos obrigatórios (Obra, Data, Condição Climática)', 'OK', { duration: 3000 });
+      return;
+    }
+
+    if (this.dataDiario < this.today) {
+      this.snackBar.open('A data do diário não pode ser no passado.', 'OK', { duration: 3000 });
       return;
     }
 

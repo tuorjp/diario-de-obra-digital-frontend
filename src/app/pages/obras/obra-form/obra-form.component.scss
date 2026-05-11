@@ -19,10 +19,14 @@
     cursor: pointer;
     text-decoration: none;
 
-    &:hover { text-decoration: underline; }
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
-  .separator { color: #9ca3af; }
+  .separator {
+    color: #9ca3af;
+  }
 
   .current {
     color: #374151;
@@ -65,42 +69,62 @@
   align-items: flex-start;
 }
 
-.date-range-error-row {
-  margin-top: -12px;
-  margin-bottom: 18px;
-
-  .field-error {
-    font-size: 12px;
-  }
-}
 
 /* Row specific layouts */
 .row-nome-contrato {
-  .field-nome { flex: 1 1 auto; }
-  .field-contrato { flex: 0 0 150px; }
+  .field-nome {
+    flex: 1 1 auto;
+  }
+
+  .field-contrato {
+    flex: 0 0 150px;
+  }
 }
 
-.row-dates-address {
-  flex-wrap: wrap;
+.row-dates-cep {
   gap: 12px;
-
   .field-date { flex: 0 0 auto; }
   .field-cep { flex: 0 0 140px; }
+
+  &.has-error {
+    margin-bottom: 4px;
+  }
+}
+
+.row-city-uf {
+  gap: 12px;
   .field-cidade { flex: 1 1 160px; }
   .field-uf { flex: 0 0 120px; }
 }
 
+.row-error-tight {
+  margin-bottom: 10px;
+}
+
 .row-comp-num {
-  .field-complemento { flex: 1; }
-  .field-numero { flex: 0 0 160px; }
+  .field-complemento {
+    flex: 1;
+  }
+
+  .field-numero {
+    flex: 0 0 160px;
+  }
 }
 
 .row-person {
   align-items: flex-end;
 
-  .field-person-name { flex: 1 1 auto; }
-  .field-crea { flex: 0 0 200px; }
-  .field-crea-uf { flex: 0 0 140px; }
+  .field-person-name {
+    flex: 1 1 auto;
+  }
+
+  .field-crea {
+    flex: 0 0 200px;
+  }
+
+  .field-crea-uf {
+    flex: 0 0 140px;
+  }
 }
 
 /* ─── Fields ─────────────────────────────────────────────────── */
@@ -109,7 +133,9 @@
   flex-direction: column;
   gap: 5px;
 
-  &.field-full { flex: 1; }
+  &.field-full {
+    flex: 1;
+  }
 
   label {
     font-size: 13px;
@@ -132,7 +158,9 @@
     width: 100%;
     box-sizing: border-box;
 
-    &:focus { border-color: #6b7280; }
+    &:focus {
+      border-color: #6b7280;
+    }
 
     &.invalid {
       border-color: #ef4444;
@@ -144,7 +172,9 @@
       cursor: default;
     }
 
-    &::placeholder { color: #9ca3af; }
+    &::placeholder {
+      color: #9ca3af;
+    }
   }
 
   select {
@@ -162,7 +192,9 @@
     font-family: inherit;
     transition: border-color 0.15s;
 
-    &:focus { border-color: #6b7280; }
+    &:focus {
+      border-color: #6b7280;
+    }
 
     &:disabled {
       background: #f9fafb;
@@ -175,11 +207,11 @@
     resize: vertical;
     min-height: 90px;
   }
+}
 
-  .field-error {
-    font-size: 11px;
-    color: #ef4444;
-  }
+.field-error {
+  font-size: 11px;
+  color: #ef4444;
 }
 
 /* ─── Date wrapper (mimics the Figma date input with calendar icon) */
@@ -209,7 +241,9 @@
     pointer-events: none;
   }
 
-  select { padding-right: 32px; }
+  select {
+    padding-right: 32px;
+  }
 }
 
 /* ─── Submit Button ──────────────────────────────────────────── */
@@ -233,7 +267,9 @@
   gap: 8px;
   transition: background 0.15s;
 
-  &:hover:not(:disabled) { background: #111827; }
+  &:hover:not(:disabled) {
+    background: #111827;
+  }
 
   &:disabled {
     opacity: 0.65;
@@ -264,7 +300,7 @@
 .spinner-sm {
   width: 16px;
   height: 16px;
-  border: 2px solid rgba(255,255,255,0.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
   border-top-color: #fff;
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
@@ -272,5 +308,7 @@
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
