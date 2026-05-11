@@ -127,6 +127,45 @@
   }
 }
 
+/* ─── Autocomplete ───────────── */
+.autocomplete-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.suggestions-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #d1d5db;
+  border-radius: 0 0 6px 6px;
+  z-index: 1000;
+  max-height: 200px;
+  overflow-y: auto;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  li {
+    padding: 8px 12px;
+    font-size: 14px;
+    color: #111827;
+    cursor: pointer;
+    border-bottom: 1px solid #f3f4f6;
+
+    &:hover {
+      background-color: #f3f4f6;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+}
+
 /* ─── Fields ─────────────────────────────────────────────────── */
 .field {
   display: flex;

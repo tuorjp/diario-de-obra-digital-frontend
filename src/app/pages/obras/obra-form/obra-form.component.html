@@ -1,5 +1,4 @@
 <div class="page-container">
-  <!-- Breadcrumb -->
   <div class="breadcrumb">
     <a (click)="goHome()" class="breadcrumb-link">Início</a>
     <span class="separator">></span>
@@ -8,224 +7,228 @@
     <span class="current">{{ isEditMode ? 'Editar Obra' : 'Nova Obra' }}</span>
   </div>
 
-  <!-- Loading state -->
   @if (loading) {
-  <div class="status-state">
-    <div class="spinner"></div>
-    <p>Carregando dados...</p>
-  </div>
+    <div class="status-state">
+      <div class="spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
   } @else {
-  <div class="form-card">
-    <h1 class="form-title">{{ isEditMode ? 'Editar Obra' : 'Cadastrar Obra' }}</h1>
+    <div class="form-card">
+      <h1 class="form-title">{{ isEditMode ? 'Editar Obra' : 'Cadastrar Obra' }}</h1>
 
-    @if (errorMsg) {
-    <div class="alert-error">{{ errorMsg }}</div>
-    }
-
-    <form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-      <!-- Row 1: Nome da Obra + Nº Contrato -->
-      <div class="form-row row-nome-contrato">
-        <div class="field field-nome">
-          <label for="projeto">Nome da Obra*</label>
-          <input id="projeto" formControlName="projeto" type="text" placeholder="Ex: Construção do Bloco A"
-            [class.invalid]="form.get('projeto')?.invalid && form.get('projeto')?.touched" />
-          @if (form.get('projeto')?.invalid && form.get('projeto')?.touched) {
-          <span class="field-error">Campo obrigatório</span>
-          }
-        </div>
-        <div class="field field-contrato">
-          <label for="numeroContrato">Nº Contrato</label>
-          <input id="numeroContrato" formControlName="numeroContrato" type="text" placeholder="Ex: 2024/001" />
-        </div>
-      </div>
-
-      <!-- Row 2: Contratante -->
-      <div class="form-row">
-        <div class="field field-full">
-          <label for="contratante">Contratante*</label>
-          <input id="contratante" formControlName="contratante" type="text" placeholder="Ex: Prefeitura Municipal de São Paulo"
-            [class.invalid]="form.get('contratante')?.invalid && form.get('contratante')?.touched" />
-          @if (form.get('contratante')?.invalid && form.get('contratante')?.touched) {
-          <span class="field-error">Campo obrigatório</span>
-          }
-        </div>
-      </div>
-
-      <!-- Row 3: Contratada -->
-      <div class="form-row">
-        <div class="field field-full">
-          <label for="contratada">Contratada*</label>
-          <input id="contratada" formControlName="contratada" type="text" placeholder="Ex: Construtora ABC Ltda."
-            [class.invalid]="form.get('contratada')?.invalid && form.get('contratada')?.touched" />
-          @if (form.get('contratada')?.invalid && form.get('contratada')?.touched) {
-          <span class="field-error">Campo obrigatório</span>
-          }
-        </div>
-      </div>
-
-      <!-- Row 4: Datas + CEP -->
-      <div class="form-row row-dates-cep" 
-        [class.has-error]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)">
-        <div class="field field-date">
-          <label for="dataInicio">Data Início</label>
-          <div class="date-wrapper">
-            <input id="dataInicio" formControlName="dataInicio" type="date" 
-              [class.invalid]="(form.errors?.['dateRangeInvalid'] || form.get('dataInicio')?.invalid) && form.get('dataInicio')?.touched" />
-          </div>
-          @if (form.get('dataInicio')?.errors?.['pastDate'] && form.get('dataInicio')?.touched) {
-            <span class="field-error">A data não pode ser no passado.</span>
-          }
-        </div>
-        <div class="field field-date">
-          <label for="dataPrevistaFim">Data Prevista Fim</label>
-          <div class="date-wrapper">
-            <input id="dataPrevistaFim" formControlName="dataPrevistaFim" type="date" 
-              [class.invalid]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)" />
-          </div>
-        </div>
-        <div class="field field-cep">
-          <label for="cep">CEP</label>
-          <input id="cep" formControlName="cep" type="text" placeholder="Ex: 01310-100"
-            (blur)="onCepBlur()" maxlength="9" />
-        </div>
-      </div>
-
-      @if (form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)) {
-      <div class="form-row row-error-tight">
-        <span class="field-error">A data de início não pode ser posterior à data prevista de fim.</span>
-      </div>
+      @if (errorMsg) {
+        <div class="alert-error">{{ errorMsg }}</div>
       }
 
-      <!-- Row 5: Cidade + UF -->
-      <div class="form-row row-city-uf">
-        <div class="field field-cidade">
-          <label for="cidade">Cidade</label>
-          <input id="cidade" formControlName="cidade" type="text" placeholder="Ex: São Paulo" />
-        </div>
-        <div class="field field-uf">
-          <label for="uf">UF</label>
-          <div class="select-wrapper">
-            <select id="uf" formControlName="uf">
-              <option value="">Selecionar</option>
-              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
-            </select>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+        <div class="form-row row-nome-contrato">
+          <div class="field field-nome">
+            <label for="projeto">Nome da Obra*</label>
+            <input id="projeto" formControlName="projeto" type="text" placeholder="Ex: Construção do Bloco A"
+                   [class.invalid]="form.get('projeto')?.invalid && form.get('projeto')?.touched" />
+            @if (form.get('projeto')?.invalid && form.get('projeto')?.touched) {
+              <span class="field-error">Campo obrigatório</span>
+            }
+          </div>
+          <div class="field field-contrato">
+            <label for="numeroContrato">Nº Contrato</label>
+            <input id="numeroContrato" formControlName="numeroContrato" type="text" placeholder="Ex: 2024/001" />
           </div>
         </div>
-      </div>
 
-      <!-- Row 5: Endereço -->
-      <div class="form-row">
-        <div class="field field-full">
-          <label for="endereco">Endereço</label>
-          <input id="endereco" formControlName="endereco" type="text" placeholder="Ex: Av. Paulista" />
-        </div>
-      </div>
-
-      <!-- Row 6: Complemento + Número -->
-      <div class="form-row row-comp-num">
-        <div class="field field-complemento">
-          <label for="complemento">Complemento do Endereço</label>
-          <input id="complemento" formControlName="complemento" type="text" placeholder="Ex: Apto 42, Bloco B" />
-        </div>
-        <div class="field field-numero">
-          <label for="numero">Número</label>
-          <input id="numero" formControlName="numero" type="text" placeholder="Ex: 1000" />
-        </div>
-      </div>
-
-      <!-- Row 7: Fiscal + CREA + UF CREA -->
-      <div class="form-row row-person">
-        <div class="field field-person-name">
-          <label for="fiscalId">Fiscal</label>
-          <input id="fiscalId-search" type="text" placeholder="Buscar fiscal" class="hidden-input" style="display:none" />
-          <select id="fiscalId" formControlName="fiscalId">
-            <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of fiscais" [value]="u.id">{{ u.name }}</option>
-          </select>
-        </div>
-        <div class="field field-crea">
-          <label>Registro Crea</label>
-          <input type="text" [value]="fiscalCrea" placeholder="Registro CREA do fiscal" readonly />
-        </div>
-        <div class="field field-crea-uf">
-          <label>UF Crea</label>
-          <div class="select-wrapper">
-            <select [value]="fiscalCreaUf" disabled>
-              <option value="">Selecionar</option>
-              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
-            </select>
+        <div class="form-row">
+          <div class="field field-full">
+            <label for="contratante">Contratante*</label>
+            <input id="contratante" formControlName="contratante" type="text" placeholder="Ex: Prefeitura Municipal de São Paulo"
+                   [class.invalid]="form.get('contratante')?.invalid && form.get('contratante')?.touched" />
+            @if (form.get('contratante')?.invalid && form.get('contratante')?.touched) {
+              <span class="field-error">Campo obrigatório</span>
+            }
           </div>
         </div>
-      </div>
 
-      <!-- Row 8: Engenheiro 1 + CREA + UF CREA -->
-      <div class="form-row row-person">
-        <div class="field field-person-name">
-          <label for="engenheiroId1">Engenheiro 1</label>
-          <select id="engenheiroId1" formControlName="engenheiroId1">
-            <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
-          </select>
-        </div>
-        <div class="field field-crea">
-          <label>Registro Crea</label>
-          <input type="text" [value]="eng1Crea" placeholder="Registro CREA do engenheiro" readonly />
-        </div>
-        <div class="field field-crea-uf">
-          <label>UF Crea</label>
-          <div class="select-wrapper">
-            <select [value]="eng1CreaUf" disabled>
-              <option value="">Selecionar</option>
-              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
-            </select>
+        <div class="form-row">
+          <div class="field field-full">
+            <label for="contratada">Contratada*</label>
+            <input id="contratada" formControlName="contratada" type="text" placeholder="Ex: Construtora ABC Ltda."
+                   [class.invalid]="form.get('contratada')?.invalid && form.get('contratada')?.touched" />
+            @if (form.get('contratada')?.invalid && form.get('contratada')?.touched) {
+              <span class="field-error">Campo obrigatório</span>
+            }
           </div>
         </div>
-      </div>
 
-      <!-- Row 9: Engenheiro 2 + CREA + UF CREA -->
-      <div class="form-row row-person">
-        <div class="field field-person-name">
-          <label for="engenheiroId2">Engenheiro 2</label>
-          <select id="engenheiroId2" formControlName="engenheiroId2">
-            <option [value]="null">Selecionar</option>
-            <option *ngFor="let u of engenheiros" [value]="u.id">{{ u.name }}</option>
-          </select>
-        </div>
-        <div class="field field-crea">
-          <label>Registro Crea</label>
-          <input type="text" [value]="eng2Crea" placeholder="Registro CREA do engenheiro" readonly />
-        </div>
-        <div class="field field-crea-uf">
-          <label>UF Crea</label>
-          <div class="select-wrapper">
-            <select [value]="eng2CreaUf" disabled>
-              <option value="">Selecionar</option>
-              <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
-            </select>
+        <div class="form-row row-dates-cep"
+             [class.has-error]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)">
+          <div class="field field-date">
+            <label for="dataInicio">Data Início</label>
+            <div class="date-wrapper">
+              <input id="dataInicio" formControlName="dataInicio" type="date"
+                     [class.invalid]="(form.errors?.['dateRangeInvalid'] || form.get('dataInicio')?.invalid) && form.get('dataInicio')?.touched" />
+            </div>
+            @if (form.get('dataInicio')?.errors?.['pastDate'] && form.get('dataInicio')?.touched) {
+              <span class="field-error">A data não pode ser no passado.</span>
+            }
+          </div>
+          <div class="field field-date">
+            <label for="dataPrevistaFim">Data Prevista Fim</label>
+            <div class="date-wrapper">
+              <input id="dataPrevistaFim" formControlName="dataPrevistaFim" type="date"
+                     [class.invalid]="form.errors?.['dateRangeInvalid'] && (form.get('dataInicio')?.touched || form.get('dataPrevistaFim')?.touched)" />
+            </div>
+          </div>
+          <div class="field field-cep">
+            <label for="cep">CEP</label>
+            <input id="cep" formControlName="cep" type="text" placeholder="Ex: 01310-100"
+                   (blur)="onCepBlur()" maxlength="9" />
           </div>
         </div>
-      </div>
 
-      <!-- Row 10: Observações -->
-      <div class="form-row">
-        <div class="field field-full">
-          <label for="observacao">Observações</label>
-          <textarea id="observacao" formControlName="observacao" placeholder="Informações adicionais sobre a obra..." rows="4"></textarea>
+        <div class="form-row row-city-uf">
+          <div class="field field-cidade">
+            <label for="cidade">Cidade</label>
+            <input id="cidade" formControlName="cidade" type="text" placeholder="Ex: São Paulo" />
+          </div>
+          <div class="field field-uf">
+            <label for="uf">UF</label>
+            <div class="select-wrapper">
+              <select id="uf" formControlName="uf">
+                <option value="">Selecionar</option>
+                <option *ngFor="let uf of UF_OPTIONS" [value]="uf">{{ uf }}</option>
+              </select>
+            </div>
+          </div>
         </div>
-      </div>
 
-      <!-- Submit Button -->
-      <div class="form-actions">
-        <button type="submit" class="btn-submit" [disabled]="saving">
-          @if (saving) {
-          <span class="spinner-sm"></span> Salvando...
-          } @else {
-          {{ isEditMode ? 'Salvar Alterações' : 'Cadastrar' }}
-          }
-        </button>
-      </div>
-    </form>
-  </div>
+        <div class="form-row">
+          <div class="field field-full">
+            <label for="endereco">Endereço</label>
+            <input id="endereco" formControlName="endereco" type="text" placeholder="Ex: Av. Paulista" />
+          </div>
+        </div>
+
+        <div class="form-row row-comp-num">
+          <div class="field field-complemento">
+            <label for="complemento">Complemento do Endereço</label>
+            <input id="complemento" formControlName="complemento" type="text" placeholder="Ex: Apto 42, Bloco B" />
+          </div>
+          <div class="field field-numero">
+            <label for="numero">Número</label>
+            <input id="numero" formControlName="numero" type="text" placeholder="Ex: 1000" />
+          </div>
+        </div>
+
+        <div class="form-row row-person">
+          <div class="field field-person-name">
+            <label>Fiscal do Contrato</label>
+            <div class="autocomplete-wrapper">
+              <input type="text" formControlName="fiscalId" placeholder="Pesquisar fiscal..."
+                     (focus)="showFiscalDropdown = true"
+                     (blur)="showFiscalDropdown = false"
+                     [class.invalid]="form.get('fiscalId')?.errors?.['userNotFound']" />
+
+              @if (showFiscalDropdown && fiscaisFiltrados.length > 0) {
+                <ul class="suggestions-list">
+                  @for (user of fiscaisFiltrados; track user.id) {
+                    <li (mousedown)="selectUser(user, 'fiscalId')">{{ user.name }}</li>
+                  }
+                </ul>
+              }
+            </div>
+            @if (form.get('fiscalId')?.errors?.['userNotFound']) {
+              <span class="field-error">Selecione da lista ou apague o nome.</span>
+            }
+          </div>
+          <div class="field field-crea">
+            <label>Registro Crea</label>
+            <input type="text" [value]="fiscalCrea" placeholder="CREA" readonly title="Preenchido automaticamente" />
+          </div>
+          <div class="field field-crea-uf">
+            <label>UF Crea</label>
+            <input type="text" [value]="fiscalCreaUf" placeholder="UF" readonly title="Preenchido automaticamente" />
+          </div>
+        </div>
+
+        <div class="form-row row-person">
+          <div class="field field-person-name">
+            <label>Engenheiro 1</label>
+            <div class="autocomplete-wrapper">
+              <input type="text" formControlName="engenheiroId1" placeholder="Pesquisar engenheiro..."
+                     (focus)="showEng1Dropdown = true"
+                     (blur)="showEng1Dropdown = false"
+                     [class.invalid]="form.get('engenheiroId1')?.errors?.['userNotFound']" />
+
+              @if (showEng1Dropdown && engenheiros1Filtrados.length > 0) {
+                <ul class="suggestions-list">
+                  @for (u of engenheiros1Filtrados; track u.id) {
+                    <li (mousedown)="selectUser(u, 'engenheiroId1')">{{ u.name }} ({{ u.crea }})</li>
+                  }
+                </ul>
+              }
+            </div>
+            @if (form.get('engenheiroId1')?.errors?.['userNotFound']) {
+              <span class="field-error">Selecione da lista ou apague o nome.</span>
+            }
+          </div>
+          <div class="field field-crea">
+            <label>Registro Crea</label>
+            <input type="text" [value]="eng1Crea" placeholder="CREA" readonly title="Preenchido automaticamente" />
+          </div>
+          <div class="field field-crea-uf">
+            <label>UF Crea</label>
+            <input type="text" [value]="eng1CreaUf" placeholder="UF" readonly title="Preenchido automaticamente" />
+          </div>
+        </div>
+
+        <div class="form-row row-person">
+          <div class="field field-person-name">
+            <label>Engenheiro 2</label>
+            <div class="autocomplete-wrapper">
+              <input type="text" formControlName="engenheiroId2" placeholder="Pesquisar engenheiro..."
+                     (focus)="showEng2Dropdown = true"
+                     (blur)="showEng2Dropdown = false"
+                     [class.invalid]="form.get('engenheiroId2')?.errors?.['userNotFound']" />
+
+              @if (showEng2Dropdown && engenheiros2Filtrados.length > 0) {
+                <ul class="suggestions-list">
+                  @for (u of engenheiros2Filtrados; track u.id) {
+                    <li (mousedown)="selectUser(u, 'engenheiroId2')">{{ u.name }} ({{ u.crea }})</li>
+                  }
+                </ul>
+              }
+            </div>
+            @if (form.get('engenheiroId2')?.errors?.['userNotFound']) {
+              <span class="field-error">Selecione da lista ou apague o nome.</span>
+            }
+          </div>
+          <div class="field field-crea">
+            <label>Registro Crea</label>
+            <input type="text" [value]="eng2Crea" placeholder="CREA" readonly title="Preenchido automaticamente" />
+          </div>
+          <div class="field field-crea-uf">
+            <label>UF Crea</label>
+            <input type="text" [value]="eng2CreaUf" placeholder="UF" readonly title="Preenchido automaticamente" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field field-full">
+            <label for="observacao">Observações</label>
+            <textarea id="observacao" formControlName="observacao" placeholder="Informações adicionais..." rows="4"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-submit" [disabled]="saving">
+            @if (saving) {
+              <span class="spinner-sm"></span> Salvando...
+            } @else {
+              {{ isEditMode ? 'Salvar Alterações' : 'Cadastrar' }}
+            }
+          </button>
+        </div>
+      </form>
+    </div>
   }
 </div>
