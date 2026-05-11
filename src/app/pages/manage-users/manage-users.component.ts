@@ -150,6 +150,11 @@ export class ManageUsersComponent implements OnInit {
   }
 
   onToggleStatus(user: UserProfileDto) {
+    if (user.login === 'admin') {
+      this.snackBar.open('O usuário admin não pode ser desativado.', 'Fechar', { duration: 4000 });
+      return;
+    }
+
     const action = user.enabled ? 'desativar' : 'ativar';
     if (!confirm(`Deseja realmente ${action} o usuário ${user.name}?`)) return;
 

@@ -95,7 +95,7 @@
             <a mat-icon-button title="Editar" [routerLink]="['/user/edit', user.id]" style="color: #666;">
               <mat-icon>edit</mat-icon>
             </a>
-            <button mat-icon-button title="Desativar/Ativar" (click)="onToggleStatus(user)" color="warn">
+            <button *ngIf="user.login !== 'admin'" mat-icon-button title="Desativar/Ativar" (click)="onToggleStatus(user)" color="warn">
               <mat-icon>{{ user.enabled ? 'delete' : 'restore_from_trash' }}</mat-icon>
             </button>
           </td>
