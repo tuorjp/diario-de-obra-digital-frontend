@@ -5,35 +5,6 @@
   background: #f3f4f6;
 }
 
-/* ─── Breadcrumb ─────────────────────────────────────────────── */
-.breadcrumb {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
-  color: #6b7280;
-  margin-bottom: 24px;
-
-  .breadcrumb-link {
-    color: #374151;
-    cursor: pointer;
-    text-decoration: none;
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-
-  .separator {
-    color: #9ca3af;
-  }
-
-  .current {
-    color: #374151;
-    font-weight: 500;
-  }
-}
-
 /* ─── Card ───────────────────────────────────────────────────── */
 .form-card {
   background: #ffffff;
@@ -68,7 +39,6 @@
   margin-bottom: 18px;
   align-items: flex-start;
 }
-
 
 /* Row specific layouts */
 .row-nome-contrato {
@@ -111,6 +81,7 @@
   }
 }
 
+/* Layout específico para a linha do Engenheiro e CREA */
 .row-person {
   align-items: flex-end;
 
@@ -205,6 +176,7 @@
       border-color: #ef4444;
     }
 
+    /* Regra que garante o visual bloqueado para os campos readonly */
     &[readonly] {
       background: #f9fafb;
       color: #6b7280;
@@ -253,7 +225,7 @@
   color: #ef4444;
 }
 
-/* ─── Date wrapper (mimics the Figma date input with calendar icon) */
+/* ─── Date wrapper */
 .date-wrapper {
   position: relative;
 
@@ -263,7 +235,7 @@
   }
 }
 
-/* ─── Select wrapper (custom chevron) ───────────────────────── */
+/* ─── Select wrapper */
 .select-wrapper {
   position: relative;
 
