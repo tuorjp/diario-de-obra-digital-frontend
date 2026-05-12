@@ -210,7 +210,9 @@
         animation: dropdownIn 0.15s ease-out;
 
         .dropdown-item {
-          display: block;
+          display: flex;
+          align-items: center;
+          gap: 8px;
           width: 100%;
           text-align: left;
           background: none;
@@ -221,6 +223,12 @@
           cursor: pointer;
           font-weight: 500;
           transition: background 0.2s;
+          
+          mat-icon {
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
+          }
 
           &:hover {
             background: #f8fafc;

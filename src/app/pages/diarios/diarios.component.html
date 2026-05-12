@@ -67,19 +67,24 @@
           
           <div class="options-dropdown" *ngIf="activeDropdownId === diario.id">
             <button class="dropdown-item color-blue" [routerLink]="['/diarios/view', diario.id]">
-              Visualizar
+              <mat-icon>visibility</mat-icon>
+              <span>Visualizar</span>
             </button>
             <button class="dropdown-item" *ngIf="canEdit(diario)" [routerLink]="['/diarios/edit', diario.id]">
-              Editar
+              <mat-icon>edit</mat-icon>
+              <span>Editar</span>
             </button>
             <button class="dropdown-item color-green" *ngIf="canApproveReject(diario)" (click)="onAprovar(diario)">
-              Aprovar
+              <mat-icon>check_circle</mat-icon>
+              <span>Aprovar</span>
             </button>
             <button class="dropdown-item color-orange" *ngIf="canApproveReject(diario)" (click)="onReprovar(diario)">
-              Reprovar
+              <mat-icon>cancel</mat-icon>
+              <span>Reprovar</span>
             </button>
             <button class="dropdown-item color-red" *ngIf="canDelete(diario)" (click)="onDelete(diario)">
-              Excluir
+              <mat-icon>delete</mat-icon>
+              <span>Excluir</span>
             </button>
           </div>
         </div>
