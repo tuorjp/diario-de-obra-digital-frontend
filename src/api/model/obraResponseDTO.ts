@@ -23,6 +23,7 @@ export interface ObraResponseDTO {
     fiscal?: UserProfileDTO;
     engenheiros?: Set<UserProfileDTO>;
     endereco?: EnderecoObraDTO;
+    cliente?: UserProfileDTO;
 }
 export namespace ObraResponseDTO {
     export const StatusEnum = {

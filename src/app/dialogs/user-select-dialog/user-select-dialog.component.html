@@ -39,17 +39,19 @@
                  placeholder="Filtrar por e-mail..." id="filter-email" />
         </div>
       </div>
-      <div class="filter-field filter-field--crea">
-        <label>CREA</label>
-        <div class="filter-input-wrapper">
-          <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
-               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-          </svg>
-          <input type="text" [(ngModel)]="filterCrea" (ngModelChange)="applyFilters()"
-                 placeholder="Filtrar por CREA..." id="filter-crea" />
+      @if (data.role !== 'USER') {
+        <div class="filter-field filter-field--crea">
+          <label>CREA</label>
+          <div class="filter-input-wrapper">
+            <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input type="text" [(ngModel)]="filterCrea" (ngModelChange)="applyFilters()"
+                   placeholder="Filtrar por CREA..." id="filter-crea" />
+          </div>
         </div>
-      </div>
+      }
     </div>
 
     <!-- Loading State -->
@@ -79,13 +81,15 @@
             <tr>
               <th>Nome</th>
               <th>E-mail</th>
-              <th>CREA</th>
+              @if (data.role !== 'USER') {
+                <th>CREA</th>
+              }
             </tr>
           </thead>
           <tbody>
             @if (filteredUsers.length === 0) {
               <tr class="empty-row">
-                <td colspan="3">
+                <td [attr.colspan]="data.role === 'USER' ? 2 : 3">
                   <div class="empty-state">
                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -108,13 +112,15 @@
                   </div>
                 </td>
                 <td class="email-cell">{{ user.login }}</td>
-                <td>
-                  @if (user.crea) {
-                    <span class="crea-badge">{{ user.crea }}{{ user.creaUf ? '/' + user.creaUf : '' }}</span>
-                  } @else {
-                    <span class="no-crea">—</span>
-                  }
-                </td>
+                @if (data.role !== 'USER') {
+                  <td>
+                    @if (user.crea) {
+                      <span class="crea-badge">{{ user.crea }}{{ user.creaUf ? '/' + user.creaUf : '' }}</span>
+                    } @else {
+                      <span class="no-crea">—</span>
+                    }
+                  </td>
+                }
               </tr>
             }
           </tbody>

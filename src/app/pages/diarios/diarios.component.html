@@ -5,7 +5,7 @@
     <div class="header-left">
       <h2>Diários de Obra</h2>
     </div>
-    <button class="btn-novo-diario" (click)="onAddDiario()">
+    <button *ngIf="userRole !== 'USER'" class="btn-novo-diario" (click)="onAddDiario()">
       <span class="btn-plus">+</span> Novo Diário
     </button>
   </div>

@@ -45,11 +45,14 @@ export class ObraFormComponent implements OnInit, OnDestroy {
   selectedFiscalId: number | null = null;
   selectedEng1Id: number | null = null;
   selectedEng2Id: number | null = null;
+  selectedClienteId: number | null = null;
 
   // Nomes exibidos nos campos
   fiscalNome = '';
   eng1Nome = '';
   eng2Nome = '';
+  clienteNome = '';
+  clienteLogin = '';
 
   // Informações de CREA exibidas na tela
   fiscalCrea = '';
@@ -98,17 +101,27 @@ export class ObraFormComponent implements OnInit, OnDestroy {
     }, { validators: this.dateRangeValidator });
   }
 
-  openUserSelectDialog(field: 'fiscal' | 'eng1' | 'eng2'): void {
+  openUserSelectDialog(field: 'fiscal' | 'eng1' | 'eng2' | 'cliente'): void {
     const isFiscal = field === 'fiscal';
+    const isCliente = field === 'cliente';
     const excludeId = field === 'eng1' ? this.selectedEng2Id
                     : field === 'eng2' ? this.selectedEng1Id
                     : null;
 
-    const dialogData: UserSelectDialogData = {
-      role: isFiscal ? 'FISCAL' : 'ENGENHEIRO',
-      title: isFiscal ? 'Selecionar Fiscal do Contrato' : `Selecionar Engenheiro ${field === 'eng1' ? '1' : '2'}`,
-      excludeId
-    };
+    let role: 'FISCAL' | 'ENGENHEIRO' | 'USER';
+    let title: string;
+    if (isCliente) {
+      role = 'USER';
+      title = 'Selecionar Cliente';
+    } else if (isFiscal) {
+      role = 'FISCAL';
+      title = 'Selecionar Fiscal do Contrato';
+    } else {
+      role = 'ENGENHEIRO';
+      title = `Selecionar Engenheiro ${field === 'eng1' ? '1' : '2'}`;
+    }
+
+    const dialogData: UserSelectDialogData = { role, title, excludeId };
 
     const ref = this.dialog.open(UserSelectDialogComponent, {
       data: dialogData,
@@ -124,7 +137,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  private applyUserSelection(field: 'fiscal' | 'eng1' | 'eng2', user: UserProfileDto): void {
+  private applyUserSelection(field: 'fiscal' | 'eng1' | 'eng2' | 'cliente', user: UserProfileDto): void {
     if (field === 'fiscal') {
       this.selectedFiscalId = user.id;
       this.fiscalNome = user.name;
@@ -135,18 +148,22 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       this.eng1Nome = user.name;
       this.eng1Crea = user.crea || '';
       this.eng1CreaUf = user.creaUf || '';
-    } else {
+    } else if (field === 'eng2') {
       this.selectedEng2Id = user.id;
       this.eng2Nome = user.name;
       this.eng2Crea = user.crea || '';
       this.eng2CreaUf = user.creaUf || '';
+    } else if (field === 'cliente') {
+      this.selectedClienteId = user.id;
+      this.clienteNome = user.name;
+      this.clienteLogin = user.login || '';
     }
     // Defer to next macrotask so the dialog close animation finishes
     // before Angular runs change detection on this component's view.
     setTimeout(() => this.cdr.detectChanges());
   }
 
-  clearUser(field: 'fiscal' | 'eng1' | 'eng2'): void {
+  clearUser(field: 'fiscal' | 'eng1' | 'eng2' | 'cliente'): void {
     if (field === 'fiscal') {
       this.selectedFiscalId = null;
       this.fiscalNome = '';
@@ -157,11 +174,15 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       this.eng1Nome = '';
       this.eng1Crea = '';
       this.eng1CreaUf = '';
-    } else {
+    } else if (field === 'eng2') {
       this.selectedEng2Id = null;
       this.eng2Nome = '';
       this.eng2Crea = '';
       this.eng2CreaUf = '';
+    } else if (field === 'cliente') {
+      this.selectedClienteId = null;
+      this.clienteNome = '';
+      this.clienteLogin = '';
     }
     this.cdr.detectChanges();
   }
@@ -187,6 +208,7 @@ export class ObraFormComponent implements OnInit, OnDestroy {
       observacao: v.observacao || undefined,
       fiscalId: this.selectedFiscalId || undefined,
       engenheiroIds: engenheiroIds.length > 0 ? engenheiroIds : undefined,
+      clienteId: this.selectedClienteId || undefined,
       endereco: {
         cep: v.cep || undefined,
         cidade: v.cidade || undefined,
@@ -245,6 +267,12 @@ export class ObraFormComponent implements OnInit, OnDestroy {
           this.fiscalNome = obra.fiscal.name;
           this.fiscalCrea = obra.fiscal.crea || '';
           this.fiscalCreaUf = obra.fiscal.creaUf || '';
+        }
+
+        if (obra.cliente) {
+          this.selectedClienteId = obra.cliente.id;
+          this.clienteNome = obra.cliente.name;
+          this.clienteLogin = obra.cliente.login || '';
         }
 
         const engs = obra.engenheiros || [];

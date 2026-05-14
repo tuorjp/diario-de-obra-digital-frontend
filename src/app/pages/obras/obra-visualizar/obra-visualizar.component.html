@@ -15,9 +15,11 @@
         <div class="card-header">
             <h1>{{ obra()?.projeto }}</h1>
             <div class="header-actions">
-                <button class="btn-inserir" (click)="onInserirDiario()">
-                    <span class="icon">+</span> Inserir Diário
-                </button>
+                @if (!isClient()) {
+                    <button class="btn-inserir" (click)="onInserirDiario()">
+                        <span class="icon">+</span> Inserir Diário
+                    </button>
+                }
                 @if (isGestorOrAdmin()) {
                 <button class="btn-editar" (click)="onEditarObra()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24"
@@ -106,7 +108,20 @@
         <hr class="divider" />
 
         <div class="card-section engineering-section">
-            <div class="eng-row" *ngIf="obra()?.fiscal as fiscal">
+            <div class="eng-row" *ngIf="obra()?.cliente as cliente">
+                <div class="eng-name">
+                    <span class="label">Cliente:</span>
+                    <span class="value">{{ cliente.name || '—' }}</span>
+                </div>
+                <div class="eng-details">
+                    <div class="detail-item">
+                        <span class="label">E-mail:</span>
+                        <span class="value">{{ cliente.login || '—' }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="eng-row mt-3" *ngIf="obra()?.fiscal as fiscal">
                 <div class="eng-name">
                     <span class="label">Fiscal:</span>
                     <span class="value">{{ fiscal.name || '—' }}</span>
