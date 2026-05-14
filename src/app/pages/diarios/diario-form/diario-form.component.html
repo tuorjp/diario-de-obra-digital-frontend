@@ -5,6 +5,18 @@
     </div>
   </div>
 
+  <!-- Error Banner -->
+  @if (errorMsg) {
+    <div class="alert-error-banner">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ errorMsg }}</span>
+      <button class="alert-dismiss" (click)="errorMsg = null" title="Fechar">×</button>
+    </div>
+  }
+
   <!-- TABS -->
   <div class="tabs">
     <button class="tab-btn" [class.active]="activeTab === 'DIARIO'" (click)="setTab('DIARIO')">Diário</button>
@@ -44,14 +56,14 @@
         <!-- Equipamentos -->
         <div class="list-section">
           <h3>Equipamentos</h3>
-          <mat-form-field appearance="outline" class="w-100 mb-1" *ngIf="!isViewMode">
-            <mat-label>Buscar equipamento...</mat-label>
-            <input type="text" matInput [(ngModel)]="buscaEquipamento" 
-                   (input)="filtrarEq()" [matAutocomplete]="autoEq"/>
-            <mat-autocomplete #autoEq="matAutocomplete" (optionSelected)="selecionarEq($event)" [displayWith]="displayFn">
-              <mat-option *ngFor="let c of eqFiltrados" [value]="c">{{c.nome}}</mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+          <button type="button" class="btn-open-catalog" (click)="openCatalogDialog('equipamento')" *ngIf="!isViewMode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Selecionar Equipamentos
+            <span class="catalog-count" *ngIf="equipamentosAdicionados.length > 0">{{ equipamentosAdicionados.length }}</span>
+          </button>
           <div class="item-added" *ngFor="let eq of equipamentosAdicionados; let i = index">
             <span>{{ eq.equipamentoNome }}</span>
             <input type="number" [(ngModel)]="eq.quantidade" min="1" class="qtd-input" title="Quantidade" [disabled]="isViewMode">
@@ -62,14 +74,14 @@
         <!-- Mão de Obra -->
         <div class="list-section">
           <h3>Mão de Obra</h3>
-          <mat-form-field appearance="outline" class="w-100 mb-1" *ngIf="!isViewMode">
-            <mat-label>Buscar profissional...</mat-label>
-            <input type="text" matInput [(ngModel)]="buscaMaoDeObra" 
-                   (input)="filtrarMo()" [matAutocomplete]="autoMo"/>
-            <mat-autocomplete #autoMo="matAutocomplete" (optionSelected)="selecionarMo($event)" [displayWith]="displayFn">
-              <mat-option *ngFor="let c of moFiltrados" [value]="c">{{c.nome}}</mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+          <button type="button" class="btn-open-catalog" (click)="openCatalogDialog('maoDeObra')" *ngIf="!isViewMode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Selecionar Mão de Obra
+            <span class="catalog-count" *ngIf="maoDeObraAdicionada.length > 0">{{ maoDeObraAdicionada.length }}</span>
+          </button>
           <div class="item-added" *ngFor="let mo of maoDeObraAdicionada; let i = index">
             <span>{{ mo.maoDeObraNome }}</span>
             <input type="number" [(ngModel)]="mo.quantidade" min="1" class="qtd-input" title="Quantidade" [disabled]="isViewMode">
@@ -80,17 +92,17 @@
         <!-- Serviços -->
         <div class="list-section">
           <h3>Serviços Executados</h3>
-          <mat-form-field appearance="outline" class="w-100 mb-1" *ngIf="!isViewMode">
-            <mat-label>Buscar serviço...</mat-label>
-            <input type="text" matInput [(ngModel)]="buscaServico" 
-                   (input)="filtrarSv()" [matAutocomplete]="autoSv"/>
-            <mat-autocomplete #autoSv="matAutocomplete" (optionSelected)="selecionarSv($event)" [displayWith]="displayFn">
-              <mat-option *ngFor="let c of svFiltrados" [value]="c">{{c.nome}}</mat-option>
-            </mat-autocomplete>
-          </mat-form-field>
+          <button type="button" class="btn-open-catalog" (click)="openCatalogDialog('servico')" *ngIf="!isViewMode">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            Selecionar Serviços
+            <span class="catalog-count" *ngIf="servicosAdicionados.length > 0">{{ servicosAdicionados.length }}</span>
+          </button>
           <div class="item-added" *ngFor="let sv of servicosAdicionados; let i = index">
             <span>{{ sv.servicoNome }}</span>
-            <input type="number" step="0.5" [(ngModel)]="sv.quantidade" min="0.1" class="qtd-input" title="Quantidade" [disabled]="isViewMode">
+            <input type="number" step="0.5" [(ngModel)]="sv.quantidade" min="0.5" class="qtd-input" title="Quantidade" [disabled]="isViewMode">
             <button (click)="removeServico(i)" class="btn-remove" *ngIf="!isViewMode">×</button>
           </div>
         </div>

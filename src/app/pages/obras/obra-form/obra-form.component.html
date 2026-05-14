@@ -59,9 +59,6 @@
               <input id="dataInicio" formControlName="dataInicio" type="date"
                      [class.invalid]="(form.errors?.['dateRangeInvalid'] || form.get('dataInicio')?.invalid) && form.get('dataInicio')?.touched" />
             </div>
-            @if (form.get('dataInicio')?.errors?.['pastDate'] && form.get('dataInicio')?.touched) {
-              <span class="field-error">A data não pode ser no passado.</span>
-            }
           </div>
           <div class="field field-date">
             <label for="dataPrevistaFim">Data Prevista Fim</label>
@@ -111,26 +108,36 @@
           </div>
         </div>
 
+        <!-- Fiscal do Contrato -->
         <div class="form-row row-person">
           <div class="field field-person-name">
             <label>Fiscal do Contrato</label>
-            <div class="autocomplete-wrapper">
-              <input type="text" formControlName="fiscalId" placeholder="Pesquisar fiscal..."
-                     (focus)="showFiscalDropdown = true"
-                     (blur)="showFiscalDropdown = false"
-                     [class.invalid]="form.get('fiscalId')?.errors?.['userNotFound']" />
-
-              @if (showFiscalDropdown && fiscaisFiltrados.length > 0) {
-                <ul class="suggestions-list">
-                  @for (user of fiscaisFiltrados; track user.id) {
-                    <li (mousedown)="selectUser(user, 'fiscalId')">{{ user.name }}</li>
-                  }
-                </ul>
-              }
+            <div class="user-select-field">
+              <input id="fiscal-input" type="text" class="user-select-input"
+                     [value]="fiscalNome"
+                     placeholder="Clique para selecionar um fiscal..."
+                     readonly
+                     (click)="openUserSelectDialog('fiscal')" />
+              <div class="user-select-actions">
+                @if (selectedFiscalId) {
+                  <button type="button" class="clear-btn" (click)="clearUser('fiscal')" title="Remover fiscal">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                }
+                <button type="button" class="open-modal-btn" (click)="openUserSelectDialog('fiscal')" tabindex="-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </button>
+              </div>
             </div>
-            @if (form.get('fiscalId')?.errors?.['userNotFound']) {
-              <span class="field-error">Selecione da lista ou apague o nome.</span>
-            }
           </div>
           <div class="field field-crea">
             <label>Registro Crea</label>
@@ -142,26 +149,36 @@
           </div>
         </div>
 
+        <!-- Engenheiro 1 -->
         <div class="form-row row-person">
           <div class="field field-person-name">
             <label>Engenheiro 1</label>
-            <div class="autocomplete-wrapper">
-              <input type="text" formControlName="engenheiroId1" placeholder="Pesquisar engenheiro..."
-                     (focus)="showEng1Dropdown = true"
-                     (blur)="showEng1Dropdown = false"
-                     [class.invalid]="form.get('engenheiroId1')?.errors?.['userNotFound']" />
-
-              @if (showEng1Dropdown && engenheiros1Filtrados.length > 0) {
-                <ul class="suggestions-list">
-                  @for (u of engenheiros1Filtrados; track u.id) {
-                    <li (mousedown)="selectUser(u, 'engenheiroId1')">{{ u.name }} ({{ u.crea }})</li>
-                  }
-                </ul>
-              }
+            <div class="user-select-field">
+              <input id="eng1-input" type="text" class="user-select-input"
+                     [value]="eng1Nome"
+                     placeholder="Clique para selecionar um engenheiro..."
+                     readonly
+                     (click)="openUserSelectDialog('eng1')" />
+              <div class="user-select-actions">
+                @if (selectedEng1Id) {
+                  <button type="button" class="clear-btn" (click)="clearUser('eng1')" title="Remover engenheiro 1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                }
+                <button type="button" class="open-modal-btn" (click)="openUserSelectDialog('eng1')" tabindex="-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </button>
+              </div>
             </div>
-            @if (form.get('engenheiroId1')?.errors?.['userNotFound']) {
-              <span class="field-error">Selecione da lista ou apague o nome.</span>
-            }
           </div>
           <div class="field field-crea">
             <label>Registro Crea</label>
@@ -173,26 +190,36 @@
           </div>
         </div>
 
+        <!-- Engenheiro 2 -->
         <div class="form-row row-person">
           <div class="field field-person-name">
             <label>Engenheiro 2</label>
-            <div class="autocomplete-wrapper">
-              <input type="text" formControlName="engenheiroId2" placeholder="Pesquisar engenheiro..."
-                     (focus)="showEng2Dropdown = true"
-                     (blur)="showEng2Dropdown = false"
-                     [class.invalid]="form.get('engenheiroId2')?.errors?.['userNotFound']" />
-
-              @if (showEng2Dropdown && engenheiros2Filtrados.length > 0) {
-                <ul class="suggestions-list">
-                  @for (u of engenheiros2Filtrados; track u.id) {
-                    <li (mousedown)="selectUser(u, 'engenheiroId2')">{{ u.name }} ({{ u.crea }})</li>
-                  }
-                </ul>
-              }
+            <div class="user-select-field">
+              <input id="eng2-input" type="text" class="user-select-input"
+                     [value]="eng2Nome"
+                     placeholder="Clique para selecionar um engenheiro..."
+                     readonly
+                     (click)="openUserSelectDialog('eng2')" />
+              <div class="user-select-actions">
+                @if (selectedEng2Id) {
+                  <button type="button" class="clear-btn" (click)="clearUser('eng2')" title="Remover engenheiro 2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                  </button>
+                }
+                <button type="button" class="open-modal-btn" (click)="openUserSelectDialog('eng2')" tabindex="-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  </svg>
+                </button>
+              </div>
             </div>
-            @if (form.get('engenheiroId2')?.errors?.['userNotFound']) {
-              <span class="field-error">Selecione da lista ou apague o nome.</span>
-            }
           </div>
           <div class="field field-crea">
             <label>Registro Crea</label>
@@ -223,4 +250,5 @@
       </form>
     </div>
   }
+
 </div>

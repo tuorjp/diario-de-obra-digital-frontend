@@ -178,7 +178,11 @@ export class DiariosComponent implements OnInit {
   canEdit(diario: DiarioResponseDto): boolean {
     if (this.userRole === 'ADMIN') return true;
     if (['ENGENHEIRO', 'GESTOR'].includes(this.userRole || '')) {
-      if (diario.autorId !== this.userId) return false;
+      const isAutor = diario.autorId === this.userId;
+      const isEngenheiroVinculado = diario.engenheiroIds?.includes(this.userId || 0);
+
+      if (!isAutor && !isEngenheiroVinculado) return false;
+
       const diarioDate = new Date(diario.data);
       const today = new Date();
       const diffTime = Math.abs(today.getTime() - diarioDate.getTime());

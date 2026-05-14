@@ -62,6 +62,7 @@ export interface DiarioResponseDto {
   status: 'AGUARDANDO_AVALIACAO' | 'VALIDO' | 'INVALIDO';
   autorId: number;
   autorNome: string;
+  engenheiroIds: number[];
   validadorId?: number;
   nomeValidador?: string;
   comentarioValidacao?: string;

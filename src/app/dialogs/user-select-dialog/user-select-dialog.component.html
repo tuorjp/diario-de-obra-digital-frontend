@@ -1,0 +1,137 @@
+<div class="dialog-container">
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <h2 class="dialog-title">{{ data.title }}</h2>
+    <button class="close-btn" (click)="cancel()" title="Fechar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="dialog-body">
+
+    <!-- Filters -->
+    <div class="filters-row">
+      <div class="filter-field">
+        <label>Nome</label>
+        <div class="filter-input-wrapper">
+          <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" [(ngModel)]="filterName" (ngModelChange)="applyFilters()"
+                 placeholder="Filtrar por nome..." id="filter-name" />
+        </div>
+      </div>
+      <div class="filter-field">
+        <label>E-mail</label>
+        <div class="filter-input-wrapper">
+          <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" [(ngModel)]="filterEmail" (ngModelChange)="applyFilters()"
+                 placeholder="Filtrar por e-mail..." id="filter-email" />
+        </div>
+      </div>
+      <div class="filter-field filter-field--crea">
+        <label>CREA</label>
+        <div class="filter-input-wrapper">
+          <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24"
+               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" [(ngModel)]="filterCrea" (ngModelChange)="applyFilters()"
+                 placeholder="Filtrar por CREA..." id="filter-crea" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    @if (loading) {
+      <div class="state-container">
+        <div class="spinner"></div>
+        <p>Carregando...</p>
+      </div>
+    }
+
+    <!-- Error State -->
+    @if (!loading && error) {
+      <div class="state-container state-error">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        </svg>
+        <p>Erro ao carregar usuários. Tente novamente.</p>
+      </div>
+    }
+
+    <!-- Table -->
+    @if (!loading && !error) {
+      <div class="table-wrapper">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Nome</th>
+              <th>E-mail</th>
+              <th>CREA</th>
+            </tr>
+          </thead>
+          <tbody>
+            @if (filteredUsers.length === 0) {
+              <tr class="empty-row">
+                <td colspan="3">
+                  <div class="empty-state">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                    <p>Nenhum usuário encontrado</p>
+                  </div>
+                </td>
+              </tr>
+            }
+            @for (user of filteredUsers; track user.id) {
+              <tr class="user-row" (click)="selectUser(user)">
+                <td>
+                  <div class="user-name-cell">
+                    <div class="user-avatar">{{ (user.name | slice:0:1).toUpperCase() }}</div>
+                    <span>{{ user.name }}</span>
+                  </div>
+                </td>
+                <td class="email-cell">{{ user.login }}</td>
+                <td>
+                  @if (user.crea) {
+                    <span class="crea-badge">{{ user.crea }}{{ user.creaUf ? '/' + user.creaUf : '' }}</span>
+                  } @else {
+                    <span class="no-crea">—</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Footer count -->
+      <div class="results-count">
+        {{ filteredUsers.length }} {{ filteredUsers.length === 1 ? 'resultado' : 'resultados' }}
+      </div>
+    }
+
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button class="btn-cancel" (click)="cancel()">Cancelar</button>
+  </div>
+
+</div>

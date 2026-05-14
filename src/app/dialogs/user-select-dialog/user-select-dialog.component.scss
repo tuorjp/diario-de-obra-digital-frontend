@@ -1,0 +1,308 @@
+/* ─── Container ────────────────────────────────────────────────── */
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  width: 720px;
+  max-width: 100%;
+  max-height: 90vh;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* ─── Header ───────────────────────────────────────────────────── */
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid #f1f3f5;
+  flex-shrink: 0;
+}
+
+.dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.close-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  color: #6b7280;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover {
+    background: #f3f4f6;
+    color: #111827;
+  }
+}
+
+/* ─── Body ──────────────────────────────────────────────────────── */
+.dialog-body {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+}
+
+/* ─── Filters ───────────────────────────────────────────────────── */
+.filters-row {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px;
+  border-bottom: 1px solid #f1f3f5;
+  flex-shrink: 0;
+  background: #fafafa;
+}
+
+.filter-field {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  &--crea {
+    flex: 0 0 160px;
+  }
+
+  label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9ca3af;
+  }
+}
+
+.filter-input-wrapper {
+  position: relative;
+
+  .filter-icon {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #9ca3af;
+    pointer-events: none;
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px 8px 32px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #111827;
+    background: #fff;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.15s, box-shadow 0.15s;
+
+    &:focus {
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    &::placeholder {
+      color: #d1d5db;
+    }
+  }
+}
+
+/* ─── Table Wrapper ──────────────────────────────────────────────── */
+.table-wrapper {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: #f8fafc;
+
+    tr {
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th {
+      padding: 10px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #6b7280;
+      text-align: left;
+      white-space: nowrap;
+    }
+  }
+
+  tbody {
+    tr.user-row {
+      cursor: pointer;
+      border-bottom: 1px solid #f3f4f6;
+      transition: background 0.12s;
+
+      &:hover {
+        background: #f5f3ff;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+
+      td {
+        padding: 12px 20px;
+        font-size: 14px;
+        color: #374151;
+        vertical-align: middle;
+      }
+    }
+
+    tr.empty-row td {
+      padding: 0;
+    }
+  }
+}
+
+/* ─── User Name Cell ─────────────────────────────────────────────── */
+.user-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+  color: #111827;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ─── Email Cell ─────────────────────────────────────────────────── */
+.email-cell {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+/* ─── CREA Badge ─────────────────────────────────────────────────── */
+.crea-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 100px;
+  letter-spacing: 0.3px;
+  border: 1px solid #dbeafe;
+}
+
+.no-crea {
+  color: #d1d5db;
+  font-size: 14px;
+}
+
+/* ─── States ─────────────────────────────────────────────────────── */
+.state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 48px 24px;
+  color: #6b7280;
+  font-size: 14px;
+  flex: 1;
+
+  &.state-error {
+    color: #ef4444;
+  }
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 40px;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+/* ─── Results Count ──────────────────────────────────────────────── */
+.results-count {
+  padding: 8px 24px;
+  font-size: 12px;
+  color: #9ca3af;
+  border-top: 1px solid #f1f3f5;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+/* ─── Footer ──────────────────────────────────────────────────────── */
+.dialog-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 14px 24px;
+  border-top: 1px solid #f1f3f5;
+  flex-shrink: 0;
+  background: #fff;
+}
+
+.btn-cancel {
+  padding: 9px 20px;
+  background: #f3f4f6;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+
+  &:hover {
+    background: #e5e7eb;
+  }
+}
+
+/* ─── Spinner ─────────────────────────────────────────────────────── */
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e5e7eb;
+  border-top-color: #6366f1;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

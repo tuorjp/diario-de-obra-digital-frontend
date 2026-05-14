@@ -1,0 +1,86 @@
+<div class="dialog-container">
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <h2 class="dialog-title">{{ data.title }}</h2>
+    <span class="selected-badge" *ngIf="selectedCount > 0">{{ selectedCount }} selecionado{{ selectedCount > 1 ? 's' : '' }}</span>
+    <button class="close-btn" (click)="cancel()" title="Fechar">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Filter -->
+  <div class="filter-bar">
+    <div class="filter-input-wrapper">
+      <svg class="filter-icon" xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"
+           fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="text" [(ngModel)]="filterText" (ngModelChange)="applyFilter()"
+             placeholder="Filtrar por nome..." id="catalog-filter" class="filter-input" />
+    </div>
+  </div>
+
+  <!-- List -->
+  <div class="items-list">
+
+    @if (filteredRows.length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <p>Nenhum item encontrado</p>
+      </div>
+    }
+
+    @for (row of filteredRows; track row.item.id) {
+      <div class="item-row" [class.item-row--checked]="row.checked" (click)="toggleCheck(row)">
+
+        <!-- Checkbox -->
+        <div class="checkbox-cell" (click)="$event.stopPropagation(); toggleCheck(row)">
+          <div class="custom-checkbox" [class.checked]="row.checked">
+            @if (row.checked) {
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none"
+                   stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            }
+          </div>
+        </div>
+
+        <!-- Name -->
+        <span class="item-name">{{ row.item.nome }}</span>
+
+        <!-- Quantity -->
+        <div class="qty-cell" (click)="$event.stopPropagation()">
+          <label class="qty-label">{{ quantityLabel }}</label>
+          <input type="number" class="qty-input"
+                 [(ngModel)]="row.quantidade"
+                 [step]="quantityStep"
+                 [min]="quantityStep"
+                 [disabled]="!row.checked"
+                 (blur)="clampQuantity(row)"
+                 (click)="$event.stopPropagation()" />
+        </div>
+
+      </div>
+    }
+
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <span class="footer-info" *ngIf="selectedCount > 0">
+      {{ selectedCount }} item{{ selectedCount > 1 ? 's' : '' }} selecionado{{ selectedCount > 1 ? 's' : '' }}
+    </span>
+    <div class="footer-actions">
+      <button class="btn-cancel" (click)="cancel()">Cancelar</button>
+      <button class="btn-save" (click)="save()">Confirmar Seleção</button>
+    </div>
+  </div>
+
+</div>
