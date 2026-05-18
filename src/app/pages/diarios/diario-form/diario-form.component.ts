@@ -11,6 +11,9 @@ import { CreateOcorrenciaDto, MaoDeObraItemDto, ServicoItemDto, EquipamentoItemD
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatDialog } from '@angular/material/dialog';
+import { extractErrorMessage } from '../../../utils/extract-error-message';
+import { CatalogSelectDialogComponent, CatalogSelectedItem, CatalogSelectDialogData } from '../../../dialogs/catalog-select-dialog/catalog-select-dialog.component';
 
 @Component({
   selector: 'app-diario-form',
@@ -28,6 +31,7 @@ export class DiarioFormComponent implements OnInit {
   private datePipe = inject(DatePipe);
   private cdr = inject(ChangeDetectorRef);
   private authService = inject(AuthService);
+  private dialog = inject(MatDialog);
 
   @ViewChild('obraModal') obraModal!: ObraModalComponent;
   @ViewChild('fileInput') fileInput!: ElementRef;
@@ -44,6 +48,7 @@ export class DiarioFormComponent implements OnInit {
   diarioId!: number;
   diarioCompleto: DiarioResponseDto | null = null;
   activeTab: 'DIARIO' | 'OCORRENCIAS' = 'DIARIO';
+  errorMsg: string | null = null;
 
   // Catalogs
   catalogoEquipamentos: any[] = [];
@@ -65,14 +70,6 @@ export class DiarioFormComponent implements OnInit {
   buscaEquipamento: string = '';
   buscaMaoDeObra: string = '';
   buscaServico: string = '';
-
-  eqFiltrados: any[] = [];
-  moFiltrados: any[] = [];
-  svFiltrados: any[] = [];
-
-  mostrarEq = false;
-  mostrarMo = false;
-  mostrarSv = false;
 
   tempOcorrenciaTipo: string = '';
   tempOcorrenciaDescricao: string = '';
@@ -163,7 +160,10 @@ export class DiarioFormComponent implements OnInit {
           this.cdr.detectChanges();
         });
       },
-      error: () => this.snackBar.open('Erro ao carregar diário', 'OK')
+      error: async (err) => {
+        this.errorMsg = await extractErrorMessage(err, 'Erro ao carregar diário.');
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -179,54 +179,69 @@ export class DiarioFormComponent implements OnInit {
     this.obraSelecionada = obra;
   }
 
-  // --- Autocomplete Logic ---
-  filtrarEq() {
-    this.eqFiltrados = this.catalogoEquipamentos.filter(e => e.nome.toLowerCase().includes(this.buscaEquipamento.toLowerCase()));
+  openCatalogDialog(type: 'equipamento' | 'maoDeObra' | 'servico'): void {
+    const configs: Record<string, { title: string; catalog: any[]; selected: CatalogSelectedItem[]; step?: number }> = {
+      equipamento: {
+        title: 'Selecionar Equipamentos',
+        catalog: this.catalogoEquipamentos,
+        selected: this.equipamentosAdicionados.map(e => ({ id: e.equipamentoId, nome: e.equipamentoNome ?? '', quantidade: e.quantidade }))
+      },
+      maoDeObra: {
+        title: 'Selecionar Mão de Obra',
+        catalog: this.catalogoMaoDeObra,
+        selected: this.maoDeObraAdicionada.map(m => ({ id: m.maoDeObraId, nome: m.maoDeObraNome ?? '', quantidade: m.quantidade }))
+      },
+      servico: {
+        title: 'Selecionar Serviços Executados',
+        catalog: this.catalogoServicos,
+        selected: this.servicosAdicionados.map(s => ({ id: s.servicoId, nome: s.servicoNome ?? '', quantidade: s.quantidade })),
+        step: 0.5
+      }
+    };
+
+    const cfg = configs[type];
+    const data: CatalogSelectDialogData = {
+      title: cfg.title,
+      catalog: cfg.catalog,
+      selected: cfg.selected,
+      quantityStep: cfg.step ?? 1
+    };
+
+    const ref = this.dialog.open(CatalogSelectDialogComponent, {
+      data,
+      panelClass: 'catalog-select-panel',
+      maxWidth: '560px',
+      width: '90vw',
+      disableClose: true
+    });
+
+    ref.afterClosed().subscribe((result: CatalogSelectedItem[] | null) => {
+      if (result === null) return; // cancelled
+
+      if (type === 'equipamento') {
+        this.equipamentosAdicionados = result.map(r => ({
+          equipamentoId: r.id,
+          equipamentoNome: r.nome,
+          quantidade: r.quantidade
+        }));
+      } else if (type === 'maoDeObra') {
+        this.maoDeObraAdicionada = result.map(r => ({
+          maoDeObraId: r.id,
+          maoDeObraNome: r.nome,
+          quantidade: r.quantidade
+        }));
+      } else {
+        this.servicosAdicionados = result.map(r => ({
+          servicoId: r.id,
+          servicoNome: r.nome,
+          quantidade: r.quantidade
+        }));
+      }
+      setTimeout(() => this.cdr.detectChanges());
+    });
   }
 
-  filtrarMo() {
-    this.moFiltrados = this.catalogoMaoDeObra.filter(e => e.nome.toLowerCase().includes(this.buscaMaoDeObra.toLowerCase()));
-  }
-
-  filtrarSv() {
-    this.svFiltrados = this.catalogoServicos.filter(e => e.nome.toLowerCase().includes(this.buscaServico.toLowerCase()));
-  }
-
-  hideEq() {} 
-  hideMo() {} 
-  hideSv() {} 
-
-  selecionarEq(event: MatAutocompleteSelectedEvent) {
-    const cat = event.option.value; // expected to be the object 'c'
-    if (!this.equipamentosAdicionados.find(e => e.equipamentoId === cat.id)) {
-      this.equipamentosAdicionados.push({ equipamentoId: cat.id, equipamentoNome: cat.nome, quantidade: 1 });
-    }
-    this.buscaEquipamento = '';
-    // reset selection so text doesn't stay populated
-    event.option.deselect();
-  }
-
-  selecionarMo(event: MatAutocompleteSelectedEvent) {
-    const cat = event.option.value;
-    if (!this.maoDeObraAdicionada.find(e => e.maoDeObraId === cat.id)) {
-      this.maoDeObraAdicionada.push({ maoDeObraId: cat.id, maoDeObraNome: cat.nome, quantidade: 1 });
-    }
-    this.buscaMaoDeObra = '';
-    event.option.deselect();
-  }
-
-  selecionarSv(event: MatAutocompleteSelectedEvent) {
-    const cat = event.option.value;
-    if (!this.servicosAdicionados.find(e => e.servicoId === cat.id)) {
-      this.servicosAdicionados.push({ servicoId: cat.id, servicoNome: cat.nome, quantidade: 1 });
-    }
-    this.buscaServico = '';
-    event.option.deselect();
-  }
-  
-  displayFn(item?: any): string {
-    return item ? item.nome : '';
-  }
+  // --- Legacy autocomplete (kept for removal safety) ---
 
   removeEquipamento(index: number) {
     this.equipamentosAdicionados.splice(index, 1);
@@ -306,13 +321,16 @@ export class DiarioFormComponent implements OnInit {
   }
 
   salvar() {
+    this.errorMsg = null;
     if (!this.obraSelecionada || !this.dataDiario || !this.condicaoClimatica) {
-      this.snackBar.open('Preencha os campos obrigatórios (Obra, Data, Condição Climática)', 'OK', { duration: 3000 });
+      this.errorMsg = 'Preencha os campos obrigatórios: Obra, Data e Condição Climática.';
       return;
     }
 
-    if (this.dataDiario < this.today) {
-      this.snackBar.open('A data do diário não pode ser no passado.', 'OK', { duration: 3000 });
+    // Só bloqueia data no passado ao criar um novo diário.
+    // Em modo edição, o backend controla a janela de 5 dias.
+    if (!this.isEditMode && this.dataDiario < this.today) {
+      this.errorMsg = 'A data do diário não pode ser no passado.';
       return;
     }
 
@@ -334,15 +352,21 @@ export class DiarioFormComponent implements OnInit {
           this.snackBar.open('Diário atualizado com sucesso!', 'OK', { duration: 3000 });
           this.router.navigate(['/diarios']);
         },
-        error: () => this.snackBar.open('Erro ao atualizar diário', 'OK', { duration: 3000 })
+        error: async (err) => {
+          this.errorMsg = await extractErrorMessage(err, 'Erro ao atualizar diário. Tente novamente.');
+          this.cdr.detectChanges();
+        }
       });
     } else {
       this.diarioService.createDiario(this.obraSelecionada.id!, diarioBlob, this.fotosNovas).subscribe({
         next: () => {
-          this.snackBar.open('Diário criado com sucesso!', 'OK', { duration: 3000 });
+          this.snackBar.open('Diário criado com sucesso!', 'OK', { duration: 3000});
           this.router.navigate(['/diarios']);
         },
-        error: () => this.snackBar.open('Erro ao criar diário', 'OK', { duration: 3000 })
+        error: async (err) => {
+          this.errorMsg = await extractErrorMessage(err, 'Erro ao criar diário. Tente novamente.');
+          this.cdr.detectChanges();
+        }
       });
     }
   }
@@ -364,7 +388,10 @@ export class DiarioFormComponent implements OnInit {
         this.snackBar.open('Diário aprovado com sucesso!', 'OK', { duration: 3000 });
         this.router.navigate(['/diarios']);
       },
-      error: () => this.snackBar.open('Erro ao aprovar diário', 'OK', { duration: 3000 })
+      error: async (err) => {
+        this.errorMsg = await extractErrorMessage(err, 'Erro ao aprovar diário.');
+        this.cdr.detectChanges();
+      }
     });
   }
 
@@ -376,7 +403,10 @@ export class DiarioFormComponent implements OnInit {
         this.snackBar.open('Diário reprovado com sucesso!', 'OK', { duration: 3000 });
         this.router.navigate(['/diarios']);
       },
-      error: () => this.snackBar.open('Erro ao reprovar diário', 'OK', { duration: 3000 })
+      error: async (err) => {
+        this.errorMsg = await extractErrorMessage(err, 'Erro ao reprovar diário.');
+        this.cdr.detectChanges();
+      }
     });
   }
 }
