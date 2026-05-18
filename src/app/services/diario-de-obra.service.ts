@@ -8,7 +8,7 @@ import { DiarioResponseDto } from '../utils/dto/diario.dto';
   providedIn: 'root'
 })
 export class DiarioDeObraService {
-  baseUrl = "http://localhost:8090/diario";
+  baseUrl = "/api/diario";
   private http = inject(HttpClient);
 
   public searchDiarios(
@@ -81,15 +81,15 @@ export class DiarioDeObraService {
   }
 
   public getEquipamentos(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8090/catalogo/equipamentos');
+    return this.http.get<any[]>('/api/catalogo/equipamentos');
   }
 
   public getMaoDeObra(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8090/catalogo/maodeobras');
+    return this.http.get<any[]>('/api/catalogo/maodeobras');
   }
 
   public getServicos(): Observable<any[]> {
-    return this.http.get<any[]>('http://localhost:8090/catalogo/servicos');
+    return this.http.get<any[]>('/api/catalogo/servicos');
   }
 
   public imprimirDiarios(ids: number[]): Observable<Blob> {

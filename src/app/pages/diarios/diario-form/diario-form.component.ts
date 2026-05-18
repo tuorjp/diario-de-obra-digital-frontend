@@ -317,7 +317,7 @@ export class DiarioFormComponent implements OnInit {
   }
 
   getPhotoUrl(filename: string): string {
-    return `http://localhost:8090/diario/fotos/${filename}`;
+    return `/api/diario/fotos/${filename}`;
   }
 
   salvar() {
