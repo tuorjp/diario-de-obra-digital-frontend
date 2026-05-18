@@ -58,6 +58,10 @@ export class DiarioDeObraService {
     return this.http.patch<DiarioResponseDto>(`${this.baseUrl}/${id}/reprovar`, payload);
   }
 
+  public retornarAguardandoDiario(id: number): Observable<DiarioResponseDto> {
+    return this.http.patch<DiarioResponseDto>(`${this.baseUrl}/${id}/aguardar`, {});
+  }
+
   public getDiario(id: number): Observable<DiarioResponseDto> {
     return this.http.get<DiarioResponseDto>(`${this.baseUrl}/${id}`);
   }

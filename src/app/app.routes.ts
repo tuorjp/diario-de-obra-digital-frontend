@@ -23,8 +23,7 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: 'dashboard', component: HomeComponent, data: { title: 'Início' } },
-      { path: 'home', component: HomeComponent, data: { title: 'Início' } },
+      { path: '', redirectTo: 'obras', pathMatch: 'full' },
       { path: 'obras', component: ObrasComponent, data: { title: 'Obras' } },
       { path: 'obras/visualizar/:id', component: ObraVisualizarComponent, data: { title: 'Detalhes da Obra' } },
       { path: 'obras/nova', component: ObraFormComponent, data: { title: 'Nova Obra' } },

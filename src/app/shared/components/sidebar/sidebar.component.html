@@ -10,13 +10,6 @@
   <nav class="menu">
 
     <div class="menu-item">
-      <a routerLink="/dashboard" routerLinkActive="active">
-        <mat-icon>dashboard</mat-icon> Dashboard
-      </a>
-    </div>
-    <div class="separator"></div>
-
-    <div class="menu-item">
       <a routerLink="/obras" routerLinkActive="active">
         <mat-icon>construction</mat-icon> Obras
       </a>
@@ -53,7 +46,7 @@
   <div class="separator"></div>
 
   <div class="logout">
-    <a routerLink="/logout">
+    <a (click)="logout()" style="cursor: pointer;">
       <mat-icon>logout</mat-icon> Sair
     </a>
   </div>

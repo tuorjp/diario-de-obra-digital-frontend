@@ -38,7 +38,7 @@
         </div>
         <div class="form-group flex-1">
           <label>Data *</label>
-          <input type="date" [(ngModel)]="dataDiario" [disabled]="isEditMode || isViewMode" [min]="today" />
+          <input type="date" [(ngModel)]="dataDiario" [disabled]="isEditMode || isViewMode" />
         </div>
         <div class="form-group flex-1">
           <label>Condição Climática *</label>
@@ -184,7 +184,8 @@
 
     <div class="form-actions mt-2">
       <button class="btn-cancel" (click)="cancelar()">{{ isViewMode ? 'Voltar' : 'Cancelar' }}</button>
-      <button class="btn-reprovar" (click)="onReprovar()" *ngIf="isViewMode && canApproveReject()">Reprovar</button>
+      <button class="btn-cancel" (click)="onRetornarAguardando()" *ngIf="isViewMode && canRetornarAguardando()" style="background-color: #3b82f6; color: white;">Aguardar Avaliação</button>
+      <button class="btn-reprovar" (click)="onReprovar()" *ngIf="isViewMode && canApproveReject() && diarioCompleto?.status !== 'INVALIDO'">Reprovar</button>
       <button class="btn-aprovar" (click)="onAprovar()" *ngIf="isViewMode && canApproveReject()">Aprovar</button>
       <button class="btn-save" (click)="salvar()" *ngIf="!isViewMode">{{ isEditMode ? 'Salvar Alterações' : 'Criar Diário' }}</button>
     </div>
