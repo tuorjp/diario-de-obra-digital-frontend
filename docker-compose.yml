@@ -32,7 +32,7 @@ services:
 
   frontend:
     build:
-      context: https://github.com/tuorjp/diario-de-obra-digital-frontend.git#main
+      context: .
       dockerfile: Dockerfile
     container_name: diario-frontend
     ports:
