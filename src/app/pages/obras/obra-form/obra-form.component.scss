@@ -358,3 +358,58 @@
     transform: rotate(360deg);
   }
 }
+
+/* ── Responsividade do Formulário ── */
+@media (max-width: 768px) {
+  .page-container {
+    padding: 16px 10px;
+  }
+
+  .form-card {
+    padding: 24px 16px;
+    border-radius: 8px;
+  }
+
+  .form-title {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+    align-items: stretch !important;
+
+    .field {
+      width: 100% !important;
+      flex: 1 1 100% !important;
+    }
+  }
+
+  /* Reset dos flex-basis/widths específicos */
+  .row-nome-contrato .field-contrato {
+    flex: 1 1 auto;
+  }
+
+  .row-dates-cep {
+    .field-date, .field-cep {
+      flex: 1 1 auto;
+    }
+  }
+
+  .row-city-uf .field-uf {
+    flex: 1 1 auto;
+  }
+
+  .row-comp-num .field-numero {
+    flex: 1 1 auto;
+  }
+
+  .row-person {
+    .field-crea, .field-crea-uf {
+      flex: 1 1 auto;
+    }
+  }
+}
+

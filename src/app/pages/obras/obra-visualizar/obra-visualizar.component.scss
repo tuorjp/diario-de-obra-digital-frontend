@@ -403,3 +403,145 @@
         background: #EDF2F7;
     }
 }
+
+/* ── Responsividade Geral ── */
+@media (max-width: 768px) {
+    .page-container {
+        padding: 1rem 0.75rem;
+    }
+
+    .obra-card {
+        padding: 1.25rem 1rem;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+        margin-bottom: 1.5rem;
+
+        h1 {
+            font-size: 1.4rem;
+        }
+
+        .header-actions {
+            width: 100%;
+            flex-direction: column;
+            gap: 0.75rem;
+
+            button {
+                width: 100%;
+                justify-content: center;
+                padding: 0.75rem 1.2rem;
+            }
+        }
+    }
+
+    .card-section {
+        .data-grid {
+            flex-direction: column;
+            gap: 1.5rem;
+
+            .data-group, .data-group-right {
+                width: 100%;
+                gap: 1.2rem;
+            }
+
+            .data-group-right .row {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+        }
+    }
+
+    .engineering-section {
+        .eng-row {
+            flex-direction: column;
+            gap: 1.2rem;
+
+            .eng-details {
+                flex-direction: column;
+                gap: 1.2rem;
+            }
+        }
+    }
+
+    .divider {
+        margin: 1.5rem 0;
+    }
+
+    .diarios-section {
+        .table-wrapper {
+            border: none;
+            background: transparent;
+        }
+
+        .tabela-diarios {
+            display: block;
+
+            thead {
+                display: none; /* Esconder cabeçalho no mobile */
+            }
+
+            tbody {
+                display: block;
+            }
+
+            tr {
+                display: block;
+                background: #fff;
+                border: 1px solid #E2E8F0;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                padding: 1rem;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+                &:hover {
+                    background: #fff;
+                }
+            }
+
+            tbody td {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                text-align: right !important;
+                padding: 0.6rem 0 !important;
+                border: none !important;
+                border-bottom: 1px solid #f0f0f0 !important;
+                width: 100% !important;
+
+                &:last-child {
+                    border-bottom: none !important;
+                    padding-top: 1rem !important;
+                    justify-content: center !important;
+                    gap: 0.5rem;
+                }
+
+                &::before {
+                    content: attr(data-label);
+                    font-weight: 700;
+                    text-transform: uppercase;
+                    font-size: 0.75rem;
+                    color: #718096;
+                    text-align: left;
+                    flex: 1;
+                }
+            }
+        }
+
+        .diario-pagination {
+            flex-wrap: wrap;
+            justify-content: center !important;
+            gap: 0.5rem;
+
+            .page-info {
+                order: -1;
+                width: 100%;
+                text-align: center;
+                margin-bottom: 0.25rem;
+            }
+        }
+    }
+}
+
