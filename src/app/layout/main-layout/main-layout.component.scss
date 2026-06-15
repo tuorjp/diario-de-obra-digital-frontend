@@ -14,7 +14,7 @@
 }
 
 /* esconder a sidebar desktop apenas no mobile e tablet */
-@media (max-width: 992px) {
+@media (max-width: 1024px) {
   .sidebar-desktop {
     display: none;
   }

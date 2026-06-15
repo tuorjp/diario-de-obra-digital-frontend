@@ -96,10 +96,10 @@ $hefesto-5: #C2420B; // Laranja/Vermelho (Desativar)
   }
 
   // Responsividade
-  @media (max-width: 900px) {
+  @media (max-width: 1024px) {
     &.three-col, &.four-col-address { grid-template-columns: 1fr 1fr; }
   }
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr !important;
   }
 }

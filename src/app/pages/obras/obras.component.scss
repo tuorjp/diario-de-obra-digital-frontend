@@ -5,7 +5,7 @@
   border: 1px solid #e5e5e5;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     padding: 1.25rem;
     border-radius: 12px;
   }
@@ -19,7 +19,7 @@
   margin-bottom: 1.5rem;
   gap: 1rem;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     flex-direction: column;
     align-items: stretch;
   }
@@ -108,7 +108,7 @@
   margin-bottom: 1.5rem;
   flex-wrap: wrap;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     justify-content: flex-start;
     flex-direction: column;
     align-items: stretch;
@@ -444,7 +444,7 @@
 }
 
 /* ── Responsive Table (Cards) ────────────────────── */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .table-wrapper {
     border: none;
     background: transparent;

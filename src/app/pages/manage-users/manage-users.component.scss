@@ -52,7 +52,7 @@
   align-items: center;
   flex-wrap: wrap;
 
-  @media(max-width: 900px) {
+  @media(max-width: 1024px) {
     flex-direction: column;
     align-items: stretch;
   }
@@ -114,7 +114,7 @@
     background-color: #e0e0e0;
     margin: 0 0.5rem;
 
-    @media(max-width: 900px) {
+    @media(max-width: 1024px) {
       display: none;
     }
   }
@@ -279,7 +279,7 @@
 }
 
 /* ── Responsividade de Gerenciamento de Usuários ── */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .page-container {
     padding: 0.5rem;
   }
