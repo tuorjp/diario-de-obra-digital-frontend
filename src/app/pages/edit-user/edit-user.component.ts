@@ -9,7 +9,7 @@ import {
   ValidationErrors,
   ValidatorFn
 } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, UrlSegment } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
@@ -76,7 +76,7 @@ export class EditUserComponent implements OnInit {
   //  MÉTODOS DE ROTEAMENTO E CONFIGURAÇÃO
 
   private checkRouteContext(): void {
-    const urlSegments = this.route.snapshot.url.map(segment => segment.path);
+    const urlSegments = this.route.snapshot.url.map((segment: UrlSegment) => segment.path);
     const paramId = this.route.snapshot.paramMap.get('id');
 
     if (urlSegments.includes('new')) {
@@ -114,7 +114,7 @@ export class EditUserComponent implements OnInit {
       role: [{ value: 'USER', disabled: !this.isNewUser && !this.isEditOther }, [Validators.required]],
 
       // Campo 'enabled'
-      enabled: [{ value: true, disabled: this.isNewUser }],
+      enabled: [{ value: true, disabled: true }],
 
       creationDate: [{ value: '', disabled: true }],
       phone1: ['', [Validators.required, Validators.pattern(phonePattern)]],
