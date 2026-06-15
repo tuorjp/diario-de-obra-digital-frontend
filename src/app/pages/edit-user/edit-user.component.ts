@@ -114,7 +114,7 @@ export class EditUserComponent implements OnInit {
       role: [{ value: 'USER', disabled: !this.isNewUser && !this.isEditOther }, [Validators.required]],
 
       // Campo 'enabled'
-      enabled: [{ value: true, disabled: this.isNewUser }],
+      enabled: [{ value: true, disabled: true }],
 
       creationDate: [{ value: '', disabled: true }],
       phone1: ['', [Validators.required, Validators.pattern(phonePattern)]],
