@@ -7,7 +7,7 @@ import { Observable, tap } from 'rxjs';
 })
 export class AuthService {
   // Ajuste a porta se necessário (8090)
-  private apiUrl = 'http://localhost:8090/auth/login';
+  private apiUrl = '/api/auth/login';
 
   constructor(private http: HttpClient) {}
 

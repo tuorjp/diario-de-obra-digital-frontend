@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: diario-db
+    environment:
+      POSTGRES_DB: diario-de-obra-ueg
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: https://github.com/tuorjp/diario-de-obra-digital-backend.git#main
+      dockerfile: Dockerfile
+    container_name: diario-backend
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      POSTGRES_DB: diario-de-obra-ueg
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 12345
+      JWT_SECRET: my_secret_key
+    depends_on:
+      - db
+    restart: unless-stopped
+    volumes:
+      - backend_uploads:/app/uploads
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: diario-frontend
+    ports:
+      - "8085:80" 
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  backend_uploads:

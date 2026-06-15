@@ -329,20 +329,13 @@ export class DiarioFormComponent implements OnInit {
   }
 
   getPhotoUrl(filename: string): string {
-    return `http://localhost:8090/diario/fotos/${filename}`;
+    return `/api/diario/fotos/${filename}`;
   }
 
   salvar() {
     this.errorMsg = null;
     if (!this.obraSelecionada || !this.dataDiario || !this.condicaoClimatica) {
       this.errorMsg = 'Preencha os campos obrigatórios: Obra, Data e Condição Climática.';
-      return;
-    }
-
-    // Só bloqueia data no passado ao criar um novo diário.
-    // Em modo edição, o backend controla a janela de 5 dias.
-    if (!this.isEditMode && this.dataDiario < this.today) {
-      this.errorMsg = 'A data do diário não pode ser no passado.';
       return;
     }
 
@@ -388,9 +381,29 @@ export class DiarioFormComponent implements OnInit {
   }
 
   canApproveReject(): boolean {
-    if (!this.diarioCompleto || this.diarioCompleto.status !== 'AGUARDANDO_AVALIACAO') return false;
+    if (!this.diarioCompleto || this.diarioCompleto.status === 'VALIDO') return false;
     const role = this.authService.getUserRole();
     return ['ADMIN', 'GESTOR', 'FISCAL'].includes(role || '');
+  }
+
+  canRetornarAguardando(): boolean {
+    if (!this.diarioCompleto || this.diarioCompleto.status === 'AGUARDANDO_AVALIACAO') return false;
+    const role = this.authService.getUserRole();
+    return ['ADMIN', 'GESTOR', 'FISCAL'].includes(role || '');
+  }
+
+  onRetornarAguardando() {
+    if (!confirm('Deseja retornar este diário para "Aguardando Avaliação"?')) return;
+    this.diarioService.retornarAguardandoDiario(this.diarioId).subscribe({
+      next: () => {
+        this.snackBar.open('Diário retornado com sucesso!', 'OK', { duration: 3000 });
+        this.router.navigate(['/diarios']);
+      },
+      error: async (err) => {
+        this.errorMsg = await extractErrorMessage(err, 'Erro ao retornar diário.');
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   onAprovar() {

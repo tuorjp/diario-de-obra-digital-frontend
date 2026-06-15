@@ -1,9 +1,10 @@
 import {Component, ChangeDetectionStrategy, OnInit, inject, ChangeDetectorRef} from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink, RouterLinkActive, Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import {UserProfileDto} from '../../../utils/dto/user-profile.dto';
 import {UserService} from '../../../services/user.service';
+import {AuthService} from '../../../core/auth/auth.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -15,6 +16,8 @@ import {UserService} from '../../../services/user.service';
 })
 export class SidebarComponent implements OnInit {
   private userService = inject(UserService);
+  private authService = inject(AuthService);
+  private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
 
   currentUser: UserProfileDto | null = null;
@@ -30,5 +33,10 @@ export class SidebarComponent implements OnInit {
         console.warn('Não foi possível carregar perfil na sidebar');
       }
     });
+  }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 }

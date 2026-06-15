@@ -9,7 +9,7 @@ import { Page } from '../utils/dto/page.dto';
   providedIn: 'root'
 })
 export class UserService {
-  baseUrl = "http://localhost:8090/user";
+  baseUrl = "/api/user";
   private http = inject(HttpClient);
 
   //  BUSCAS E PERFIL

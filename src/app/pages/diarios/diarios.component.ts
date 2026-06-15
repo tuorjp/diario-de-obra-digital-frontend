@@ -50,6 +50,7 @@ export class DiariosComponent implements OnInit {
   userId: number | null = null;
 
   activeDropdownId: number | null = null;
+  expandedJustifications: { [id: number]: boolean } = {};
 
   @HostListener('document:click')
   closeDropdown() {
@@ -59,6 +60,11 @@ export class DiariosComponent implements OnInit {
   toggleDropdown(id: number, event: Event) {
     event.stopPropagation();
     this.activeDropdownId = this.activeDropdownId === id ? null : id;
+  }
+
+  toggleJustification(id: number, event: Event) {
+    event.stopPropagation();
+    this.expandedJustifications[id] = !this.expandedJustifications[id];
   }
 
   ngOnInit(): void {
@@ -171,17 +177,24 @@ export class DiariosComponent implements OnInit {
   }
 
   canApproveReject(diario: DiarioResponseDto): boolean {
-    if (diario.status !== 'AGUARDANDO_AVALIACAO') return false;
+    if (diario.status === 'VALIDO') return false;
+    return ['ADMIN', 'GESTOR', 'FISCAL'].includes(this.userRole || '');
+  }
+
+  canRetornarAguardando(diario: DiarioResponseDto): boolean {
+    if (diario.status === 'AGUARDANDO_AVALIACAO') return false;
     return ['ADMIN', 'GESTOR', 'FISCAL'].includes(this.userRole || '');
   }
 
   canEdit(diario: DiarioResponseDto): boolean {
     if (this.userRole === 'ADMIN') return true;
+    if (diario.status !== 'AGUARDANDO_AVALIACAO') return false;
     if (['ENGENHEIRO', 'GESTOR'].includes(this.userRole || '')) {
       const isAutor = diario.autorId === this.userId;
       const isEngenheiroVinculado = diario.engenheiroIds?.includes(this.userId || 0);
+      const isGestor = this.userRole === 'GESTOR';
 
-      if (!isAutor && !isEngenheiroVinculado) return false;
+      if (!isAutor && !isEngenheiroVinculado && !isGestor) return false;
 
       const diarioDate = new Date(diario.data);
       const today = new Date();
@@ -226,6 +239,17 @@ export class DiariosComponent implements OnInit {
         this.loadData();
       },
       error: () => this.snackBar.open('Erro ao reprovar diário.', 'Fechar', { duration: 3000 })
+    });
+  }
+
+  onRetornarAguardando(diario: DiarioResponseDto) {
+    if (!confirm('Deseja retornar este diário para "Aguardando Avaliação"?')) return;
+    this.diarioService.retornarAguardandoDiario(diario.id).subscribe({
+      next: () => {
+        this.snackBar.open('Diário retornado para aguardando.', 'Ok', { duration: 3000 });
+        this.loadData();
+      },
+      error: () => this.snackBar.open('Erro ao retornar diário.', 'Fechar', { duration: 3000 })
     });
   }
 

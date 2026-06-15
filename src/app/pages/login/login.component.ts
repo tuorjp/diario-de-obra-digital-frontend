@@ -44,7 +44,11 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/obras']);
+    }
+  }
 
   onSubmit(): void {
     if (this.loginForm.invalid || this.isLoading) {
@@ -60,7 +64,7 @@ export class LoginComponent implements OnInit {
       .pipe(finalize(() => this.isLoading = false))
       .subscribe({
         next: () => {
-          this.router.navigate(['/home']); // redireciona após login
+          this.router.navigate(['/obras']); // redireciona após login
         },
         error: (err: any) => {
           console.error('ERRO', err);

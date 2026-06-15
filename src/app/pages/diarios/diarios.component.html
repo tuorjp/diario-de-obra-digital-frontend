@@ -78,9 +78,13 @@
               <mat-icon>check_circle</mat-icon>
               <span>Aprovar</span>
             </button>
-            <button class="dropdown-item color-orange" *ngIf="canApproveReject(diario)" (click)="onReprovar(diario)">
+            <button class="dropdown-item color-orange" *ngIf="canApproveReject(diario) && diario.status !== 'INVALIDO'" (click)="onReprovar(diario)">
               <mat-icon>cancel</mat-icon>
               <span>Reprovar</span>
+            </button>
+            <button class="dropdown-item color-blue" *ngIf="canRetornarAguardando(diario)" (click)="onRetornarAguardando(diario)">
+              <mat-icon>undo</mat-icon>
+              <span>Voltar p/ Aguardando</span>
             </button>
             <button class="dropdown-item color-red" *ngIf="canDelete(diario)" (click)="onDelete(diario)">
               <mat-icon>delete</mat-icon>
@@ -106,6 +110,15 @@
               [class.badge-pendente]="diario.status === 'AGUARDANDO_AVALIACAO'">
               {{ formatStatus(diario.status) }}
           </span>
+        </div>
+        <div class="info-group justification-group" *ngIf="diario.comentarioValidacao && (diario.status === 'INVALIDO' || diario.status === 'AGUARDANDO_AVALIACAO')">
+          <span class="info-label">Motivo (Última Reprovação)</span>
+          <div class="justification-text" 
+               [class.expanded]="expandedJustifications[diario.id]" 
+               (click)="toggleJustification(diario.id, $event)"
+               title="Clique para expandir/recolher">
+            {{ diario.comentarioValidacao }}
+          </div>
         </div>
       </div>
     </div>

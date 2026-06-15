@@ -78,20 +78,20 @@
         </thead>
         <tbody>
         <tr *ngFor="let user of users">
-          <td><strong>{{ user.name }}</strong></td>
-          <td>{{ user.login }}</td>
-          <td>
+          <td data-label="Nome"><strong>{{ user.name }}</strong></td>
+          <td data-label="Login">{{ user.login }}</td>
+          <td data-label="Função">
               <span class="role-badge" [ngClass]="getRoleClass(user.role)">
                 {{ user.role }}
               </span>
           </td>
-          <td>{{ user.creationDate | date:'dd/MM/yyyy' }}</td>
-          <td style="text-align: center;">
+          <td data-label="Data Cadastro">{{ user.creationDate | date:'dd/MM/yyyy' }}</td>
+          <td style="text-align: center;" data-label="Situação">
               <span class="status-badge" [class.active]="user.enabled" [class.inactive]="!user.enabled">
                 {{ user.enabled ? 'Ativo' : 'Inativo' }}
               </span>
           </td>
-          <td class="actions">
+          <td class="actions" data-label="Ações">
             <a mat-icon-button title="Editar" [routerLink]="['/user/edit', user.id]" style="color: #666;">
               <mat-icon>edit</mat-icon>
             </a>
