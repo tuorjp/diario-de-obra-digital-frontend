@@ -22,5 +22,6 @@ export interface UpdateObraDTO {
     fiscalId?: number;
     engenheiroIds?: Set<number>;
     endereco?: EnderecoObraDTO;
+    clienteId?: number;
 }
 

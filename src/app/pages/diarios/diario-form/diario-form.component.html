@@ -187,7 +187,7 @@
       <button class="btn-cancel" (click)="onRetornarAguardando()" *ngIf="isViewMode && canRetornarAguardando()" style="background-color: #3b82f6; color: white;">Aguardar Avaliação</button>
       <button class="btn-reprovar" (click)="onReprovar()" *ngIf="isViewMode && canApproveReject() && diarioCompleto?.status !== 'INVALIDO'">Reprovar</button>
       <button class="btn-aprovar" (click)="onAprovar()" *ngIf="isViewMode && canApproveReject()">Aprovar</button>
-      <button class="btn-save" (click)="salvar()" *ngIf="!isViewMode">{{ isEditMode ? 'Salvar Alterações' : 'Criar Diário' }}</button>
+      <button class="btn-save" (click)="salvar()" *ngIf="!isViewMode && !isClient">{{ isEditMode ? 'Salvar Alterações' : 'Criar Diário' }}</button>
     </div>
 
   </div>

@@ -36,6 +36,7 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
     loading = signal<boolean>(true);
     error = signal<string | null>(null);
     isGestorOrAdmin = signal<boolean>(false);
+    isClient = signal<boolean>(false);
 
     // Diários reais do backend
     diarios = signal<DiarioResponseDto[]>([]);
@@ -63,6 +64,7 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
         this.userService.getMyProfile().pipe(takeUntil(this.destroy$)).subscribe({
             next: (profile) => {
                 this.isGestorOrAdmin.set(profile.role === 'GESTOR' || profile.role === 'ADMIN');
+                this.isClient.set(profile.role === 'USER');
             },
             error: (err) => console.error('Error fetching user profile', err)
         });
@@ -163,7 +165,7 @@ export class ObraVisualizarComponent implements OnInit, OnDestroy {
 
     // ---- Ações de diário ----
     onVisualizarDiario(diario: DiarioResponseDto): void {
-        this.router.navigate(['/diarios/edit', diario.id]);
+        this.router.navigate(['/diarios/view', diario.id]);
     }
 
     onEditarDiario(diario: DiarioResponseDto): void {

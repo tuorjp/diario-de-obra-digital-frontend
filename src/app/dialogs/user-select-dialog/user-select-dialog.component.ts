@@ -6,7 +6,7 @@ import { UserService } from '../../services/user.service';
 import { UserProfileDto } from '../../utils/dto/user-profile.dto';
 
 export interface UserSelectDialogData {
-  role: 'FISCAL' | 'ENGENHEIRO';
+  role: 'FISCAL' | 'ENGENHEIRO' | 'USER';
   excludeId?: number | null;
   title: string;
 }
@@ -66,7 +66,7 @@ export class UserSelectDialogComponent implements OnInit {
     this.filteredUsers = this.allUsers.filter(u => {
       const matchName = !name || (u.name ?? '').toLowerCase().includes(name);
       const matchEmail = !email || (u.login ?? '').toLowerCase().includes(email);
-      const matchCrea = !crea || (u.crea ?? '').toLowerCase().includes(crea);
+      const matchCrea = this.data.role === 'USER' || !crea || (u.crea ?? '').toLowerCase().includes(crea);
       return matchName && matchEmail && matchCrea;
     });
   }

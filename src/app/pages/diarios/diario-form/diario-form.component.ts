@@ -45,6 +45,7 @@ export class DiarioFormComponent implements OnInit {
 
   isEditMode = false;
   isViewMode = false;
+  isClient = false;
   diarioId!: number;
   diarioCompleto: DiarioResponseDto | null = null;
   activeTab: 'DIARIO' | 'OCORRENCIAS' = 'DIARIO';
@@ -89,11 +90,22 @@ export class DiarioFormComponent implements OnInit {
     const idParam = this.route.snapshot.paramMap.get('id');
     const isView = this.route.snapshot.url.some(segment => segment.path === 'view');
     
+    this.isClient = this.authService.getUserRole() === 'USER';
+    
     if (idParam) {
-      this.isEditMode = !isView;
-      this.isViewMode = isView;
+      if (this.isClient) {
+        this.isEditMode = false;
+        this.isViewMode = true;
+      } else {
+        this.isEditMode = !isView;
+        this.isViewMode = isView;
+      }
       this.diarioId = +idParam;
       this.carregarDiario(this.diarioId);
+    } else if (this.isClient) {
+      // Redirect clients away from "new diary" form
+      this.router.navigate(['/diarios']);
+      return;
     }
   }
 
